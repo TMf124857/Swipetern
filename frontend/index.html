@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swipetern - Student & Employer Matching</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom scrollbar and swipe card styles */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .swipe-card {
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+        .swipe-left {
+            transform: translate(-150%, 10deg) rotate(-20deg);
+            opacity: 0;
+        }
+        .swipe-right {
+            transform: translate(150%, 10deg) rotate(20deg);
+            opacity: 0;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- Header / Navbar -->
+    <header class="bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-md">
+        <div class="max-width-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2 cursor-pointer" onclick="app.showTab('discovery')">
+                <i class="fa-solid fa-rotate-right text-2xl animate-pulse"></i>
+                <span class="text-2xl font-black tracking-wider bg-clip-text bg-gradient-to-r from-yellow-300 to-amber-200">Swipetern</span>
+            </div>
+
+            <!-- Authed Navbar Links -->
+            <div id="nav-authed" class="hidden flex items-center space-x-4">
+                <span id="nav-user-badge" class="bg-white/20 px-3 py-1 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1">
+                    <span id="nav-user-role-icon"></span>
+                    <span id="nav-user-email"></span>
+                </span>
+
+                <button onclick="app.logout()" class="hover:bg-white/10 px-3 py-1.5 rounded-lg text-sm font-medium transition duration-200">
+                    <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace Container -->
+    <main class="flex-grow flex flex-col max-w-7xl w-full mx-auto p-4 md:p-6">
+
+        <!-- Loading Spinner overlay -->
+        <div id="global-spinner" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center z-50">
+            <div class="bg-white p-5 rounded-2xl shadow-xl flex flex-col items-center space-y-3">
+                <i class="fa-solid fa-spinner fa-spin text-4xl text-indigo-600"></i>
+                <span class="text-sm font-semibold text-slate-600">Loading, please wait...</span>
+            </div>
+        </div>
+
+        <!-- Success Toast -->
+        <div id="toast" class="hidden fixed top-5 right-5 bg-emerald-600 text-white px-5 py-3 rounded-xl shadow-lg flex items-center space-x-3 z-50 transition-all duration-300 transform translate-y-[-20px] opacity-0">
+            <i class="fa-solid fa-circle-check text-xl"></i>
+            <span id="toast-message" class="font-medium text-sm">Action successful!</span>
+        </div>
+
+        <!-- Error Alert Banner -->
+        <div id="error-banner" class="hidden mb-6 bg-rose-50 border border-rose-200 text-rose-700 p-4 rounded-xl flex items-start space-x-3">
+            <i class="fa-solid fa-triangle-exclamation text-xl mt-0.5"></i>
+            <div class="flex-grow">
+                <h4 class="font-bold text-sm">An error occurred</h4>
+                <p id="error-banner-text" class="text-xs mt-0.5"></p>
+            </div>
+            <button onclick="document.getElementById('error-banner').classList.add('hidden')" class="hover:bg-rose-100 p-1 rounded-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- ================= WELCOME / AUTH SCREEN ================= -->
+        <section id="screen-welcome" class="flex-grow flex items-center justify-center py-6">
+            <div class="bg-white w-full max-w-md p-8 rounded-3xl shadow-xl border border-slate-100">
+                <div class="text-center mb-8">
+                    <div class="inline-block bg-indigo-50 p-4 rounded-3xl text-indigo-600 mb-3">
+                        <i class="fa-solid fa-heart-pulse text-4xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-extrabold text-slate-900">Welcome to Swipetern</h2>
+                    <p class="text-slate-500 mt-1.5 text-sm">Connect students & employers through mutual-consent matching.</p>
+                </div>
+
+                <!-- Tabs for Register vs Login -->
+                <div class="flex bg-slate-100 p-1 rounded-xl mb-6">
+                    <button id="tab-btn-login" onclick="app.setAuthTab('login')" class="flex-1 py-2 text-sm font-bold rounded-lg bg-white text-indigo-600 shadow-xs transition duration-200">
+                        Login
+                    </button>
+                    <button id="tab-btn-register" onclick="app.setAuthTab('register')" class="flex-1 py-2 text-sm font-bold rounded-lg text-slate-600 hover:text-slate-900 transition duration-200">
+                        Register
+                    </button>
+                </div>
+
+                <!-- Login Form -->
+                <form id="form-login" onsubmit="app.handleLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Email Address</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-envelope absolute left-3 top-3.5 text-slate-400"></i>
+                            <input type="email" id="login-email" required placeholder="name@domain.com" class="pl-10 w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Password</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-lock absolute left-3 top-3.5 text-slate-400"></i>
+                            <input type="password" id="login-password" required placeholder="••••••••" class="pl-10 w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-md transition duration-200 hover:shadow-lg">
+                        Sign In
+                    </button>
+                </form>
+
+                <!-- Register Form -->
+                <form id="form-register" onsubmit="app.handleRegister(event)" class="space-y-4 hidden">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Email Address</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-envelope absolute left-3 top-3.5 text-slate-400"></i>
+                            <input type="email" id="reg-email" required placeholder="name@domain.com" class="pl-10 w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Password</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-lock absolute left-3 top-3.5 text-slate-400"></i>
+                            <input type="password" id="reg-password" required placeholder="Min 4 characters" class="pl-10 w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Select Role</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="border-2 border-indigo-500 bg-indigo-50/50 p-3 rounded-xl flex items-center justify-center space-x-2 cursor-pointer" id="role-label-student">
+                                <input type="radio" name="reg-role" value="student" checked onchange="app.toggleRoleLabel('student')" class="accent-indigo-600">
+                                <span class="text-sm font-bold text-slate-700">Student</span>
+                            </label>
+                            <label class="border-2 border-slate-200 p-3 rounded-xl flex items-center justify-center space-x-2 cursor-pointer" id="role-label-employer">
+                                <input type="radio" name="reg-role" value="employer" onchange="app.toggleRoleLabel('employer')" class="accent-indigo-600">
+                                <span class="text-sm font-bold text-slate-700">Employer</span>
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-md transition duration-200 hover:shadow-lg">
+                        Create Account
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- ================= ONBOARDING / PROFILE SCREEN ================= -->
+        <section id="screen-onboarding" class="hidden max-w-2xl mx-auto w-full py-6">
+            <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-100">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-black text-slate-900">Complete Your Profile</h2>
+                    <p class="text-slate-500 text-sm mt-1">Let other users know about you to foster perfect matches.</p>
+                </div>
+
+                <form onsubmit="app.saveProfile(event)" class="space-y-5">
+                    <!-- Standard Field: Full Name / HR Name -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Your Full Name</label>
+                        <input type="text" id="prof-name" required placeholder="John Doe" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                    </div>
+
+                    <!-- Standard Field: Bio / Short pitch -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Short Biography / Bio</label>
+                        <textarea id="prof-bio" rows="3" placeholder="Tell people about yourself or your company mission..." class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"></textarea>
+                    </div>
+
+                    <!-- Role-Specific fields (Student) -->
+                    <div id="fields-student" class="space-y-4 hidden">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Education / School & Degree</label>
+                            <input type="text" id="prof-education" placeholder="e.g. Stanford University, BS Computer Science" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Skills (Comma separated)</label>
+                            <input type="text" id="prof-skills" placeholder="e.g. Python, Javascript, Figma, Git" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Target Job Titles (Comma separated)</label>
+                            <input type="text" id="prof-job-titles" placeholder="e.g. Software Engineer, Project Manager" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Visa / Work Authorization Status</label>
+                            <select id="prof-visa-status" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm bg-white">
+                                <option value="not_required">US Citizen / Permanent Resident (Not Required)</option>
+                                <option value="pending">F-1 Visa / Needs Sponsorship (Pending)</option>
+                                <option value="approved">Already Approved / Work Visa</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Role-Specific fields (Employer) -->
+                    <div id="fields-employer" class="space-y-4 hidden">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Company Name</label>
+                            <input type="text" id="prof-company" placeholder="e.g. Stripe, Inc." class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Industry Sector</label>
+                            <input type="text" id="prof-industry" placeholder="e.g. Fintech, Healthcare, Robotics" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-md transition duration-200">
+                        Save Profile & Continue
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- ================= MAIN WORKSPACE (SWIPING, CHAT, ANALYTICS, ADMIN) ================= -->
+        <section id="screen-workspace" class="hidden flex-grow flex flex-col md:flex-row gap-6">
+
+            <!-- Sidebar Navigation -->
+            <aside class="md:w-64 flex flex-row md:flex-col justify-around md:justify-start bg-white p-2 md:p-4 rounded-3xl shadow-sm border border-slate-100 gap-2 shrink-0">
+                <div class="hidden md:flex items-center space-x-3 px-3 py-4 border-b border-slate-100 mb-4">
+                    <div class="h-10 w-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 text-lg font-black" id="sidebar-initials">
+                        S
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm truncate" id="sidebar-user-name">User Name</h4>
+                        <span class="text-slate-400 text-xs font-medium" id="sidebar-user-role">Student</span>
+                    </div>
+                </div>
+
+                <button onclick="app.showTab('discovery')" id="btn-tab-discovery" class="flex-1 md:flex-initial flex items-center justify-center md:justify-start space-x-3 px-4 py-3 rounded-xl text-indigo-600 bg-indigo-50/70 font-bold transition duration-200">
+                    <i class="fa-solid fa-rectangle-list text-lg"></i>
+                    <span class="hidden md:inline text-sm">Discovery Cards</span>
+                </button>
+
+                <button onclick="app.showTab('chat')" id="btn-tab-chat" class="flex-1 md:flex-initial flex items-center justify-center md:justify-start space-x-3 px-4 py-3 rounded-xl text-slate-500 hover:text-slate-900 font-bold transition duration-200">
+                    <i class="fa-solid fa-comments text-lg"></i>
+                    <span class="hidden md:inline text-sm">Matches & Chat</span>
+                </button>
+
+                <!-- Employer Specific Tab to post jobs -->
+                <button onclick="app.showTab('jobs')" id="btn-tab-jobs" class="hidden flex-1 md:flex-initial flex items-center justify-center md:justify-start space-x-3 px-4 py-3 rounded-xl text-slate-500 hover:text-slate-900 font-bold transition duration-200">
+                    <i class="fa-solid fa-briefcase text-lg"></i>
+                    <span class="hidden md:inline text-sm">Manage Jobs</span>
+                </button>
+
+                <button onclick="app.showTab('analytics')" id="btn-tab-analytics" class="flex-1 md:flex-initial flex items-center justify-center md:justify-start space-x-3 px-4 py-3 rounded-xl text-slate-500 hover:text-slate-900 font-bold transition duration-200">
+                    <i class="fa-solid fa-chart-simple text-lg"></i>
+                    <span class="hidden md:inline text-sm">Analytics</span>
+                </button>
+
+                <button onclick="app.showTab('admin')" id="btn-tab-admin" class="hidden flex-1 md:flex-initial flex items-center justify-center md:justify-start space-x-3 px-4 py-3 rounded-xl text-amber-600 hover:bg-amber-50 font-bold transition duration-200">
+                    <i class="fa-solid fa-user-shield text-lg"></i>
+                    <span class="hidden md:inline text-sm">Admin Panel</span>
+                </button>
+            </aside>
+
+            <!-- Main Dynamic Content Pane -->
+            <div class="flex-grow flex flex-col bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden min-h-[500px]">
+
+                <!-- Tab 1: Discovery Deck (Swipe Card Interface) -->
+                <div id="tab-discovery" class="tab-content flex-grow flex flex-col items-center justify-center p-6">
+                    <div class="text-center mb-6">
+                        <h3 class="text-xl font-extrabold text-slate-900">Discovery Deck</h3>
+                        <p class="text-xs text-slate-400 mt-1">Swipe RIGHT to LIKE, LEFT to PASS</p>
+                    </div>
+
+                    <!-- Swipe Card Deck container -->
+                    <div class="relative w-full max-w-sm h-96 flex items-center justify-center" id="deck-container">
+                        <!-- Cards will be injected here dynamically -->
+                        <div class="text-center p-8 bg-slate-50 border-2 border-dashed border-slate-200 rounded-3xl flex flex-col items-center justify-center h-full w-full">
+                            <i class="fa-solid fa-face-sad-tear text-4xl text-slate-300 mb-3 animate-bounce"></i>
+                            <h4 class="font-bold text-slate-600">No active profiles left</h4>
+                            <p class="text-xs text-slate-400 mt-1 px-4">You have swiped on everyone or there are no new candidates/opportunities available.</p>
+                            <button onclick="app.fetchDiscoveryFeed()" class="mt-4 bg-indigo-600 text-white text-xs px-4 py-2 rounded-xl font-bold hover:bg-indigo-700 transition">
+                                <i class="fa-solid fa-rotate mr-1"></i> Refresh Feed
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Swipe Controls -->
+                    <div class="flex justify-center items-center space-x-8 mt-6" id="deck-controls">
+                        <button onclick="app.swipe('pass')" class="h-16 w-16 bg-rose-50 hover:bg-rose-100 text-rose-500 hover:text-rose-600 rounded-full border border-rose-200 flex items-center justify-center shadow-md hover:shadow-lg transition transform hover:scale-105 active:scale-95 duration-200">
+                            <i class="fa-solid fa-xmark text-2xl"></i>
+                        </button>
+                        <button onclick="app.swipe('like')" class="h-16 w-16 bg-emerald-50 hover:bg-emerald-100 text-emerald-500 hover:text-emerald-600 rounded-full border border-emerald-200 flex items-center justify-center shadow-md hover:shadow-lg transition transform hover:scale-105 active:scale-95 duration-200">
+                            <i class="fa-solid fa-heart text-2xl"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Matches and Live Chat Room -->
+                <div id="tab-chat" class="tab-content flex-grow hidden flex flex-col md:flex-row h-full">
+                    <!-- Left Sidebar: Matches list -->
+                    <div class="md:w-72 border-r border-slate-100 flex flex-col h-full shrink-0">
+                        <div class="p-4 border-b border-slate-100">
+                            <h4 class="font-extrabold text-slate-900 flex items-center justify-between">
+                                <span>Mutual Matches</span>
+                                <span class="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full text-xs" id="match-badge">0</span>
+                            </h4>
+                        </div>
+                        <div class="flex-grow overflow-y-auto p-2 space-y-1 max-h-[400px] md:max-h-[500px]" id="matches-list">
+                            <!-- Injected matches -->
+                            <div class="text-center py-10 text-slate-400 text-xs">
+                                <i class="fa-regular fa-comment-dots text-3xl mb-2"></i>
+                                <p>No matches yet. Keep swiping to connect!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Pane: Active Chat conversation & Compliance Sidebar -->
+                    <div class="flex-grow flex flex-col h-full hidden" id="chat-workspace">
+                        <!-- Chat header -->
+                        <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                            <div class="flex items-center space-x-3">
+                                <div class="h-10 w-10 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold" id="chat-header-initials">
+                                    T
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-sm" id="chat-header-title">Tech Corp</h4>
+                                    <span class="text-xs text-indigo-600" id="chat-header-subtitle">Match: Backend Developer</span>
+                                </div>
+                            </div>
+                            <!-- Button to file report of this matched user -->
+                            <button onclick="app.showReportModal()" class="text-xs text-rose-500 hover:text-rose-700 font-bold hover:bg-rose-50 px-3 py-1.5 rounded-lg border border-rose-200">
+                                <i class="fa-solid fa-flag mr-1"></i> Report
+                            </button>
+                        </div>
+
+                        <!-- Chat & Compliance Horizontal Layout -->
+                        <div class="flex-grow flex flex-col lg:flex-row min-h-0">
+
+                            <!-- Chat message history and send bar -->
+                            <div class="flex-grow flex flex-col h-full p-4 justify-between">
+                                <div class="flex-grow overflow-y-auto space-y-3 mb-4 pr-2 max-h-[300px] lg:max-h-[380px]" id="chat-messages">
+                                    <!-- Messages injected -->
+                                </div>
+                                <form onsubmit="app.sendMessage(event)" class="flex space-x-2">
+                                    <input type="text" id="chat-message-input" placeholder="Type a message..." required class="flex-grow px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden">
+                                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 rounded-xl font-bold text-sm transition">
+                                        <i class="fa-solid fa-paper-plane"></i>
+                                    </button>
+                                </form>
+                            </div>
+
+                            <!-- Compliance tracker widget side panel -->
+                            <div class="lg:w-80 border-t lg:border-t-0 lg:border-l border-slate-100 p-5 bg-indigo-50/20 flex flex-col shrink-0">
+                                <h4 class="font-extrabold text-sm text-slate-800 flex items-center justify-between mb-4">
+                                    <span>Compliance Tracker</span>
+                                    <span id="compliance-readiness-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-700">Pending</span>
+                                </h4>
+
+                                <div class="space-y-4 text-xs">
+                                    <!-- Progress/Readiness Meter -->
+                                    <div class="bg-white p-3 rounded-xl border border-slate-100">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <span class="font-bold text-slate-600">Verification Process</span>
+                                            <span class="font-bold text-indigo-600" id="compliance-percent">0%</span>
+                                        </div>
+                                        <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                                            <div class="bg-indigo-600 h-full transition-all duration-300" id="compliance-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Verification Steps Checkboxes -->
+                                    <div class="space-y-2">
+                                        <!-- Step 1: School Approval -->
+                                        <div class="bg-white p-3 rounded-xl border border-slate-100 flex items-start justify-between">
+                                            <div>
+                                                <h5 class="font-bold text-slate-700">1. School Co-op Approval</h5>
+                                                <p class="text-[10px] text-slate-400 mt-0.5">Authorization from university portal.</p>
+                                            </div>
+                                            <select id="comp-school" onchange="app.updateCompliance('schoolApproval', this.value)" class="text-[11px] font-bold border border-slate-200 rounded-lg p-1 bg-white focus:outline-hidden">
+                                                <option value="pending">Pending</option>
+                                                <option value="approved">Approved</option>
+                                                <option value="rejected">Rejected</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Step 2: Visa Status -->
+                                        <div class="bg-white p-3 rounded-xl border border-slate-100 flex items-start justify-between">
+                                            <div>
+                                                <h5 class="font-bold text-slate-700">2. Visa & Work Permit</h5>
+                                                <p class="text-[10px] text-slate-400 mt-0.5">Verification of valid student visa status.</p>
+                                            </div>
+                                            <select id="comp-visa" onchange="app.updateCompliance('visaStatus', this.value)" class="text-[11px] font-bold border border-slate-200 rounded-lg p-1 bg-white focus:outline-hidden">
+                                                <option value="pending">Pending</option>
+                                                <option value="approved">Approved</option>
+                                                <option value="not_required">Not Needed</option>
+                                                <option value="rejected">Rejected</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Step 3: Travel Docs -->
+                                        <div class="bg-white p-3 rounded-xl border border-slate-100 flex items-start justify-between">
+                                            <div>
+                                                <h5 class="font-bold text-slate-700">3. Travel Documents</h5>
+                                                <p class="text-[10px] text-slate-400 mt-0.5">Passport and health certificate check.</p>
+                                            </div>
+                                            <select id="comp-travel" onchange="app.updateCompliance('travelDocs', this.value)" class="text-[11px] font-bold border border-slate-200 rounded-lg p-1 bg-white focus:outline-hidden">
+                                                <option value="pending">Pending</option>
+                                                <option value="approved">Approved</option>
+                                                <option value="rejected">Rejected</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Step 4: Interview Scheduled -->
+                                        <div class="bg-white p-3 rounded-xl border border-slate-100 flex items-start justify-between">
+                                            <div>
+                                                <h5 class="font-bold text-slate-700">4. Interview Progress</h5>
+                                                <p class="text-[10px] text-slate-400 mt-0.5">Successful scheduling of initial round.</p>
+                                            </div>
+                                            <div class="flex items-center space-x-2">
+                                                <input type="checkbox" id="comp-interview" onchange="app.updateCompliance('interviewScheduled', this.checked ? 'true' : 'false')" class="h-4 w-4 rounded-md text-indigo-600 focus:ring-indigo-500 accent-indigo-600">
+                                                <span class="font-semibold text-slate-500">Done</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat room inactive placeholder -->
+                    <div id="chat-empty" class="flex-grow flex flex-col items-center justify-center p-8 text-center text-slate-400">
+                        <div class="h-20 w-20 rounded-full bg-slate-50 flex items-center justify-center mb-4">
+                            <i class="fa-solid fa-messages text-3xl text-indigo-300"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-600">No Chat Selected</h4>
+                        <p class="text-xs px-10 mt-1 max-w-sm">Select one of your mutual matches on the left to start a direct message thread and process compliance verification.</p>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Employer Opportunity Postings -->
+                <div id="tab-jobs" class="tab-content flex-grow p-6 hidden space-y-6">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="text-xl font-extrabold text-slate-900">Manage Job Postings</h3>
+                            <p class="text-xs text-slate-400 mt-1">Add and manage active job listings candidates swipe on.</p>
+                        </div>
+                        <button onclick="app.showAddJobModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-xl text-xs shadow-xs transition duration-200">
+                            <i class="fa-solid fa-plus mr-1"></i> Add Opportunity
+                        </button>
+                    </div>
+
+                    <!-- List of posted jobs -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="posted-jobs-list">
+                        <!-- Jobs injected here -->
+                    </div>
+                </div>
+
+                <!-- Tab 4: Analytics Dashboard -->
+                <div id="tab-analytics" class="tab-content flex-grow p-6 hidden space-y-6 overflow-y-auto max-h-[550px]">
+                    <div>
+                        <h3 class="text-xl font-extrabold text-slate-900">System Metrics & Metrics Summary</h3>
+                        <p class="text-xs text-slate-400 mt-1">Aggregated statistics and live system events log.</p>
+                    </div>
+
+                    <!-- Summary Cards -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
+                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Total Users</span>
+                            <span class="text-2xl font-black text-slate-800 mt-1 block" id="metric-users">0</span>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
+                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Job Postings</span>
+                            <span class="text-2xl font-black text-slate-800 mt-1 block" id="metric-jobs">0</span>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
+                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Mutual Matches</span>
+                            <span class="text-2xl font-black text-slate-800 mt-1 block" id="metric-matches">0</span>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
+                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Swipe Actions</span>
+                            <span class="text-2xl font-black text-indigo-600 mt-1 block" id="metric-swipes">0</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Swipe like/pass breakdown -->
+                        <div class="bg-slate-50 border border-slate-100 p-5 rounded-2xl">
+                            <h4 class="font-bold text-sm text-slate-700 mb-4">Swipe Direction Breakdown</h4>
+                            <div class="space-y-3">
+                                <div>
+                                    <div class="flex justify-between text-xs font-semibold mb-1">
+                                        <span class="text-emerald-600">Likes (Right Swipes)</span>
+                                        <span id="metric-likes">0</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
+                                        <div id="bar-likes" class="bg-emerald-500 h-full transition-all duration-300" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs font-semibold mb-1">
+                                        <span class="text-rose-600">Passes (Left Swipes)</span>
+                                        <span id="metric-passes">0</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
+                                        <div id="bar-passes" class="bg-rose-400 h-full transition-all duration-300" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Compliance Readiness Breakdown -->
+                        <div class="bg-slate-50 border border-slate-100 p-5 rounded-2xl">
+                            <h4 class="font-bold text-sm text-slate-700 mb-4">Match Compliance Readiness</h4>
+                            <div class="space-y-3">
+                                <div>
+                                    <div class="flex justify-between text-xs font-semibold mb-1">
+                                        <span class="text-indigo-600">Ready</span>
+                                        <span id="metric-comp-ready">0</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
+                                        <div id="bar-ready" class="bg-indigo-600 h-full transition-all" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs font-semibold mb-1">
+                                        <span class="text-amber-600">In Progress</span>
+                                        <span id="metric-comp-progress">0</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
+                                        <div id="bar-progress" class="bg-amber-500 h-full transition-all" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live raw logs -->
+                    <div class="border border-slate-100 p-5 rounded-2xl bg-slate-50/50">
+                        <h4 class="font-bold text-sm text-slate-700 mb-3"><i class="fa-solid fa-clock-rotate-left mr-1.5 text-indigo-500"></i> Live Activity Logs</h4>
+                        <div class="overflow-y-auto max-h-48 text-xs font-mono space-y-1.5 p-3 bg-slate-900 text-slate-300 rounded-xl" id="analytics-events-list">
+                            <!-- Events injected -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 5: Admin Panel (Moderation) -->
+                <div id="tab-admin" class="tab-content flex-grow p-6 hidden space-y-6">
+                    <div>
+                        <h3 class="text-xl font-extrabold text-slate-900">Safety & Moderation Center</h3>
+                        <p class="text-xs text-slate-400 mt-1">Review flagged profiles and take disciplinary measures.</p>
+                    </div>
+
+                    <div class="border border-slate-100 rounded-2xl overflow-hidden bg-white shadow-xs">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-50 text-slate-500 font-bold uppercase tracking-wider border-b border-slate-100">
+                                <tr>
+                                    <th class="px-4 py-3">Report ID</th>
+                                    <th class="px-4 py-3">Reporter</th>
+                                    <th class="px-4 py-3">Reported User ID</th>
+                                    <th class="px-4 py-3">Reason / Description</th>
+                                    <th class="px-4 py-3">Status</th>
+                                    <th class="px-4 py-3 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 font-medium" id="admin-reports-table">
+                                <!-- Reports injected -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-100 border-t border-slate-200 py-4 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-400 font-semibold tracking-wide flex justify-between items-center">
+            <span>&copy; 2026 Swipetern Inc. All rights reserved.</span>
+            <div class="space-x-3">
+                <a href="#" class="hover:text-slate-600">Privacy Policy</a>
+                <a href="#" class="hover:text-slate-600">Terms of Service</a>
+                <!-- Super easy convenience button to switch/elevate user role to admin -->
+                <button onclick="app.elevateToAdmin()" class="bg-amber-100 hover:bg-amber-200 text-amber-800 px-2 py-0.5 rounded-md text-[10px] transition font-bold border border-amber-300">
+                    <i class="fa-solid fa-shield-halved"></i> Quick Admin Mock
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ================= DIALOG / MODALS ================= -->
+
+    <!-- Match Confetti Success Overlay -->
+    <div id="modal-match-success" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-md flex items-center justify-center z-50 animate-fade-in">
+        <div class="bg-white p-8 rounded-3xl shadow-2xl max-w-sm w-full text-center border-4 border-indigo-400 transform scale-100 transition-all duration-300">
+            <div class="h-20 w-20 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-4 animate-bounce">
+                <i class="fa-solid fa-heart-circle-check"></i>
+            </div>
+            <h3 class="text-3xl font-black text-slate-900 bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">It's a Match!</h3>
+            <p class="text-slate-500 text-sm mt-2">You and the other user have both shown mutual interest.</p>
+
+            <div class="my-6 bg-slate-50 p-4 rounded-2xl border border-slate-100 text-xs text-left space-y-1.5">
+                <div><span class="font-bold text-slate-600">Student:</span> <span id="match-student-name" class="font-medium text-slate-800"></span></div>
+                <div><span class="font-bold text-slate-600">Employer:</span> <span id="match-employer-name" class="font-medium text-slate-800"></span></div>
+                <div><span class="font-bold text-slate-600">Opportunity:</span> <span id="match-opp-title" class="font-medium text-indigo-600"></span></div>
+            </div>
+
+            <button onclick="app.closeMatchModal()" class="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-bold py-3 rounded-xl shadow-lg transition">
+                Start Chatting & Complete Checklist
+            </button>
+        </div>
+    </div>
+
+    <!-- Create Opportunity Posting Modal (Employer Only) -->
+    <div id="modal-add-job" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-3xl shadow-xl max-w-md w-full border border-slate-100">
+            <h3 class="text-lg font-black text-slate-900 mb-4">Post New Internship Opportunity</h3>
+
+            <form onsubmit="app.handleAddJob(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Job Title</label>
+                    <input type="text" id="add-job-title" required placeholder="e.g. Frontend Engineering Intern" class="w-full px-4 py-2 rounded-xl border border-slate-200 text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Job Description</label>
+                    <textarea id="add-job-desc" rows="4" required placeholder="Describe responsibilities, projects, and work environment..." class="w-full px-4 py-2 rounded-xl border border-slate-200 text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Skills Required (Comma separated)</label>
+                    <input type="text" id="add-job-skills" placeholder="e.g. React, Tailwind CSS, TypeScript" class="w-full px-4 py-2 rounded-xl border border-slate-200 text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500">
+                </div>
+
+                <div class="flex space-x-3 pt-2">
+                    <button type="button" onclick="document.getElementById('modal-add-job').classList.add('hidden')" class="flex-1 border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold py-2 rounded-xl text-sm transition">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded-xl text-sm transition shadow-sm">
+                        Post Listing
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Report Flagging Modal -->
+    <div id="modal-report" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-3xl shadow-xl max-w-sm w-full border border-slate-100">
+            <h3 class="text-lg font-black text-slate-900 mb-2"><i class="fa-solid fa-triangle-exclamation text-rose-500 mr-1.5"></i> File Moderation Report</h3>
+            <p class="text-xs text-slate-400 mb-4">Please detail your concerns with this user. Our moderators will review this promptly.</p>
+
+            <form onsubmit="app.handleReportSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Reason for Report</label>
+                    <textarea id="report-reason" rows="4" required placeholder="Describe the policy violation, safety concerns, or spam behavior..." class="w-full px-4 py-2 rounded-xl border border-slate-200 text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500"></textarea>
+                </div>
+
+                <div class="flex space-x-3">
+                    <button type="button" onclick="document.getElementById('modal-report').classList.add('hidden')" class="flex-1 border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold py-2 rounded-xl text-sm transition">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 rounded-xl text-sm transition shadow-sm">
+                        Submit Report
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Load custom JavaScript -->
+    <script src="/static/app.js"></script>
+</body>
+</html>
