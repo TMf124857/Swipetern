@@ -257,6 +257,26 @@ docker compose up --build -d
 docker compose down
 ```
 
+#### 💡 Troubleshooting: Port Already Allocated Error
+If you receive an error stating:
+`Bind for 0.0.0.0:8000 failed: port is already allocated`
+
+This means another process (such as a local Uvicorn development server) is already running on port `8000`. You can resolve this in one of two ways:
+
+1. **Stop the conflicting process:**
+   Find and terminate the process bound to port `8000`:
+   ```bash
+   kill $(lsof -t -i :8000) 2>/dev/null || true
+   ```
+
+2. **Change the external port binding:**
+   Open `docker-compose.yml` and change the outer port mapping from `"8000:8000"` to an alternative port (such as `"8080:8000"`):
+   ```yaml
+   ports:
+     - "8080:8000"
+   ```
+   Now, you can access the application inside the container at **`http://localhost:8080`**.
+
 #### 2. Manual Docker Container Build
 Build and run the Docker image manually:
 ```bash
