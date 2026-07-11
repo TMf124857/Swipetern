@@ -176,30 +176,26 @@ python3 /home/jules/verification/verify_swipetern.py
 
 Swipetern is fully packaged and ready to deploy to production. Below are the steps for standard containerized or platform-as-a-service (PaaS) clouds:
 
-### Method A: Docker Container Deployment (Recommended)
-Create a `Dockerfile` in the root directory:
-```dockerfile
-FROM python:3.12-slim
+### Method A: Docker Container & Compose Deployment (Recommended)
 
-WORKDIR /app
+#### 1. Running with Docker Compose
+We provide a pre-configured `docker-compose.yml` file to get the service running instantly with hot-reloading capability for easier local development.
 
-# Install dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy source code
-COPY backend/ ./backend
-COPY frontend/ ./frontend
-COPY README.md .
-
-# Expose port and run Gunicorn/Uvicorn
-EXPOSE 8000
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+Start the application container with:
+```bash
+docker compose up --build -d
 ```
-Build and run the Docker image:
+- Access the app at: **`http://localhost:8000`**
+- Stop the application using:
+```bash
+docker compose down
+```
+
+#### 2. Manual Docker Container Build
+Build and run the Docker image manually:
 ```bash
 docker build -t swipetern:latest .
-docker run -p 8000:8000 --env DATABASE_URL="sqlite:///./swipetern.db" swipetern:latest
+docker run -d -p 8000:8000 --name swipetern_app --env DATABASE_URL="sqlite:///./swipetern.db" swipetern:latest
 ```
 
 ### Method B: Deploying to Heroku / Render / Railway
