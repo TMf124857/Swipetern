@@ -8,6 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* Modern aesthetic, neo-brutalist & glassmorphism accents */
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
@@ -52,6 +54,11 @@
         }
         .match-celebration {
             animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 250px;
         }
     </style>
 </head>
@@ -379,7 +386,7 @@
                                     <!-- Messages injected -->
                                 </div>
                                 <form onsubmit="app.sendMessage(event)" class="flex space-x-2">
-                                    <input type="text" id="chat-message-input" placeholder="Drop a message..." required class="flex-grow px-4 py-3 text-sm rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden font-medium">
+                                    <input type="text" id="chat-message-input" placeholder="Drop a message..." required class="flex-grow px-4 py-3 text-sm rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden font-medium font-bold">
                                     <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 rounded-xl font-bold text-sm transition">
                                         <i class="fa-solid fa-paper-plane"></i>
                                     </button>
@@ -455,7 +462,7 @@
                                             </div>
                                             <div class="flex items-center space-x-2">
                                                 <input type="checkbox" id="comp-interview" onchange="app.updateCompliance('interviewScheduled', this.checked ? 'true' : 'false')" class="h-4 w-4 rounded-md text-indigo-600 focus:ring-indigo-500 accent-indigo-600">
-                                                <span class="font-bold text-slate-500">Done</span>
+                                                <span class="font-bold text-slate-500 font-extrabold">Done</span>
                                             </div>
                                         </div>
                                     </div>
@@ -516,6 +523,29 @@
                         <div class="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
                             <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Total Swipes</span>
                             <span class="text-2xl font-black text-indigo-600 mt-1 block" id="metric-swipes">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Chart JS Visual Engagement Section -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-slate-50 border border-slate-100 p-6 rounded-2xl flex flex-col justify-between">
+                            <div>
+                                <h4 class="font-bold text-slate-700 text-sm mb-1">Customer Acquisition Cost vs. Lifetime Value</h4>
+                                <p class="text-[10px] text-slate-450 mb-3">Demonstrating massive margins driven by campus partner loops.</p>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="cacChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 border border-slate-100 p-6 rounded-2xl flex flex-col justify-between">
+                            <div>
+                                <h4 class="font-bold text-slate-700 text-sm mb-1">Target Market Segmentation (TAM/SAM/SOM)</h4>
+                                <p class="text-[10px] text-slate-450 mb-3">Capturing the massive early-career and international deployment sector.</p>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="tamChart"></canvas>
+                            </div>
                         </div>
                     </div>
 

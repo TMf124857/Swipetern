@@ -918,6 +918,64 @@ class SwipeternApp {
         document.getElementById("metric-comp-progress").innerText = `${met.compliance.in_progress} (${progPercent}%)`;
         document.getElementById("bar-progress").style.width = `${progPercent}%`;
 
+        // Render CAC Chart
+        const ctxCac = document.getElementById('cacChart').getContext('2d');
+        if (window.myCacChart) window.myCacChart.destroy();
+        window.myCacChart = new Chart(ctxCac, {
+            type: 'bar',
+            data: {
+                labels: ['Student', 'Startup', 'Enterprise'],
+                datasets: [
+                    {
+                        label: 'CAC ($)',
+                        data: [15, 120, 500],
+                        backgroundColor: '#f43f5e',
+                        borderRadius: 6
+                    },
+                    {
+                        label: 'LTV ($)',
+                        data: [180, 1600, 8000],
+                        backgroundColor: '#10b981',
+                        borderRadius: 6
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { labels: { color: '#64748b', font: { weight: 'bold', size: 10 } } }
+                },
+                scales: {
+                    x: { ticks: { color: '#64748b', font: { weight: 'bold', size: 9 } } },
+                    y: { ticks: { color: '#64748b', font: { weight: 'bold', size: 9 } } }
+                }
+            }
+        });
+
+        // Render TAM/SAM/SOM Chart
+        const ctxTam = document.getElementById('tamChart').getContext('2d');
+        if (window.myTamChart) window.myTamChart.destroy();
+        window.myTamChart = new Chart(ctxTam, {
+            type: 'doughnut',
+            data: {
+                labels: ['TAM', 'SAM', 'SOM'],
+                datasets: [{
+                    data: [43, 12, 0.35],
+                    backgroundColor: ['#6366f1', '#14b8a6', '#f59e0b'],
+                    borderColor: '#ffffff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { labels: { color: '#64748b', font: { weight: 'bold', size: 10 } } }
+                }
+            }
+        });
+
         // Raw logs
         const logContainer = document.getElementById("analytics-events-list");
         if (data.recent_events.length === 0) {
