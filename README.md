@@ -10,9 +10,10 @@ Swipetern is a high-performance, full-stack platform designed to connect **stude
 3. [Who is it for?](#-who-is-it-for)
 4. [When should it be used?](#-when-should-it-be-used)
 5. [How does it work?](#-how-does-it-work)
-6. [System Architecture](#-system-architecture)
-7. [Running & Testing Locally](#-running--testing-locally)
-8. [Deployment Guide](#-deployment-guide)
+6. [System Architecture & OOP Design](#-system-architecture--oop-design)
+7. [Role Privileges](#-role-privileges)
+8. [Running & Testing Locally](#-running--testing-locally)
+9. [Deployment Guide](#-deployment-guide)
 
 ---
 
@@ -78,8 +79,9 @@ Traditional recruitment tools suffer from three main drawbacks:
 
 ---
 
-## 🏗️ System Architecture
+## 🏗️ System Architecture & OOP Design
 
+### 1. High-Level Architecture
 The platform is designed with a lightweight, secure, and production-ready decoupled architecture:
 
 ```
@@ -110,6 +112,70 @@ The platform is designed with a lightweight, secure, and production-ready decoup
 - **Database:** SQLite with full foreign key constraint enforcement listener.
 - **Frontend:** Vanilla ES6 Javascript, HTML5, Tailwind CSS via CDN, and FontAwesome icons.
 - **E2E Testing:** Playwright (Chromium headless browser) for automated interaction flow, screenshots, and video verification.
+
+---
+
+### 2. Object-Oriented Programming (OOP) Approach
+Swipetern implements standard object-oriented principles to model domains, encapsulate internal application states, and structure business logic clearly. Each primary domain concept is mapped to specific logical components or database models.
+
+#### 🧩 Suggested Classes & Core Domain Concepts
+
+- **`User` (Base Class):**
+  - Represents the base structure for standard system access. Houses core capabilities including authentication, credential hashing, session management, dynamic activity checking (`is_active`), and notification hooks.
+- **`StudentUser` (Extends `User`):**
+  - Specializes the user with capabilities to browse target opportunities, execute swipes, and manage their personal internship-focused portfolio.
+- **`EmployerUser` (Extends `User`):**
+  - Specializes the user with capabilities to create and manage dynamic internship opportunity listings, browse student candidate cards, and record swipes.
+- **`Profile`:**
+  - Manages and encapsulates core role-specific user details (including skill vectors, university credentials, industry fields, etc.).
+- **`Opportunity`:**
+  - Represents a specific internship or co-op opening hosted by an employer containing target skillsets and details.
+- **`CandidateProfile`:**
+  - A contextual view representing a student profile formatted specifically for employer evaluation decks.
+- **`SwipeEvent`:**
+  - Standard model tracking specific raw directional interactions (`like` / `pass`) between swipers and swipe-targets.
+- **`Match`:**
+  - Represents a verified mutual connection triggered when a student and employer mutually express interest. It acts as the anchor for secondary engagement.
+- **`ChatRoom`:**
+  - Manages, routes, and archives dynamic direct messages between mutually matched users.
+- **`ComplianceRecord`:**
+  - Tracks onboarding requirements, tracks verification status across checklist steps, and computes real-time candidate readiness.
+- **`Report`:**
+  - Stores user reports and flagged behaviors submitted to moderation queues.
+
+#### ⚙️ OOP Principles Applied
+
+- **Encapsulation:**
+  Internal state variables (such as password digests, deactivation controls, and session authorization statuses) are securely encapsulated inside model instances and validation schemas, protecting raw fields from unauthorized external manipulation.
+- **Inheritance:**
+  The common attributes of system accounts (e.g., authentication, registration date, activation statuses) are cleanly defined in the parent `User` class, which is then extended to build specialized student and employer profiles.
+- **Abstraction:**
+  Complex internal logic—such as evaluating matching criteria, computing compliance scoring, and handling user warnings—is simplified into straightforward logical actions (`login()`, `swipe()`, `sendMessage()`, `updateCompliance()`) exposed through clean RESTful interfaces.
+- **Polymorphism:**
+  Allows role-based specialization of shared functions. For example, the action of retrieving a swipe discovery deck (`viewFeeds()`) polymorphicly outputs Opportunity Cards for students and Candidate Cards for employers.
+
+---
+
+## 🛡️ Role Privileges
+
+Swipetern enforces a precise, state-based role hierarchy to guarantee complete security boundary separation across users.
+
+### 🎓 Student Privileges
+- **Profile Management:** Create, configure, and dynamically update their own skills, education, target roles, and visa status.
+- **Discovery:** Retrieve custom job opportunities, filter listings, and skip/swipe on active openings.
+- **Matching & Chat:** Participate in interactive text communication with employers after a successful mutual-consent match.
+- **Compliance Integration:** View the pre-hire compliance requirements checklist and update their personal status items when requested.
+
+### 🏢 Employer Privileges
+- **Profile & Post Management:** Create/edit employer info, and publish, activate, or deactivate specific internship opportunities.
+- **Discovery:** Browse and swipe through standard candidate profiles matching target internship needs.
+- **Matching & Chat:** Directly chat with students once a mutual connection is verified.
+- **Compliance Oversight:** Review and approve compliance checkpoints (e.g., School Co-op Approval, Visa, Travel Docs) for matched candidates to monitor overall hiring readiness.
+
+### 👑 Admin Privileges
+- **Moderation Dispatch:** Access a dedicated, real-time Safety & Moderation Center to inspect submitted user abuse reports.
+- **User Penalties:** Issue warnings, suspend users, or completely deactivate malicious profiles.
+- **Analytics & Platform Health:** View an aggregated analytics dashboard tracking global swipe activity, match ratios, user ratios, and critical platform-wide events.
 
 ---
 
