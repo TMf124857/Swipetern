@@ -119,10 +119,34 @@ The platform is designed with a lightweight, secure, and production-ready decoup
 - Python 3.12+
 - pip (Python package installer)
 
-### 1. Installation
-Clone this repository and install backend requirements:
+### 1. Installation & Environment Setup
+
+Clone this repository and set up a clean Python virtual environment:
+
+**Create and Activate Virtual Environment:**
+On macOS/Linux:
 ```bash
-pip install fastapi uvicorn sqlalchemy pytest httpx pydantic email-validator playwright
+python3 -m venv venv
+source venv/bin/activate
+```
+
+On Windows (Command Prompt):
+```cmd
+python -m venv venv
+venv\Scripts\activate
+```
+
+On Windows (PowerShell):
+```powershell
+python -m venv venv
+.\venv\Scripts\activate
+```
+
+**Install Dependencies:**
+With the virtual environment active, install all required dependencies using the `requirements.txt` file:
+```bash
+pip install --upgrade pip
+pip install -r requirements.txt
 ```
 
 ### 2. Run Database Migrations & Start Server
