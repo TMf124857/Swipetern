@@ -27,29 +27,56 @@ class SwipeternApp {
             {
                 id: "STU-101",
                 name: "Emma Janssen",
-                education: "Ghent University • Belgium",
-                skills: "React, TypeScript, Tailwind CSS, REST APIs",
-                bio: "Next.js frontend engineer looking to build high-performance mobile billing systems in Kampala, Uganda.",
+                education: "Ghent University (Belgium)",
+                skills: "React, TypeScript, Node.js, UI/UX Design",
+                bio: "Next.js enthusiast looking to build modern, high-impact web and mobile applications in Kampala's booming tech scene.",
                 vibe: "High Energy, tech-community organizer, coffee lover.",
                 avatar: "fa-solid fa-graduation-cap text-indigo-400"
             },
             {
                 id: "STU-102",
                 name: "Lucas de Jong",
-                education: "TU Delft • Netherlands",
-                skills: "Python, SQL, Data Modeling, NumPy",
-                bio: "Predictive data analyst wanting to optimize regional cooperative yields using satellite telemetry.",
+                education: "TU Delft (Netherlands)",
+                skills: "Python, SQL, Data Analysis, TensorFlow",
+                bio: "Data science student passionate about applying machine learning to optimize East African smallholder supply chains.",
                 vibe: "Highly focused, field trip enthusiast, quiet execution.",
                 avatar: "fa-solid fa-user-graduate text-violet-400"
             },
             {
                 id: "STU-103",
                 name: "Marie Dubois",
-                education: "Université de Paris • France",
-                skills: "Clinical Medicine, Global Health, Triaging",
-                bio: "Public health major aiming to assist automated triage scheduling pipelines in regional clinic clusters.",
+                education: "Université de Paris (France)",
+                skills: "Clinical Medicine, Global Health Policy, Swahili (Basic)",
+                bio: "Nursing & public health student eager to assist local clinics in community triage and outreach.",
                 vibe: "Highly empathetic, triage pro, community focused.",
                 avatar: "fa-solid fa-user-doctor text-pink-400"
+            },
+            {
+                id: "STU-104",
+                name: "Derrick Okello",
+                education: "Makerere University (Uganda)",
+                skills: "Django, Postgres, Mobile Money APIs, IoT",
+                bio: "Kampala local dev ready to assist international ventures land in East Africa smoothly.",
+                vibe: "Fast builder, IoT wizard, mobile money integrations specialist.",
+                avatar: "fa-solid fa-laptop-code text-emerald-400"
+            },
+            {
+                id: "STU-105",
+                name: "Florence Nabakooza",
+                education: "Makerere University (Uganda)",
+                skills: "Python, GIS Mapping, IoT, Hardware Prototyping",
+                bio: "Enthusiastic developer focused on building smart, low-cost climate-tech soil sensors to optimize crop yield predictability.",
+                vibe: "Eco-tech advocate, physical hardware enthusiast, field explorer.",
+                avatar: "fa-solid fa-microchip text-fuchsia-400"
+            },
+            {
+                id: "STU-106",
+                name: "Nils Lindqvist",
+                education: "KTH Royal Institute (Sweden)",
+                skills: "Rust, C++, Embedded Systems, LoRaWAN",
+                bio: "Embedded hardware developer looking to test off-grid mesh network arrays for clean water distribution systems.",
+                vibe: "Low-level coding master, clean water advocate, micro-controller explorer.",
+                avatar: "fa-solid fa-network-wired text-teal-400"
             }
         ];
 
@@ -58,28 +85,46 @@ class SwipeternApp {
                 id: "OP-201",
                 company_name: "Phynx Tech Solutions",
                 industry: "Kampala • ICT / Fintech",
-                skills_required: "React, Mobile Money API, TailwindCSS",
+                skills_required: "React, TailwindCSS, REST APIs",
                 description: "Help construct our lightning-fast mobile money gateway interfaces for small businesses.",
-                employer_bio: "High growth, agile developer sprints, zero bureaucracy.",
+                employer_bio: "💡 Fast-paced startup, Friday developer syncs, flat hierarchies.",
                 avatar: "fa-solid fa-building text-fuchsia-400"
             },
             {
                 id: "OP-202",
                 company_name: "Enum Agribusiness",
                 industry: "Kigali • Agritech",
-                skills_required: "Python, Pandas, SQL Yield Models",
+                skills_required: "Python, Pandas, SQL",
                 description: "Coordinate with regional maize networks to analyze crop telemetry data logs.",
-                employer_bio: "Direct field integration, sustainable agricultural impact.",
+                employer_bio: "🌱 Sustainable impact, field trips to farming cooperatives, high analytical autonomy.",
                 avatar: "fa-solid fa-seedling text-emerald-400"
             },
             {
                 id: "OP-203",
                 company_name: "Kampala Community Clinic",
                 industry: "Kampala • Healthcare",
-                skills_required: "Data logs, clinical assistant foundation",
+                skills_required: "Clinical Foundations, Empathy, Triage",
                 description: "Support active triage protocols and optimize record verification databases.",
-                employer_bio: "Mission first, extremely deep patient relationships.",
+                employer_bio: "❤️ Mission-first, incredibly rewarding patient relationships.",
                 avatar: "fa-solid fa-house-medical text-teal-400"
+            },
+            {
+                id: "OP-204",
+                company_name: "Jibu Water Rwanda",
+                industry: "Kigali • Utilities / IoT",
+                skills_required: "C++, LoRaWAN, Hardware Debugging",
+                description: "Clean water advocacy, hands-on lab experimentation, close mentorship.",
+                employer_bio: "💧 Clean water advocacy, hands-on lab experimentation, close mentorship.",
+                avatar: "fa-solid fa-faucet-drip text-blue-400"
+            },
+            {
+                id: "OP-205",
+                company_name: "SafeBoda",
+                industry: "Kampala • Mobility",
+                skills_required: "Elixir, Erlang, Postgres, GIS Routing",
+                description: "High scale mobility platform, energetic team, fast weekly sprint iterations.",
+                employer_bio: "🏍️ High scale mobility platform, energetic team, fast weekly sprint iterations.",
+                avatar: "fa-solid fa-motorcycle text-orange-400"
             }
         ];
 
@@ -99,19 +144,60 @@ class SwipeternApp {
         this.sandMatches = [
             {
                 id: "MCH-4819",
-                student_id: "STU-103",
-                student_name: "Marie Dubois",
-                opportunity_id: "OP-203",
-                employer_name: "Kampala Community Clinic",
-                opportunity_title: "Medical Care Assistant",
+                student_id: "STU-101",
+                student_name: "Emma Janssen",
+                opportunity_id: "OP-201",
+                employer_name: "Phynx Tech Solutions",
+                opportunity_title: "Frontend Developer Intern",
                 timestamp: "Just Now"
+            },
+            {
+                id: "MCH-8291",
+                student_id: "STU-104",
+                student_name: "Derrick Okello",
+                opportunity_id: "OP-201",
+                employer_name: "Phynx Tech Solutions",
+                opportunity_title: "Frontend Developer Intern",
+                timestamp: "2 hours ago"
+            },
+            {
+                id: "MCH-9182",
+                student_id: "STU-105",
+                student_name: "Florence Nabakooza",
+                opportunity_id: "OP-202",
+                employer_name: "Enum Agribusiness",
+                opportunity_title: "Agri-Data Analyst Intern",
+                timestamp: "1 day ago"
+            },
+            {
+                id: "MCH-3042",
+                student_id: "STU-106",
+                student_name: "Nils Lindqvist",
+                opportunity_id: "OP-204",
+                employer_name: "Jibu Water Rwanda",
+                opportunity_title: "IoT Systems Engineering Intern",
+                timestamp: "2 days ago"
             }
         ];
 
         this.sandChats = {
             "MCH-4819": [
                 { sender: "system", text: "Double Opt-In Match! Instant chat channel initialized.", time: "Just Now" },
-                { sender: "employer", text: "Welcome to our match channel, Marie! We would love to set up an introductory chat.", time: "Just Now" }
+                { sender: "employer", text: "Hey! We loved your portfolio. That responsive layout looks perfect. When are you free for a call?", time: "Just Now" }
+            ],
+            "MCH-8291": [
+                { sender: "system", text: "Double Opt-In Match! Instant chat channel initialized.", time: "2 hours ago" },
+                { sender: "employer", text: "Mambo Derrick! Ready to test mobile money integrations this week?", time: "1 hour ago" },
+                { sender: "student", text: "Mambo! Yes, absolutely ready. Makerere labs approved the API signoffs already.", time: "Just Now" }
+            ],
+            "MCH-9182": [
+                { sender: "system", text: "Double Opt-In Match! Instant chat channel initialized.", time: "1 day ago" },
+                { sender: "employer", text: "Welcome to the team Florence! Our cooperative field visits start next Monday.", time: "20 hours ago" }
+            ],
+            "MCH-3042": [
+                { sender: "system", text: "Double Opt-In Match! Instant chat channel initialized.", time: "2 days ago" },
+                { sender: "employer", text: "Hej Nils! Your embedded Rust and LoRa experience is incredibly unique. Our water filtration meters currently run custom firmware. Are you free for a brief call next Tuesday?", time: "1 day ago" },
+                { sender: "student", text: "Thanks for the outreach! I am absolutely free. My KTH academic advisor has already approved the syllabus mapping for 15 credits. Looking forward to it!", time: "Just Now" }
             ]
         };
 
@@ -208,6 +294,7 @@ class SwipeternApp {
         }
     }
 
+    // Hide error banner
     hideError() {
         const errBanner = document.getElementById("error-banner");
         if (errBanner) errBanner.classList.add("hidden");
@@ -395,7 +482,7 @@ class SwipeternApp {
             </div>
             <div>
                 <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Your Skills (Comma separated)</label>
-                <input type="text" id="prof-skills" placeholder="e.g. Python, React, Figma" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
+                <input type="text" id="prof-skills" placeholder="e.g. Python, React, Figma" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
             </div>
             <div>
                 <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Target Job Titles (Comma separated)</label>
@@ -403,7 +490,7 @@ class SwipeternApp {
             </div>
             <div>
                 <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Visa / Work Permit Status</label>
-                <select id="prof-visa-status" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-bold" style="min-height: 44px;">
+                <select id="prof-visa-status" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-bold" style="min-height: 44px;">
                     <option value="not_required">Citizen / PR (No sponsorship needed)</option>
                     <option value="pending">F-1 Visa / Needs Sponsorship</option>
                     <option value="approved">Already Approved Work Visa</option>
@@ -607,11 +694,11 @@ class SwipeternApp {
         if (mode === 'student') {
             btnStud.className = "px-3.5 py-1.5 text-[10px] font-black rounded-lg bg-slate-900 text-fuchsia-400 shadow-sm transition-all uppercase tracking-wider";
             btnRecr.className = "px-3.5 py-1.5 text-[10px] font-black rounded-lg text-slate-500 hover:text-slate-800 transition-all uppercase tracking-wider";
-            identityLabel.innerText = "Candidate View";
+            identityLabel.innerText = "Candidate View (Europe/NA)";
         } else {
             btnStud.className = "px-3.5 py-1.5 text-[10px] font-black rounded-lg text-slate-500 hover:text-slate-800 transition-all uppercase tracking-wider";
             btnRecr.className = "px-3.5 py-1.5 text-[10px] font-black rounded-lg bg-slate-900 text-fuchsia-400 shadow-sm transition-all uppercase tracking-wider";
-            identityLabel.innerText = "Employer View";
+            identityLabel.innerText = "Employer View (East Africa)";
         }
         this.renderSandboxCard();
     }
@@ -644,10 +731,10 @@ class SwipeternApp {
                                 <p class="text-[11px] text-slate-400 font-bold">${role.industry}</p>
                             </div>
                         </div>
-                        <span class="text-[9px] bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">15 ECTS</span>
+                        <span class="text-[9px] bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">15 ECTS Equivalent</span>
                     </div>
                     <div class="space-y-1">
-                        <div class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Vibe Check:</div>
+                        <div class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Culture Vibe Check:</div>
                         <p class="text-xs italic text-fuchsia-400 font-bold">${role.employer_bio}</p>
                     </div>
                     <div class="space-y-1">
@@ -687,12 +774,12 @@ class SwipeternApp {
                         <span class="text-[9px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">Vetted student</span>
                     </div>
                     <div class="space-y-1">
-                        <div class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Vibe Check:</div>
-                        <p class="text-xs italic text-fuchsia-400 font-bold">${student.vibe}</p>
+                        <div class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Pitch Script & Bio Snippet:</div>
+                        <p class="text-xs italic text-fuchsia-400 font-bold">"${student.bio}"</p>
                     </div>
                     <div class="space-y-1">
-                        <div class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Pitch:</div>
-                        <p class="text-xs text-slate-300 leading-relaxed font-semibold line-clamp-2">${student.bio}</p>
+                        <div class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Target Sector:</div>
+                        <p class="text-xs text-slate-300 leading-relaxed font-semibold">${student.vibe}</p>
                     </div>
                     <div class="flex flex-wrap gap-1 pt-1">
                         ${student.skills.split(', ').map(tag => `<span class="text-[9px] bg-slate-950 border border-slate-800 px-2 py-0.5 rounded text-slate-400 font-bold">${tag}</span>`).join('')}
@@ -831,9 +918,9 @@ class SwipeternApp {
 
         let messageText = "";
         if (type === 'request_interview') {
-            messageText = `Swipetern Scheduler: Google Meet invite request dispatched. Let's arrange a 15-minute call.`;
+            messageText = `Google Meet invite request dispatched. Let's arrange a 15-minute call.`;
         } else if (type === 'ects_check') {
-            messageText = `Academic Compliance: Dynamic 15 ECTS logging parameters initiated. Please review the curriculum parameters.`;
+            messageText = `Academic Compliance: Dynamic 15 ECTS logging parameters initiated.`;
         }
 
         this.sandChats[this.activeSandMatchId].push({
@@ -846,8 +933,8 @@ class SwipeternApp {
 
         setTimeout(() => {
             let response = "";
-            if (type === 'request_interview') response = "Slot accepted! Let's arrange it.";
-            else if (type === 'ects_check') response = "Done. Academic co-op signature has been logged.";
+            if (type === 'request_interview') response = "Slot accepted! Tuesday morning works perfectly for me.";
+            else if (type === 'ects_check') response = "Done! My university co-op signoff forms have been logged.";
 
             this.sandChats[this.activeSandMatchId].push({
                 sender: "student",
@@ -909,7 +996,7 @@ class SwipeternApp {
                 <div class="p-6 flex flex-col justify-between flex-grow overflow-y-auto max-h-[160px] bg-slate-900 border-t border-slate-800">
                     <div>
                         <h5 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Company Description</h5>
-                        <p class="text-xs text-slate-350 line-clamp-2 mb-3">${card.employer_bio || 'No description provided.'}</p>
+                        <p class="text-xs text-slate-355 line-clamp-2 mb-3">${card.employer_bio || 'No description provided.'}</p>
 
                         <h5 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Requirements</h5>
                         <p class="text-xs text-slate-200 leading-relaxed font-medium mb-3">${card.description}</p>
@@ -930,7 +1017,7 @@ class SwipeternApp {
                 <div class="p-6 flex flex-col justify-between flex-grow overflow-y-auto max-h-[160px] bg-slate-900 border-t border-slate-800">
                     <div>
                         <h5 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">About Me</h5>
-                        <p class="text-xs text-slate-350 line-clamp-2 mb-3">${card.bio || 'Hello, looking for awesome internships!'}</p>
+                        <p class="text-xs text-slate-355 line-clamp-2 mb-3">${card.bio || 'Hello, looking for awesome internships!'}</p>
 
                         <h5 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Target Roles</h5>
                         <p class="text-xs text-slate-200 font-bold mb-3">${card.target_job_titles || 'Software Engineer'}</p>
@@ -1296,7 +1383,7 @@ class SwipeternApp {
         if (reports.length === 0) {
             tableBody.innerHTML = `
                 <tr>
-                    <td colspan="6" class="text-center py-10 text-slate-500">No safety reports recorded. Good work!</td>
+                    <td colspan="6" class="text-center py-10 text-slate-400">No safety reports recorded. Good work!</td>
                 </tr>
             `;
             return;
@@ -1322,8 +1409,8 @@ class SwipeternApp {
                         ${isPending ? `
                             <button onclick="app.executeAdminAction(${r.id}, 'ignore')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-bold px-2.5 py-1.5 rounded focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 32px;">Ignore</button>
                             <button onclick="app.executeAdminAction(${r.id}, 'warn')" class="text-[10px] bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/20 text-orange-400 font-bold px-2.5 py-1.5 rounded focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 32px;">Warn</button>
-                            <button onclick="app.executeAdminAction(${r.id}, 'suspend')" class="text-[10px] bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-450 font-bold px-2.5 py-1.5 rounded focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 32px;">Suspend</button>
-                        ` : `<span class="text-[10px] font-semibold text-slate-500">Reviewed</span>`}
+                            <button onclick="app.executeAdminAction(${r.id}, 'suspend')" class="text-[10px] bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-455 font-bold px-2.5 py-1.5 rounded focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 32px;">Suspend</button>
+                        ` : `<span class="text-[10px] font-semibold text-slate-300">Reviewed</span>`}
                     </td>
                 </tr>
             `;
