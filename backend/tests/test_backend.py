@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from backend.database import Base, get_db
-from backend.main import app, ACTIVE_SESSIONS
+from backend.main import app
 from backend import models, crud
 
 # Set up test database
@@ -14,8 +14,6 @@ TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engin
 
 @pytest.fixture(scope="function", autouse=True)
 def setup_db():
-    # Clear active sessions to start clean
-    ACTIVE_SESSIONS.clear()
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
     yield

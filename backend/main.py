@@ -14,18 +14,46 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Swipetern API", description="API for Swipetern mutual-consent matching system")
 
-# CORS middleware to allow local development
+import hmac
+import hashlib
+
+# CORS middleware to allow secure local development and production Vercel environments
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+        "http://localhost:8080",
+        "http://127.0.0.1:8080",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000"
+    ],
+    allow_origin_regex="https://.*\\.vercel\\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Global Session Store (token -> user_id)
-# Seed with a default admin session token for testing ease
-ACTIVE_SESSIONS: Dict[str, int] = {}
+SECRET_KEY = os.getenv("SECRET_KEY", "swipetern-super-secret-key-123")
+
+def sign_token(user_id: int) -> str:
+    msg = str(user_id).encode("utf-8")
+    sig = hmac.new(SECRET_KEY.encode("utf-8"), msg, hashlib.sha256).hexdigest()
+    return f"{user_id}.{sig}"
+
+def verify_token(token: str) -> Optional[int]:
+    try:
+        parts = token.split(".")
+        if len(parts) != 2:
+            return None
+        user_id_str, sig = parts
+        user_id = int(user_id_str)
+        expected_sig = hmac.new(SECRET_KEY.encode("utf-8"), str(user_id).encode("utf-8"), hashlib.sha256).hexdigest()
+        if hmac.compare_digest(sig, expected_sig):
+            return user_id
+    except Exception:
+        pass
+    return None
 
 # Dependency to get current user from token (Header or Cookie)
 def get_current_user(
@@ -38,11 +66,11 @@ def get_current_user(
     # 1. Check Authorization header
     if authorization and authorization.startswith("Bearer "):
         token = authorization.split(" ")[1]
-        user_id = ACTIVE_SESSIONS.get(token)
+        user_id = verify_token(token)
 
     # 2. Check Cookie
     if not user_id and session_token:
-        user_id = ACTIVE_SESSIONS.get(session_token)
+        user_id = verify_token(session_token)
 
     if not user_id:
         raise HTTPException(
@@ -67,9 +95,7 @@ def get_current_user(
 
 # Helper to generate and store token
 def create_user_session(user_id: int) -> str:
-    token = secrets.token_hex(20)
-    ACTIVE_SESSIONS[token] = user_id
-    return token
+    return sign_token(user_id)
 
 # --- AUTH ROUTES ---
 
@@ -115,16 +141,7 @@ def login(user_in: schemas.UserLogin, response: Response, db: Session = Depends(
     }
 
 @app.post("/api/auth/logout")
-def logout(response: Response, authorization: Optional[str] = Header(None), session_token: Optional[str] = Cookie(None)):
-    token = None
-    if authorization and authorization.startswith("Bearer "):
-        token = authorization.split(" ")[1]
-    elif session_token:
-        token = session_token
-
-    if token and token in ACTIVE_SESSIONS:
-        del ACTIVE_SESSIONS[token]
-
+def logout(response: Response):
     response.delete_cookie("session_token")
     return {"detail": "Successfully logged out"}
 

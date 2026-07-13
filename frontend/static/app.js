@@ -918,13 +918,34 @@ class SwipeternApp {
         document.getElementById("metric-comp-progress").innerText = `${met.compliance.in_progress} (${progPercent}%)`;
         document.getElementById("bar-progress").style.width = `${progPercent}%`;
 
+        // Label splitter helper to respect AGENTS.md guardrails
+        const splitLabel = (label) => {
+            if (label.length <= 16) return label;
+            const words = label.split(' ');
+            let lines = [];
+            let currentLine = '';
+            for (let word of words) {
+                if ((currentLine + ' ' + word).trim().length <= 16) {
+                    currentLine = (currentLine + ' ' + word).trim();
+                } else {
+                    if (currentLine) lines.push(currentLine);
+                    currentLine = word;
+                }
+            }
+            if (currentLine) lines.push(currentLine);
+            return lines;
+        };
+
+        const cacLabels = ['Student Acquisition', 'Startup Recruiter', 'Enterprise Partner'].map(splitLabel);
+        const tamLabels = ['Total Addressable Market', 'Serviceable Addressable Market', 'Serviceable Obtainable Market'].map(splitLabel);
+
         // Render CAC Chart
         const ctxCac = document.getElementById('cacChart').getContext('2d');
         if (window.myCacChart) window.myCacChart.destroy();
         window.myCacChart = new Chart(ctxCac, {
             type: 'bar',
             data: {
-                labels: ['Student', 'Startup', 'Enterprise'],
+                labels: cacLabels,
                 datasets: [
                     {
                         label: 'CAC ($)',
@@ -944,7 +965,15 @@ class SwipeternApp {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { labels: { color: '#64748b', font: { weight: 'bold', size: 10 } } }
+                    legend: { labels: { color: '#64748b', font: { weight: 'bold', size: 10 } } },
+                    tooltip: {
+                        callbacks: {
+                            title: function(context) {
+                                const label = context[0].label || '';
+                                return Array.isArray(label) ? label.join(' ') : label;
+                            }
+                        }
+                    }
                 },
                 scales: {
                     x: { ticks: { color: '#64748b', font: { weight: 'bold', size: 9 } } },
@@ -959,7 +988,7 @@ class SwipeternApp {
         window.myTamChart = new Chart(ctxTam, {
             type: 'doughnut',
             data: {
-                labels: ['TAM', 'SAM', 'SOM'],
+                labels: tamLabels,
                 datasets: [{
                     data: [43, 12, 0.35],
                     backgroundColor: ['#6366f1', '#14b8a6', '#f59e0b'],
@@ -971,7 +1000,15 @@ class SwipeternApp {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { labels: { color: '#64748b', font: { weight: 'bold', size: 10 } } }
+                    legend: { labels: { color: '#64748b', font: { weight: 'bold', size: 10 } } },
+                    tooltip: {
+                        callbacks: {
+                            title: function(context) {
+                                const label = context[0].label || '';
+                                return Array.isArray(label) ? label.join(' ') : label;
+                            }
+                        }
+                    }
                 }
             }
         });

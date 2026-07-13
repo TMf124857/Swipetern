@@ -284,7 +284,29 @@ docker build -t swipetern:latest .
 docker run -d -p 8000:8000 --name swipetern_app --env DATABASE_URL="sqlite:///./swipetern.db" swipetern:latest
 ```
 
-### Method B: Deploying to Heroku / Render / Railway
+### Method B: Deploying to Vercel (swipetern.vercel.app)
+Swipetern is fully optimized for zero-configuration, lightning-fast deployment on Vercel utilizing Serverless Functions (Python runtime) and Static Asset CDN.
+
+We have preconfigured a `vercel.json` file in the root directory to handle automated routing between the frontend single-page application and the FastAPI serverless backend.
+
+#### 1. Quick Deploy via Vercel CLI
+Ensure you have the Vercel CLI installed, then log in and deploy:
+```bash
+npm install -g vercel
+vercel login
+vercel
+```
+
+#### 2. Connect Your Git Repository
+Alternatively, connect your repository to Vercel via the Vercel Dashboard:
+- Choose the repository of your project.
+- Vercel automatically detects the `vercel.json` configuration and builds your frontend & backend as serverless functions.
+- Add an environment variable `DATABASE_URL` under your Project Settings: `sqlite:///./swipetern.db` (or connect to a remote serverless PostgreSQL instance).
+- Your application will be live at: **`https://swipetern.vercel.app`**
+
+---
+
+### Method C: Deploying to Heroku / Render / Railway
 1. **Requirements:** Create a `requirements.txt` file:
    ```text
    fastapi>=0.110.0
