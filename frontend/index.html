@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Swipetern - Vibe Match Internships for Gen Z</title>
+    <title>Swipetern - Global-East Africa Mutual Match Internships</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -99,9 +99,12 @@
         <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center space-x-2.5 cursor-pointer" onclick="app.showTab('discovery')" aria-label="Swipetern Homepage">
                 <div class="bg-gradient-to-tr from-fuchsia-500 via-pink-500 to-indigo-500 p-2.5 rounded-2xl text-white shadow-md shadow-fuchsia-500/20 transform hover:scale-105 transition duration-200">
-                    <i class="fa-solid fa-fire-flame-curved text-xl"></i>
+                    <i class="fa-solid fa-earth-africa text-xl"></i>
                 </div>
-                <span class="text-2xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 via-purple-400 to-indigo-400">Swipetern</span>
+                <div class="flex flex-col items-start leading-none">
+                    <span class="text-2xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 via-purple-400 to-indigo-400">Swipetern</span>
+                    <span class="text-[9px] uppercase tracking-widest text-slate-500 font-extrabold mt-0.5">East Africa Corridor</span>
+                </div>
             </div>
 
             <!-- Navbar Action Area -->
@@ -132,7 +135,7 @@
     <main class="flex-grow flex flex-col max-w-7xl w-full mx-auto p-4 md:p-6">
 
         <!-- Loading Spinner overlay -->
-        <div id="global-spinner" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-md flex items-center justify-center z-50">
+        <div id="global-spinner" class="hidden fixed inset-0 bg-slate-955/70 backdrop-blur-md flex items-center justify-center z-50">
             <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl shadow-2xl flex flex-col items-center space-y-4 max-w-xs w-full text-center">
                 <div class="relative flex items-center justify-center">
                     <div class="animate-ping absolute inline-flex h-8 w-8 rounded-full bg-fuchsia-400 opacity-75"></div>
@@ -149,7 +152,7 @@
         </div>
 
         <!-- Error Alert Banner -->
-        <div id="error-banner" class="hidden mb-6 bg-rose-950/40 border border-rose-900/60 text-rose-200 p-4 rounded-2xl flex items-start space-x-3 shadow-xs">
+        <div id="error-banner" class="hidden mb-6 bg-rose-955/40 border border-rose-900/60 text-rose-200 p-4 rounded-2xl flex items-start space-x-3 shadow-xs">
             <i class="fa-solid fa-circle-exclamation text-rose-500 text-xl mt-0.5 animate-pulse"></i>
             <div class="flex-grow">
                 <h4 class="font-bold text-sm leading-snug">Opps, vibe check failed!</h4>
@@ -167,16 +170,16 @@
             <!-- Hero Header Pitch -->
             <div class="text-center max-w-4xl mx-auto space-y-4">
                 <span class="inline-block bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20 font-extrabold tracking-widest px-4 py-2 rounded-full uppercase text-[10px] animate-pulse shadow-xs">
-                    <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> No Resume Black Holes. Just Vibes.
+                    <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Karibu! Connecting East Africa & Global Interns
                 </span>
                 <h1 class="text-4xl md:text-6xl font-black text-slate-100 leading-tight tracking-tight">
-                    Swipe Internships. <br/>
+                    Deploy East Africa. <br/>
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 via-purple-400 to-indigo-400">
-                        Mutual Consent, Straight to DM.
+                        Mutual Consent, Safe Relocation.
                     </span>
                 </h1>
                 <p class="text-base text-slate-400 leading-relaxed max-w-xl mx-auto font-medium">
-                    Try our live simulation sandbox below right now! Double-opt-in swiping unlocks immediate chat channels and Departure checklists instantly.
+                    Are you an employer in Uganda, Kenya, or Rwanda, or an eager student from Europe or North America? Try our live simulation sandbox below to match, chat, and clear East African departure compliance checklists instantly.
                 </p>
             </div>
 
@@ -189,16 +192,16 @@
                         <div>
                             <span class="text-[10px] font-bold uppercase text-slate-500 tracking-widest">Active Simulator Deck:</span>
                             <div class="flex items-center space-x-2 mt-1">
-                                <span id="landing-identity" class="text-xs font-black text-slate-200 uppercase tracking-wider">Candidate View</span>
+                                <span id="landing-identity" class="text-xs font-black text-slate-200 uppercase tracking-wider">Candidate View (Europe/NA)</span>
                                 <span class="h-2 w-2 rounded-full bg-fuchsia-400 animate-pulse"></span>
                             </div>
                         </div>
                         <div class="flex space-x-2 bg-slate-950 p-1 rounded-xl border border-slate-800">
                             <button onclick="app.setSandboxMode('student')" id="btn-sand-student" class="px-3.5 py-1.5 text-[10px] font-black rounded-lg bg-slate-900 text-fuchsia-400 shadow-sm transition-all uppercase tracking-wider focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 36px;">
-                                Student
+                                Intern View
                             </button>
                             <button onclick="app.setSandboxMode('employer')" id="btn-sand-employer" class="px-3.5 py-1.5 text-[10px] font-black rounded-lg text-slate-400 hover:text-slate-200 transition-all uppercase tracking-wider focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 36px;">
-                                Employer
+                                Employer View
                             </button>
                         </div>
                     </div>
@@ -235,7 +238,7 @@
                     <!-- Sandbox Chat Space -->
                     <div class="flex-grow flex flex-col justify-between mt-4 border-t border-slate-800 pt-4 overflow-hidden">
                         <div class="flex items-center justify-between mb-2">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500" id="sandbox-chat-title">Chat Partner</span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400" id="sandbox-chat-title">Chat Partner</span>
                             <span class="text-[9px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider">Vibe Active</span>
                         </div>
 
@@ -246,13 +249,13 @@
 
                         <!-- Quick Responses Sandbox -->
                         <div class="space-y-2">
-                            <span class="text-[9px] font-black uppercase text-slate-400 tracking-wider">Quick Sandbox Interactions:</span>
+                            <span class="text-[9px] font-black uppercase text-slate-400 tracking-wider">Quick East African Actions:</span>
                             <div class="flex flex-wrap gap-2">
                                 <button onclick="app.sendSandboxTemplate('request_interview')" class="text-[10px] bg-slate-950 hover:bg-indigo-600 border border-slate-800 hover:border-indigo-500 text-white font-bold px-3 py-1.5 rounded-xl transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px; min-width: 44px;">
-                                    <i class="fa-solid fa-calendar-days mr-1"></i> Set Up Google Meet
+                                    <i class="fa-solid fa-calendar-days mr-1"></i> Propose Google Meet Call
                                 </button>
                                 <button onclick="app.sendSandboxTemplate('ects_check')" class="text-[10px] bg-slate-950 hover:bg-indigo-600 border border-slate-800 hover:border-indigo-500 text-white font-bold px-3 py-1.5 rounded-xl transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px; min-width: 44px;">
-                                    <i class="fa-solid fa-graduation-cap mr-1"></i> Send Co-op Signoff
+                                    <i class="fa-solid fa-graduation-cap mr-1"></i> Send Co-op/ECTS Signoff
                                 </button>
                             </div>
                         </div>
@@ -279,7 +282,7 @@
                             <span class="text-[10px] font-black text-teal-400 bg-teal-500/10 border border-teal-500/20 px-2 py-0.5 rounded-full uppercase tracking-wider">Academic 15 ECTS</span>
                         </div>
                         <h4 class="font-extrabold text-slate-100 text-sm">University Approval</h4>
-                        <p class="text-xs text-slate-400 leading-relaxed font-medium">Syllabus logs mapped and signed off by academic department.</p>
+                        <p class="text-xs text-slate-400 leading-relaxed font-medium">Coursework validation logged between European/NA university and the hiring employer.</p>
                         <div class="flex items-center space-x-2 pt-2">
                             <input type="checkbox" id="sand-check-1" checked disabled class="h-4 w-4 text-teal-600 rounded bg-slate-950 border-slate-800">
                             <span class="text-xs font-bold text-slate-300">Verification complete</span>
@@ -294,8 +297,8 @@
                             </div>
                             <span class="text-[10px] font-black text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded-full uppercase tracking-wider">Regulatory</span>
                         </div>
-                        <h4 class="font-extrabold text-slate-100 text-sm">Visa & Work Permit</h4>
-                        <p class="text-xs text-slate-400 leading-relaxed font-medium">Track passport verification, background logs, and host visa requirements.</p>
+                        <h4 class="font-extrabold text-slate-100 text-sm">Uganda Work Permit / Special Entry Visa</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed font-medium">Verify valid passport data logs and East African immigration entry approvals.</p>
                         <div class="flex items-center space-x-2 pt-2">
                             <input type="checkbox" id="sand-check-2" onchange="app.toggleSandboxCheck(2)" class="h-4 w-4 text-indigo-500 rounded bg-slate-950 border-slate-800 focus:ring-indigo-500">
                             <span class="text-xs font-bold text-slate-300">Mark verified</span>
@@ -308,10 +311,10 @@
                             <div class="h-8 w-8 rounded-lg bg-fuchsia-500/10 text-fuchsia-400 font-black text-sm flex items-center justify-center border border-fuchsia-500/20">
                                 3
                             </div>
-                            <span class="text-[10px] font-black text-fuchsia-400 bg-fuchsia-500/10 border border-fuchsia-500/20 px-2 py-0.5 rounded-full uppercase tracking-wider">Credentials</span>
+                            <span class="text-[10px] font-black text-fuchsia-400 bg-fuchsia-500/10 border border-fuchsia-500/20 px-2 py-0.5 rounded-full uppercase tracking-wider">Health Security</span>
                         </div>
-                        <h4 class="font-extrabold text-slate-100 text-sm">Travel Documents</h4>
-                        <p class="text-xs text-slate-400 leading-relaxed font-medium">Itinerary logistics, vaccination tracking, and clinical safety checklist.</p>
+                        <h4 class="font-extrabold text-slate-100 text-sm">Yellow Fever & Travel Logistics</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed font-medium">Verify immunization logs, flight itinerary, and local medical cover certificates.</p>
                         <div class="flex items-center space-x-2 pt-2">
                             <input type="checkbox" id="sand-check-3" onchange="app.toggleSandboxCheck(3)" class="h-4 w-4 text-fuchsia-500 rounded bg-slate-950 border-slate-800 focus:ring-fuchsia-500">
                             <span class="text-xs font-bold text-slate-300">Mark verified</span>
@@ -322,8 +325,8 @@
 
             <!-- Call to action: Sign up / Sign in -->
             <div class="bg-gradient-to-r from-fuchsia-500 via-purple-600 to-indigo-600 rounded-[2.5rem] p-8 text-white text-center shadow-xl space-y-4">
-                <h3 class="text-2xl md:text-3xl font-black tracking-tight leading-snug">Fall in love with Swipetern?</h3>
-                <p class="text-xs md:text-sm text-indigo-50 font-bold max-w-lg mx-auto leading-relaxed">Claim your student or employer profile right now! Secure persistent database matchmaking, real-time messaging, and safety moderation desks.</p>
+                <h3 class="text-2xl md:text-3xl font-black tracking-tight leading-snug">Love the Swipetern Corridor?</h3>
+                <p class="text-xs md:text-sm text-indigo-50 font-bold max-w-lg mx-auto leading-relaxed">Claim your student or employer profile right now! Connect with elite tech agribusiness and health organizations across Uganda and East Africa.</p>
                 <button onclick="app.showAuthModal()" class="bg-slate-950 hover:bg-slate-900 border border-slate-800 text-white font-black px-6 py-3.5 rounded-2xl text-xs uppercase tracking-wider shadow-md transform hover:scale-105 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
                     🚀 Create My Free Account Now
                 </button>
@@ -423,7 +426,7 @@
                     <!-- Right Pane: Active Chat conversation & Compliance Sidebar -->
                     <div class="flex-grow flex flex-col h-full hidden" id="chat-workspace">
                         <!-- Chat header -->
-                        <div class="p-4 border-b border-slate-850 flex justify-between items-center bg-slate-950/50">
+                        <div class="p-4 border-b border-slate-850 flex justify-between items-center bg-slate-955/50">
                             <div class="flex items-center space-x-3">
                                 <div class="h-10 w-10 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold" id="chat-header-initials">
                                     T
@@ -492,8 +495,8 @@
                                         <!-- Step 2: Visa Status -->
                                         <div class="bg-slate-950 border border-slate-800 p-3.5 rounded-xl flex items-start justify-between">
                                             <div>
-                                                <h5 class="font-bold text-slate-200">2. Visa / Work Permit</h5>
-                                                <p class="text-[10px] text-slate-500 mt-0.5">Passport & F1 status.</p>
+                                                <h5 class="font-bold text-slate-200">2. EA Permit / Entry Visa</h5>
+                                                <p class="text-[10px] text-slate-500 mt-0.5">Immigration entry status.</p>
                                             </div>
                                             <select id="comp-visa" onchange="app.updateCompliance('visaStatus', this.value)" class="text-[11px] font-bold border border-slate-700 rounded-lg p-1 bg-slate-900 text-slate-200 focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 32px;">
                                                 <option value="pending">Pending</option>
@@ -506,8 +509,8 @@
                                         <!-- Step 3: Travel Docs -->
                                         <div class="bg-slate-950 border border-slate-800 p-3.5 rounded-xl flex items-start justify-between">
                                             <div>
-                                                <h5 class="font-bold text-slate-200">3. Credentials</h5>
-                                                <p class="text-[10px] text-slate-500 mt-0.5">Core verification documents.</p>
+                                                <h5 class="font-bold text-slate-200">3. Health / Yellow Fever</h5>
+                                                <p class="text-[10px] text-slate-500 mt-0.5">Yellow Fever & medical logs.</p>
                                             </div>
                                             <select id="comp-travel" onchange="app.updateCompliance('travelDocs', this.value)" class="text-[11px] font-bold border border-slate-700 rounded-lg p-1 bg-slate-900 text-slate-200 focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 32px;">
                                                 <option value="pending">Pending</option>
@@ -638,7 +641,7 @@
                         </div>
 
                         <!-- Compliance Readiness Breakdown -->
-                        <div class="bg-slate-950 border border-slate-800 p-5 rounded-2xl">
+                        <div class="bg-slate-955 border border-slate-800 p-5 rounded-2xl">
                             <h4 class="font-bold text-sm text-slate-300 mb-4">Compliance Progress</h4>
                             <div class="space-y-3">
                                 <div>
@@ -664,9 +667,9 @@
                     </div>
 
                     <!-- Live raw logs -->
-                    <div class="border border-slate-800 p-5 rounded-2xl bg-slate-950">
+                    <div class="border border-slate-800 p-5 rounded-2xl bg-slate-955">
                         <h4 class="font-bold text-sm text-slate-300 mb-3"><i class="fa-solid fa-clock-rotate-left mr-1.5 text-fuchsia-500"></i> Event Stream</h4>
-                        <div class="overflow-y-auto max-h-48 text-xs font-mono space-y-1.5 p-3 bg-slate-950 border border-slate-850 text-slate-300 rounded-xl" id="analytics-events-list">
+                        <div class="overflow-y-auto max-h-48 text-xs font-mono space-y-1.5 p-3 bg-slate-955 border border-slate-850 text-slate-300 rounded-xl" id="analytics-events-list">
                             <!-- Events injected -->
                         </div>
                     </div>
@@ -679,7 +682,7 @@
                         <p class="text-xs text-slate-400 mt-1">Review reported profiles and suspend offenders instantly.</p>
                     </div>
 
-                    <div class="border border-slate-800 rounded-2xl overflow-hidden bg-slate-950 shadow-xs">
+                    <div class="border border-slate-800 rounded-2xl overflow-hidden bg-slate-955 shadow-xs">
                         <table class="w-full text-left text-xs">
                             <thead class="bg-slate-900 text-slate-400 font-bold uppercase tracking-wider border-b border-slate-800">
                                 <tr>
@@ -703,7 +706,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-slate-950 border-t border-slate-900 py-6 mt-auto">
+    <footer class="bg-slate-955 border-t border-slate-900 py-6 mt-auto">
         <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 font-semibold tracking-wide flex justify-between items-center">
             <span>&copy; 2026 Swipetern Inc. All rights reserved.</span>
             <div class="space-x-3">
@@ -760,7 +763,7 @@
                 <div class="grid grid-cols-2 gap-2 pt-1">
                     <label class="border-2 border-fuchsia-500 bg-fuchsia-500/10 p-2.5 rounded-xl flex items-center justify-center space-x-1.5 cursor-pointer text-[10px] font-black uppercase tracking-wider" id="role-label-student">
                         <input type="radio" name="reg-role" value="student" checked onchange="app.toggleRoleLabel('student')" class="accent-fuchsia-500">
-                        <span class="text-slate-200">Candidate</span>
+                        <span class="text-slate-200">Intern</span>
                     </label>
                     <label class="border border-slate-700 p-2.5 rounded-xl flex items-center justify-center space-x-1.5 cursor-pointer text-[10px] font-black uppercase tracking-wider" id="role-label-employer">
                         <input type="radio" name="reg-role" value="employer" onchange="app.toggleRoleLabel('employer')" class="accent-fuchsia-500">
@@ -784,7 +787,7 @@
             <h3 class="text-3xl font-black text-slate-100 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-400 via-purple-400 to-indigo-400 leading-snug">Vibe Check Passed!</h3>
             <p class="text-slate-400 text-sm mt-2 font-medium leading-relaxed">You and the other user have reciprocal likes. Ready to vibe?</p>
 
-            <div class="my-6 bg-slate-950 p-4 rounded-2xl border border-slate-800 text-xs text-left space-y-1.5 font-semibold text-slate-300">
+            <div class="my-6 bg-slate-955 p-4 rounded-2xl border border-slate-800 text-xs text-left space-y-1.5 font-semibold text-slate-300">
                 <div><span class="font-bold text-slate-500">Student:</span> <span id="match-student-name" class="font-medium text-slate-200"></span></div>
                 <div><span class="font-bold text-slate-500">Employer:</span> <span id="match-employer-name" class="font-medium text-slate-200"></span></div>
                 <div><span class="font-bold text-slate-500">Opportunity:</span> <span id="match-opp-title" class="font-medium text-fuchsia-400"></span></div>

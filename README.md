@@ -23,6 +23,15 @@ Swipetern is a high-performance, full-stack platform designed to connect **stude
 Instead of sending countless resume applications into a black hole, students discover internship positions, and employers discover student candidates, by scrolling through curated cards.
 When both parties swipe "LIKE" on each other, a **Mutual Match** is instantly created. This unlocks an integrated **Live Chat room** and an interactive **Compliance Tracker checklist** to transition candidates from "match" to "ready to onboard."
 
+### 🌍 The Global - East Africa Corridor
+
+Swipetern is specifically optimized to power the **Global-to-East Africa internship corridor**. It connects innovative employers and grassroots non-profits in East African hubs (such as **Kampala, Uganda**, **Nairobi, Kenya**, and **Kigali, Rwanda**) with talented student interns seeking real-world, high-impact deployments from **Europe and North America**.
+
+This unique corridor requires robust operational and legal guardrails to navigate international relocations safely:
+1. **Academic ECTS Integration:** Facilitates automated signoffs between international universities and East African organizations, ensuring that assignments satisfy required **European Credit Transfer System (ECTS)** guidelines (e.g. standard co-op coursework equivalents).
+2. **East African Immigration & Work Permits:** Tracks pre-hire regulatory tasks, including passport data logs, Special Entry Visas, and local country work authorizations (such as **Uganda Class G Work Permits**).
+3. **Health Security & Travel Logistics:** Verifies dynamic safety requirements, such as **Yellow Fever immunizations**, flight itineraries, and valid local medical cover certificates.
+
 ---
 
 ## 🎯 Why was it built?
