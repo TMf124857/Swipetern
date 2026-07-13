@@ -1,15 +1,29 @@
+import hmac
+import secrets
 import hashlib
 import json
 from sqlalchemy.orm import Session
 from backend import models, schemas
 from datetime import datetime
 
-# Password helpers using standard library SHA-256
+# Password helpers using secure PBKDF2 with dynamic salt and fallback support
 def hash_password(password: str) -> str:
-    return hashlib.sha256(password.encode("utf-8")).hexdigest()
+    salt = secrets.token_hex(16)
+    key = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt.encode("utf-8"), 100000)
+    return f"pbkdf2:sha256:100000:{salt}:{key.hex()}"
 
 def verify_password(password: str, hashed: str) -> bool:
-    return hash_password(password) == hashed
+    try:
+        parts = hashed.split(":")
+        if len(parts) == 5:
+            _, algo, iterations_str, salt, key_hex = parts
+            iterations = int(iterations_str)
+            new_key = hashlib.pbkdf2_hmac(algo, password.encode("utf-8"), salt.encode("utf-8"), iterations)
+            return hmac.compare_digest(new_key.hex(), key_hex)
+        # Safe fallback for old SHA-256 passwords
+        return hmac.compare_digest(hashlib.sha256(password.encode("utf-8")).hexdigest(), hashed)
+    except Exception:
+        return False
 
 # Analytics Helper
 def track_event(db: Session, event_name: str, user_id: int = None, payload: dict = None):

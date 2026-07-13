@@ -257,6 +257,26 @@ docker compose up --build -d
 docker compose down
 ```
 
+#### 💡 Troubleshooting: Port Already Allocated Error
+If you receive an error stating:
+`Bind for 0.0.0.0:8000 failed: port is already allocated`
+
+This means another process (such as a local Uvicorn development server) is already running on port `8000`. You can resolve this in one of two ways:
+
+1. **Stop the conflicting process:**
+   Find and terminate the process bound to port `8000`:
+   ```bash
+   kill $(lsof -t -i :8000) 2>/dev/null || true
+   ```
+
+2. **Change the external port binding:**
+   Open `docker-compose.yml` and change the outer port mapping from `"8000:8000"` to an alternative port (such as `"8080:8000"`):
+   ```yaml
+   ports:
+     - "8080:8000"
+   ```
+   Now, you can access the application inside the container at **`http://localhost:8080`**.
+
 #### 2. Manual Docker Container Build
 Build and run the Docker image manually:
 ```bash
@@ -264,7 +284,29 @@ docker build -t swipetern:latest .
 docker run -d -p 8000:8000 --name swipetern_app --env DATABASE_URL="sqlite:///./swipetern.db" swipetern:latest
 ```
 
-### Method B: Deploying to Heroku / Render / Railway
+### Method B: Deploying to Vercel (swipetern.vercel.app)
+Swipetern is fully optimized for zero-configuration, lightning-fast deployment on Vercel utilizing Serverless Functions (Python runtime) and Static Asset CDN.
+
+We have preconfigured a `vercel.json` file in the root directory to handle automated routing between the frontend single-page application and the FastAPI serverless backend.
+
+#### 1. Quick Deploy via Vercel CLI
+Ensure you have the Vercel CLI installed, then log in and deploy:
+```bash
+npm install -g vercel
+vercel login
+vercel
+```
+
+#### 2. Connect Your Git Repository
+Alternatively, connect your repository to Vercel via the Vercel Dashboard:
+- Choose the repository of your project.
+- Vercel automatically detects the `vercel.json` configuration and builds your frontend & backend as serverless functions.
+- Add an environment variable `DATABASE_URL` under your Project Settings: `sqlite:///./swipetern.db` (or connect to a remote serverless PostgreSQL instance).
+- Your application will be live at: **`https://swipetern.vercel.app`**
+
+---
+
+### Method C: Deploying to Heroku / Render / Railway
 1. **Requirements:** Create a `requirements.txt` file:
    ```text
    fastapi>=0.110.0
