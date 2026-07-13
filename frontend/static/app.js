@@ -30,8 +30,8 @@ class SwipeternApp {
                 education: "Ghent University • Belgium",
                 skills: "React, TypeScript, Tailwind CSS, REST APIs",
                 bio: "Next.js frontend engineer looking to build high-performance mobile billing systems in Kampala, Uganda.",
-                vibe: "💡 High Energy, tech-community organizer, coffee lover.",
-                avatar: "🎓"
+                vibe: "High Energy, tech-community organizer, coffee lover.",
+                avatar: "fa-solid fa-graduation-cap text-indigo-400"
             },
             {
                 id: "STU-102",
@@ -39,8 +39,8 @@ class SwipeternApp {
                 education: "TU Delft • Netherlands",
                 skills: "Python, SQL, Data Modeling, NumPy",
                 bio: "Predictive data analyst wanting to optimize regional cooperative yields using satellite telemetry.",
-                vibe: "🌿 Highly focused, field trip enthusiast, quiet execution.",
-                avatar: "🎓"
+                vibe: "Highly focused, field trip enthusiast, quiet execution.",
+                avatar: "fa-solid fa-user-graduate text-violet-400"
             },
             {
                 id: "STU-103",
@@ -48,8 +48,8 @@ class SwipeternApp {
                 education: "Université de Paris • France",
                 skills: "Clinical Medicine, Global Health, Triaging",
                 bio: "Public health major aiming to assist automated triage scheduling pipelines in regional clinic clusters.",
-                vibe: "❤️ Highly empathetic, triage pro, community focused.",
-                avatar: "🎓"
+                vibe: "Highly empathetic, triage pro, community focused.",
+                avatar: "fa-solid fa-user-doctor text-pink-400"
             }
         ];
 
@@ -60,8 +60,8 @@ class SwipeternApp {
                 industry: "Kampala • ICT / Fintech",
                 skills_required: "React, Mobile Money API, TailwindCSS",
                 description: "Help construct our lightning-fast mobile money gateway interfaces for small businesses.",
-                employer_bio: "⚡ High growth, agile developer sprints, zero bureaucracy.",
-                avatar: "🏢"
+                employer_bio: "High growth, agile developer sprints, zero bureaucracy.",
+                avatar: "fa-solid fa-building text-fuchsia-400"
             },
             {
                 id: "OP-202",
@@ -69,8 +69,8 @@ class SwipeternApp {
                 industry: "Kigali • Agritech",
                 skills_required: "Python, Pandas, SQL Yield Models",
                 description: "Coordinate with regional maize networks to analyze crop telemetry data logs.",
-                employer_bio: "🌱 Direct field integration, sustainable agricultural impact.",
-                avatar: "🏢"
+                employer_bio: "Direct field integration, sustainable agricultural impact.",
+                avatar: "fa-solid fa-seedling text-emerald-400"
             },
             {
                 id: "OP-203",
@@ -78,8 +78,8 @@ class SwipeternApp {
                 industry: "Kampala • Healthcare",
                 skills_required: "Data logs, clinical assistant foundation",
                 description: "Support active triage protocols and optimize record verification databases.",
-                employer_bio: "🩺 Mission first, extremely deep patient relationships.",
-                avatar: "🏢"
+                employer_bio: "Mission first, extremely deep patient relationships.",
+                avatar: "fa-solid fa-house-medical text-teal-400"
             }
         ];
 
@@ -110,7 +110,7 @@ class SwipeternApp {
 
         this.sandChats = {
             "MCH-4819": [
-                { sender: "system", text: "🎉 Double Opt-In Match! Instant chat channel initialized.", time: "Just Now" },
+                { sender: "system", text: "Double Opt-In Match! Instant chat channel initialized.", time: "Just Now" },
                 { sender: "employer", text: "Welcome to our match channel, Marie! We would love to set up an introductory chat.", time: "Just Now" }
             ]
         };
@@ -213,30 +213,37 @@ class SwipeternApp {
         if (errBanner) errBanner.classList.add("hidden");
     }
 
-    // Render screen based on auth/onboarding status
+    // Render screen based on auth/onboarding status with robust null guards
     showScreen(screenName) {
-        document.getElementById("screen-welcome").classList.add("hidden");
-        document.getElementById("screen-onboarding").classList.add("hidden");
-        document.getElementById("screen-workspace").classList.add("hidden");
-        document.getElementById("screen-landing").classList.add("hidden");
+        const welcome = document.getElementById("screen-welcome");
+        const onboarding = document.getElementById("screen-onboarding");
+        const workspace = document.getElementById("screen-workspace");
+        const landing = document.getElementById("screen-landing");
 
-        document.getElementById("nav-authed").classList.add("hidden");
-        document.getElementById("nav-guest").classList.add("hidden");
+        if (welcome) welcome.classList.add("hidden");
+        if (onboarding) onboarding.classList.add("hidden");
+        if (workspace) workspace.classList.add("hidden");
+        if (landing) landing.classList.add("hidden");
+
+        const navAuthed = document.getElementById("nav-authed");
+        const navGuest = document.getElementById("nav-guest");
+        if (navAuthed) navAuthed.classList.add("hidden");
+        if (navGuest) navGuest.classList.add("hidden");
 
         if (screenName === "landing") {
-            document.getElementById("screen-landing").classList.remove("hidden");
-            document.getElementById("nav-guest").classList.remove("hidden");
+            if (landing) landing.classList.remove("hidden");
+            if (navGuest) navGuest.classList.remove("hidden");
             this.initSandbox();
         } else if (screenName === "welcome") {
-            document.getElementById("screen-welcome").classList.remove("hidden");
-            document.getElementById("nav-guest").classList.remove("hidden");
+            if (welcome) welcome.classList.remove("hidden");
+            if (navGuest) navGuest.classList.remove("hidden");
         } else if (screenName === "onboarding") {
-            document.getElementById("screen-onboarding").classList.remove("hidden");
-            document.getElementById("nav-authed").classList.remove("hidden");
+            if (onboarding) onboarding.classList.remove("hidden");
+            if (navAuthed) navAuthed.classList.remove("hidden");
             this.setupOnboardingFields();
         } else if (screenName === "workspace") {
-            document.getElementById("screen-workspace").classList.remove("hidden");
-            document.getElementById("nav-authed").classList.remove("hidden");
+            if (workspace) workspace.classList.remove("hidden");
+            if (navAuthed) navAuthed.classList.remove("hidden");
             this.updateNavbarBadges();
             this.setupWorkspace();
         }
@@ -260,13 +267,13 @@ class SwipeternApp {
         const regForm = document.getElementById("modal-form-register");
 
         if (tab === "login") {
-            loginTab.className = "flex-1 py-1.5 text-xs font-bold rounded-lg bg-white text-indigo-600 shadow-sm transition";
-            regTab.className = "flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-500 transition";
+            loginTab.className = "flex-1 py-1.5 text-xs font-bold rounded-lg bg-slate-900 text-fuchsia-400 shadow-sm transition uppercase tracking-wider";
+            regTab.className = "flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-400 transition uppercase tracking-wider";
             loginForm.classList.remove("hidden");
             regForm.classList.add("hidden");
         } else {
-            regTab.className = "flex-1 py-1.5 text-xs font-bold rounded-lg bg-white text-indigo-600 shadow-sm transition";
-            loginTab.className = "flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-500 transition";
+            regTab.className = "flex-1 py-1.5 text-xs font-bold rounded-lg bg-slate-900 text-fuchsia-400 shadow-sm transition uppercase tracking-wider";
+            loginTab.className = "flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-400 transition uppercase tracking-wider";
             regForm.classList.remove("hidden");
             loginForm.classList.add("hidden");
         }
@@ -277,11 +284,11 @@ class SwipeternApp {
         const studLabel = document.getElementById("role-label-student");
         const empLabel = document.getElementById("role-label-employer");
         if (role === "student") {
-            studLabel.className = "border-2 border-indigo-500 bg-indigo-50/50 p-2.5 rounded-xl flex items-center justify-center space-x-1.5 cursor-pointer text-[10px] font-black uppercase tracking-wider";
-            empLabel.className = "border border-slate-200 p-2.5 rounded-xl flex items-center justify-center space-x-1.5 cursor-pointer text-[10px] font-black uppercase tracking-wider";
+            studLabel.className = "border-2 border-fuchsia-500 bg-fuchsia-500/10 p-2.5 rounded-xl flex items-center justify-center space-x-1.5 cursor-pointer text-[10px] font-black uppercase tracking-wider";
+            empLabel.className = "border border-slate-700 p-2.5 rounded-xl flex items-center justify-center space-x-1.5 cursor-pointer text-[10px] font-black uppercase tracking-wider";
         } else {
-            empLabel.className = "border-2 border-indigo-500 bg-indigo-50/50 p-2.5 rounded-xl flex items-center justify-center space-x-1.5 cursor-pointer text-[10px] font-black uppercase tracking-wider";
-            studLabel.className = "border border-slate-200 p-2.5 rounded-xl flex items-center justify-center space-x-1.5 cursor-pointer text-[10px] font-black uppercase tracking-wider";
+            empLabel.className = "border-2 border-fuchsia-500 bg-fuchsia-500/10 p-2.5 rounded-xl flex items-center justify-center space-x-1.5 cursor-pointer text-[10px] font-black uppercase tracking-wider";
+            studLabel.className = "border border-slate-700 p-2.5 rounded-xl flex items-center justify-center space-x-1.5 cursor-pointer text-[10px] font-black uppercase tracking-wider";
         }
     }
 
@@ -384,19 +391,19 @@ class SwipeternApp {
         const studentFields = `
             <div>
                 <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Education / Institution</label>
-                <input type="text" id="prof-education" placeholder="e.g. Stanford University, BS Comp Sci" class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-medium">
+                <input type="text" id="prof-education" placeholder="e.g. Stanford University, BS Comp Sci" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
             </div>
             <div>
                 <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Your Skills (Comma separated)</label>
-                <input type="text" id="prof-skills" placeholder="e.g. Python, React, Figma" class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-medium">
+                <input type="text" id="prof-skills" placeholder="e.g. Python, React, Figma" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
             </div>
             <div>
                 <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Target Job Titles (Comma separated)</label>
-                <input type="text" id="prof-job-titles" placeholder="e.g. Software Engineer, Designer" class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-medium">
+                <input type="text" id="prof-job-titles" placeholder="e.g. Software Engineer, Designer" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
             </div>
             <div>
                 <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Visa / Work Permit Status</label>
-                <select id="prof-visa-status" class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-bold bg-white">
+                <select id="prof-visa-status" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-bold" style="min-height: 44px;">
                     <option value="not_required">Citizen / PR (No sponsorship needed)</option>
                     <option value="pending">F-1 Visa / Needs Sponsorship</option>
                     <option value="approved">Already Approved Work Visa</option>
@@ -407,37 +414,37 @@ class SwipeternApp {
         const employerFields = `
             <div>
                 <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Company Name</label>
-                <input type="text" id="prof-company" placeholder="e.g. Stripe, Inc." class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-medium">
+                <input type="text" id="prof-company" placeholder="e.g. Stripe, Inc." class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
             </div>
             <div>
                 <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Industry Sector</label>
-                <input type="text" id="prof-industry" placeholder="e.g. Fintech, Web3, SpaceTech" class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-medium">
+                <input type="text" id="prof-industry" placeholder="e.g. Fintech, Web3, SpaceTech" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
             </div>
         `;
 
         container.innerHTML = `
-            <div class="bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100">
+            <div class="bg-slate-900 border border-slate-800 p-8 rounded-[2.5rem] shadow-xl">
                 <div class="mb-6">
-                    <span class="text-xs font-extrabold tracking-widest text-indigo-600 uppercase">Onboarding</span>
-                    <h2 class="text-3xl font-black text-slate-900 mt-1">Design Your Vibe Card</h2>
-                    <p class="text-slate-500 text-sm mt-1.5">Stand out with skills, target roles, and work status.</p>
+                    <span class="text-xs font-extrabold tracking-widest text-fuchsia-500 uppercase">Onboarding</span>
+                    <h2 class="text-3xl font-black text-slate-100 mt-1">Design Your Vibe Card</h2>
+                    <p class="text-slate-400 text-sm mt-1.5">Stand out with skills, target roles, and work status.</p>
                 </div>
 
                 <form onsubmit="app.saveProfile(event)" class="space-y-5">
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Display Name</label>
-                        <input type="text" id="prof-name" required placeholder="Jane Doe" class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-medium">
+                        <input type="text" id="prof-name" required placeholder="Jane Doe" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
                     </div>
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Pitch (Bio)</label>
-                        <textarea id="prof-bio" rows="3" placeholder="A brief hook about you or your company vision..." class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-medium"></textarea>
+                        <textarea id="prof-bio" rows="3" placeholder="A brief hook about you or your company vision..." class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium"></textarea>
                     </div>
 
                     <div class="space-y-4">
                         ${this.user.role === "student" ? studentFields : employerFields}
                     </div>
 
-                    <button type="submit" class="w-full bg-slate-900 hover:bg-indigo-600 text-white font-bold py-3.5 rounded-2xl shadow-lg transition duration-200 uppercase tracking-wider text-xs">
+                    <button type="submit" class="w-full bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold py-3.5 rounded-2xl shadow-lg transition duration-200 uppercase tracking-wider text-xs focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
                         Enter Platform
                     </button>
                 </form>
@@ -503,14 +510,14 @@ class SwipeternApp {
         if (userBadge && userEmail && roleIcon) {
             userEmail.innerText = this.user.email;
             if (this.user.role === "student") {
-                roleIcon.innerHTML = `<i class="fa-solid fa-graduation-cap text-yellow-300"></i>`;
-                userBadge.className = "bg-gradient-to-r from-blue-600 to-indigo-600 border border-blue-400 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1";
+                roleIcon.innerHTML = `<i class="fa-solid fa-graduation-cap text-fuchsia-400"></i>`;
+                userBadge.className = "bg-slate-950 border border-slate-800 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1.5 text-fuchsia-400";
             } else if (this.user.role === "employer") {
-                roleIcon.innerHTML = `<i class="fa-solid fa-building text-amber-300"></i>`;
-                userBadge.className = "bg-gradient-to-r from-amber-600 to-orange-600 border border-amber-400 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1";
+                roleIcon.innerHTML = `<i class="fa-solid fa-building text-indigo-400"></i>`;
+                userBadge.className = "bg-slate-950 border border-slate-800 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1.5 text-indigo-400";
             } else {
-                roleIcon.innerHTML = `<i class="fa-solid fa-user-shield text-rose-300"></i>`;
-                userBadge.className = "bg-gradient-to-r from-rose-600 to-red-600 border border-rose-400 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1";
+                roleIcon.innerHTML = `<i class="fa-solid fa-user-shield text-rose-400"></i>`;
+                userBadge.className = "bg-slate-950 border border-slate-800 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1.5 text-rose-400";
             }
         }
     }
@@ -559,9 +566,9 @@ class SwipeternApp {
             const pane = document.getElementById(`tab-${t}`);
             if (btn) {
                 if (t === tabName) {
-                    btn.className = "flex-1 md:flex-initial flex items-center justify-center md:justify-start space-x-3 px-4 py-3 rounded-xl text-indigo-600 bg-indigo-50/70 font-bold transition duration-200";
+                    btn.className = "flex-1 md:flex-initial flex items-center justify-center md:justify-start space-x-3 px-4 py-3 rounded-2xl text-fuchsia-400 bg-fuchsia-500/10 border border-fuchsia-500/20 font-black transition duration-200 focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden";
                 } else {
-                    btn.className = "flex-1 md:flex-initial flex items-center justify-center md:justify-start space-x-3 px-4 py-3 rounded-xl text-slate-500 hover:text-slate-900 font-bold transition duration-200";
+                    btn.className = "flex-1 md:flex-initial flex items-center justify-center md:justify-start space-x-3 px-4 py-3 rounded-2xl text-slate-400 hover:text-slate-200 font-bold transition duration-200 focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden";
                 }
             }
             if (pane) {
@@ -598,12 +605,12 @@ class SwipeternApp {
         const identityLabel = document.getElementById('landing-identity');
 
         if (mode === 'student') {
-            btnStud.className = "px-3.5 py-1.5 text-[10px] font-black rounded-lg bg-white text-indigo-600 shadow-sm transition-all uppercase tracking-wider";
+            btnStud.className = "px-3.5 py-1.5 text-[10px] font-black rounded-lg bg-slate-900 text-fuchsia-400 shadow-sm transition-all uppercase tracking-wider";
             btnRecr.className = "px-3.5 py-1.5 text-[10px] font-black rounded-lg text-slate-500 hover:text-slate-800 transition-all uppercase tracking-wider";
             identityLabel.innerText = "Candidate View";
         } else {
             btnStud.className = "px-3.5 py-1.5 text-[10px] font-black rounded-lg text-slate-500 hover:text-slate-800 transition-all uppercase tracking-wider";
-            btnRecr.className = "px-3.5 py-1.5 text-[10px] font-black rounded-lg bg-white text-indigo-600 shadow-sm transition-all uppercase tracking-wider";
+            btnRecr.className = "px-3.5 py-1.5 text-[10px] font-black rounded-lg bg-slate-900 text-fuchsia-400 shadow-sm transition-all uppercase tracking-wider";
             identityLabel.innerText = "Employer View";
         }
         this.renderSandboxCard();
@@ -616,10 +623,10 @@ class SwipeternApp {
             if (this.sandRoleIndex >= this.sandRoles.length) {
                 viewport.innerHTML = `
                     <div class="text-center py-6">
-                        <span class="text-3xl">🎉</span>
-                        <h4 class="text-slate-800 font-extrabold text-sm mt-2">End of Roles Stack</h4>
-                        <p class="text-xs text-slate-500 max-w-xs mx-auto mt-1 px-4">Toggle over to "Employer View" to review incoming students!</p>
-                        <button onclick="app.resetSandboxFeeds()" class="mt-4 bg-slate-900 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-indigo-600 transition">Reset Swipe Cards</button>
+                        <i class="fa-solid fa-trophy text-4xl text-fuchsia-500 mb-3 animate-bounce" aria-hidden="true"></i>
+                        <h4 class="text-slate-200 font-extrabold text-sm mt-2">End of Roles Stack</h4>
+                        <p class="text-xs text-slate-400 max-w-xs mx-auto mt-1 px-4">Toggle over to "Employer View" to review incoming students!</p>
+                        <button onclick="app.resetSandboxFeeds()" class="mt-4 bg-slate-950 hover:bg-slate-800 border border-slate-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">Reset Swipe Cards</button>
                     </div>
                 `;
                 return;
@@ -629,24 +636,26 @@ class SwipeternApp {
                 <div class="space-y-4 animate-scale-in w-full text-left">
                     <div class="flex justify-between items-start">
                         <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-xl shadow-xs">${role.avatar}</div>
+                            <div class="w-11 h-11 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-center text-xl shadow-xs">
+                                <i class="${role.avatar}"></i>
+                            </div>
                             <div>
-                                <h4 class="text-slate-900 font-extrabold text-sm">${role.company_name}</h4>
+                                <h4 class="text-slate-200 font-extrabold text-sm">${role.company_name}</h4>
                                 <p class="text-[11px] text-slate-400 font-bold">${role.industry}</p>
                             </div>
                         </div>
-                        <span class="text-[9px] bg-emerald-50 text-emerald-600 border border-emerald-100 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">15 ECTS</span>
+                        <span class="text-[9px] bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">15 ECTS</span>
                     </div>
                     <div class="space-y-1">
-                        <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Vibe Check:</div>
-                        <p class="text-xs italic text-indigo-600 font-bold">${role.employer_bio}</p>
+                        <div class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Vibe Check:</div>
+                        <p class="text-xs italic text-fuchsia-400 font-bold">${role.employer_bio}</p>
                     </div>
                     <div class="space-y-1">
-                        <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Requirements:</div>
-                        <p class="text-xs text-slate-600 leading-relaxed font-semibold line-clamp-2">${role.description}</p>
+                        <div class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Requirements:</div>
+                        <p class="text-xs text-slate-300 leading-relaxed font-semibold line-clamp-2">${role.description}</p>
                     </div>
                     <div class="flex flex-wrap gap-1 pt-1">
-                        ${role.skills_required.split(', ').map(tag => `<span class="text-[9px] bg-slate-100 px-2 py-0.5 rounded text-slate-500 font-bold">${tag}</span>`).join('')}
+                        ${role.skills_required.split(', ').map(tag => `<span class="text-[9px] bg-slate-950 border border-slate-800 px-2 py-0.5 rounded text-slate-400 font-bold">${tag}</span>`).join('')}
                     </div>
                 </div>
             `;
@@ -654,10 +663,10 @@ class SwipeternApp {
             if (this.sandStudentIndex >= this.sandStudents.length) {
                 viewport.innerHTML = `
                     <div class="text-center py-6">
-                        <span class="text-3xl">🤝</span>
-                        <h4 class="text-slate-800 font-extrabold text-sm mt-2">End of Candidate Stack</h4>
-                        <p class="text-xs text-slate-500 max-w-xs mx-auto mt-1 px-4">Toggle back to "Student" to see opportunity cards!</p>
-                        <button onclick="app.resetSandboxFeeds()" class="mt-4 bg-slate-900 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-indigo-600 transition">Reset Swipe Cards</button>
+                        <i class="fa-solid fa-users text-4xl text-fuchsia-500 mb-3 animate-bounce" aria-hidden="true"></i>
+                        <h4 class="text-slate-200 font-extrabold text-sm mt-2">End of Candidate Stack</h4>
+                        <p class="text-xs text-slate-400 max-w-xs mx-auto mt-1 px-4">Toggle back to "Student" to see opportunity cards!</p>
+                        <button onclick="app.resetSandboxFeeds()" class="mt-4 bg-slate-950 hover:bg-slate-800 border border-slate-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">Reset Swipe Cards</button>
                     </div>
                 `;
                 return;
@@ -667,24 +676,26 @@ class SwipeternApp {
                 <div class="space-y-4 animate-scale-in w-full text-left">
                     <div class="flex justify-between items-start">
                         <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-xl shadow-xs">${student.avatar}</div>
+                            <div class="w-11 h-11 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-center text-xl shadow-xs">
+                                <i class="${student.avatar}"></i>
+                            </div>
                             <div>
-                                <h4 class="text-slate-900 font-extrabold text-sm">${student.name}</h4>
+                                <h4 class="text-slate-200 font-extrabold text-sm">${student.name}</h4>
                                 <p class="text-[11px] text-slate-400 font-bold">${student.education}</p>
                             </div>
                         </div>
-                        <span class="text-[9px] bg-rose-50 text-rose-600 border border-rose-100 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">Vetted student</span>
+                        <span class="text-[9px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">Vetted student</span>
                     </div>
                     <div class="space-y-1">
-                        <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Vibe Check:</div>
-                        <p class="text-xs italic text-indigo-600 font-bold">${student.vibe}</p>
+                        <div class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Vibe Check:</div>
+                        <p class="text-xs italic text-fuchsia-400 font-bold">${student.vibe}</p>
                     </div>
                     <div class="space-y-1">
-                        <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Pitch:</div>
-                        <p class="text-xs text-slate-600 leading-relaxed font-semibold line-clamp-2">${student.bio}</p>
+                        <div class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Pitch:</div>
+                        <p class="text-xs text-slate-300 leading-relaxed font-semibold line-clamp-2">${student.bio}</p>
                     </div>
                     <div class="flex flex-wrap gap-1 pt-1">
-                        ${student.skills.split(', ').map(tag => `<span class="text-[9px] bg-slate-100 px-2 py-0.5 rounded text-slate-500 font-bold">${tag}</span>`).join('')}
+                        ${student.skills.split(', ').map(tag => `<span class="text-[9px] bg-slate-950 border border-slate-800 px-2 py-0.5 rounded text-slate-400 font-bold">${tag}</span>`).join('')}
                     </div>
                 </div>
             `;
@@ -742,7 +753,7 @@ class SwipeternApp {
 
         this.sandMatches.unshift(newMatch);
         this.sandChats[matchId] = [
-            { sender: "system", text: "🎉 Double Opt-In Match! Instant chat channel initialized.", time: "Just Now" },
+            { sender: "system", text: "Double Opt-In Match! Instant chat channel initialized.", time: "Just Now" },
             { sender: "employer", text: `Welcome to the connection channel, ${studentName}! Ready to complete travel compliance?`, time: "Just Now" }
         ];
 
@@ -764,9 +775,9 @@ class SwipeternApp {
         badge.innerText = this.sandMatches.length;
 
         container.innerHTML = this.sandMatches.map(match => `
-            <div onclick="app.selectSandboxMatch('${match.id}')" class="p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${this.activeSandMatchId === match.id ? 'bg-indigo-50 border-indigo-150 text-indigo-950 font-bold' : 'bg-slate-50 border-slate-100 hover:border-slate-200'}">
+            <div onclick="app.selectSandboxMatch('${match.id}')" class="p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${this.activeSandMatchId === match.id ? 'bg-fuchsia-500/10 border-fuchsia-500/40 text-fuchsia-400 font-bold' : 'bg-slate-950 border-slate-800 hover:border-slate-700'}" style="min-height: 44px;">
                 <div>
-                    <div class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                    <div class="text-xs font-bold flex items-center gap-1.5">
                         <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                         ${match.student_name}
                     </div>
@@ -797,11 +808,11 @@ class SwipeternApp {
         const log = this.sandChats[this.activeSandMatchId];
         chatBox.innerHTML = log.map(msg => {
             if (msg.sender === 'system') {
-                return `<div class="p-2 bg-indigo-50/50 text-indigo-500 text-[10px] text-center rounded-xl font-bold uppercase tracking-wider">${msg.text}</div>`;
+                return `<div class="p-2 bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20 text-[10px] text-center rounded-xl font-bold uppercase tracking-wider">${msg.text}</div>`;
             }
             const isStudent = msg.sender === 'student';
             const align = isStudent ? 'justify-end' : 'justify-start';
-            const color = isStudent ? 'bg-indigo-600 text-white rounded-br-none' : 'bg-slate-200 text-slate-800 rounded-bl-none';
+            const color = isStudent ? 'bg-indigo-600 text-white rounded-br-none' : 'bg-slate-850 text-slate-200 border border-slate-800 rounded-bl-none';
 
             return `
                 <div class="flex ${align}">
@@ -820,9 +831,9 @@ class SwipeternApp {
 
         let messageText = "";
         if (type === 'request_interview') {
-            messageText = `🗓️ Swipetern Scheduler: Google Meet invite request dispatched. Let's arrange a 15-minute call.`;
+            messageText = `Swipetern Scheduler: Google Meet invite request dispatched. Let's arrange a 15-minute call.`;
         } else if (type === 'ects_check') {
-            messageText = `🎓 Academic Compliance: Dynamic 15 ECTS logging parameters initiated. Please review the curriculum parameters.`;
+            messageText = `Academic Compliance: Dynamic 15 ECTS logging parameters initiated. Please review the curriculum parameters.`;
         }
 
         this.sandChats[this.activeSandMatchId].push({
@@ -870,11 +881,11 @@ class SwipeternApp {
 
         if (this.currentCardIndex >= this.discoveryCards.length) {
             deck.innerHTML = `
-                <div class="text-center p-8 bg-slate-50 border-2 border-dashed border-slate-200 rounded-3xl flex flex-col items-center justify-center h-full w-full">
-                    <i class="fa-solid fa-face-laugh-beam text-4xl text-indigo-500 mb-3 animate-pulse"></i>
-                    <h4 class="font-bold text-slate-700">All caught up!</h4>
+                <div class="text-center p-8 bg-slate-900 border border-slate-800 rounded-3xl flex flex-col items-center justify-center h-full w-full">
+                    <i class="fa-solid fa-face-laugh-beam text-4xl text-fuchsia-500 mb-3 animate-pulse" aria-hidden="true"></i>
+                    <h4 class="font-bold text-slate-200">All caught up!</h4>
                     <p class="text-xs text-slate-400 mt-1 px-4">There are no new cards in your discovery feed. Refresh to look for updates.</p>
-                    <button onclick="app.fetchDiscoveryFeed()" class="mt-4 bg-indigo-600 text-white text-xs px-4 py-2 rounded-xl font-bold hover:bg-indigo-700 transition">
+                    <button onclick="app.fetchDiscoveryFeed()" class="mt-4 bg-fuchsia-600 text-white text-xs px-4 py-2.5 rounded-xl font-bold hover:bg-fuchsia-700 transition focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
                         <i class="fa-solid fa-rotate mr-1"></i> Refresh Feed
                     </button>
                 </div>
@@ -895,16 +906,16 @@ class SwipeternApp {
                     <h3 class="text-2xl font-black truncate">${card.title}</h3>
                     <h4 class="text-indigo-200 text-sm font-semibold truncate"><i class="fa-solid fa-building mr-1"></i> ${card.company_name}</h4>
                 </div>
-                <div class="p-6 flex flex-col justify-between flex-grow overflow-y-auto max-h-[160px]">
+                <div class="p-6 flex flex-col justify-between flex-grow overflow-y-auto max-h-[160px] bg-slate-900 border-t border-slate-800">
                     <div>
                         <h5 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Company Description</h5>
-                        <p class="text-xs text-slate-600 line-clamp-2 mb-3">${card.employer_bio || 'No description provided.'}</p>
+                        <p class="text-xs text-slate-350 line-clamp-2 mb-3">${card.employer_bio || 'No description provided.'}</p>
 
                         <h5 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Requirements</h5>
-                        <p class="text-xs text-slate-700 leading-relaxed font-medium mb-3">${card.description}</p>
+                        <p class="text-xs text-slate-200 leading-relaxed font-medium mb-3">${card.description}</p>
                     </div>
                     <div class="flex flex-wrap gap-1 mt-auto pt-2">
-                        ${card.skills_required.split(',').map(s => s.trim()).filter(Boolean).map(s => `<span class="bg-indigo-50 text-indigo-600 text-[10px] px-2 py-0.5 rounded-full font-bold border border-indigo-100">${s}</span>`).join('')}
+                        ${card.skills_required.split(',').map(s => s.trim()).filter(Boolean).map(s => `<span class="bg-slate-950 border border-slate-800 text-slate-300 text-[10px] px-2 py-0.5 rounded-full font-bold">${s}</span>`).join('')}
                     </div>
                 </div>
             `;
@@ -916,23 +927,23 @@ class SwipeternApp {
                     <h3 class="text-2xl font-black truncate">${card.name}</h3>
                     <h4 class="text-violet-200 text-sm font-semibold truncate">${card.education || 'Waterloo Student'}</h4>
                 </div>
-                <div class="p-6 flex flex-col justify-between flex-grow overflow-y-auto max-h-[160px]">
+                <div class="p-6 flex flex-col justify-between flex-grow overflow-y-auto max-h-[160px] bg-slate-900 border-t border-slate-800">
                     <div>
                         <h5 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">About Me</h5>
-                        <p class="text-xs text-slate-600 line-clamp-2 mb-3">${card.bio || 'Hello, looking for awesome internships!'}</p>
+                        <p class="text-xs text-slate-350 line-clamp-2 mb-3">${card.bio || 'Hello, looking for awesome internships!'}</p>
 
                         <h5 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Target Roles</h5>
-                        <p class="text-xs text-slate-700 font-bold mb-3">${card.target_job_titles || 'Software Engineer'}</p>
+                        <p class="text-xs text-slate-200 font-bold mb-3">${card.target_job_titles || 'Software Engineer'}</p>
                     </div>
                     <div class="flex flex-wrap gap-1 mt-auto pt-2">
-                        ${card.skills.split(',').map(s => s.trim()).filter(Boolean).map(s => `<span class="bg-violet-50 text-violet-600 text-[10px] px-2 py-0.5 rounded-full font-bold border border-violet-100">${s}</span>`).join('')}
+                        ${card.skills.split(',').map(s => s.trim()).filter(Boolean).map(s => `<span class="bg-slate-950 border border-slate-800 text-slate-300 text-[10px] px-2 py-0.5 rounded-full font-bold">${s}</span>`).join('')}
                     </div>
                 </div>
             `;
         }
 
         deck.innerHTML = `
-            <div id="active-swipe-card" class="absolute inset-0 bg-white border border-slate-100 shadow-xl rounded-3xl flex flex-col overflow-hidden swipe-card">
+            <div id="active-swipe-card" class="absolute inset-0 bg-slate-900 border border-slate-800 shadow-xl rounded-3xl flex flex-col overflow-hidden swipe-card">
                 ${detailsHtml}
             </div>
         `;
@@ -1010,8 +1021,8 @@ class SwipeternApp {
 
         if (this.matches.length === 0) {
             listContainer.innerHTML = `
-                <div class="text-center py-10 text-slate-400 text-xs">
-                    <i class="fa-regular fa-comment-dots text-3xl mb-2"></i>
+                <div class="text-center py-10 text-slate-500 text-xs">
+                    <i class="fa-regular fa-comment-dots text-3xl mb-2" aria-hidden="true"></i>
                     <p>No matches yet. Keep swiping to connect!</p>
                 </div>
             `;
@@ -1025,7 +1036,7 @@ class SwipeternApp {
             const initial = displayName.charAt(0).toUpperCase();
 
             return `
-                <div onclick="app.selectMatch(${m.id})" class="flex items-center space-x-3 p-3 rounded-2xl cursor-pointer transition ${isActive ? 'bg-indigo-50 border border-indigo-100 text-indigo-900' : 'hover:bg-slate-50 text-slate-700'}">
+                <div onclick="app.selectMatch(${m.id})" class="flex items-center space-x-3 p-3 rounded-2xl cursor-pointer transition ${isActive ? 'bg-fuchsia-500/10 border border-fuchsia-500/20 text-fuchsia-400 font-bold' : 'hover:bg-slate-850 text-slate-300'}" style="min-height: 44px;">
                     <div class="h-10 w-10 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-sm shrink-0">
                         ${initial}
                     </div>
@@ -1081,13 +1092,16 @@ class SwipeternApp {
 
         container.innerHTML = this.chatMessages.map(m => {
             const isMe = m.sender_id === this.user.id;
-            const bubbleClass = isMe ? "bg-indigo-600 text-white rounded-br-none" : "bg-slate-100 text-slate-800 rounded-bl-none";
+            const bubbleClass = isMe ? "bg-indigo-600 text-white rounded-br-none" : "bg-slate-850 text-slate-200 border border-slate-800 rounded-bl-none";
             const alignClass = isMe ? "justify-end" : "justify-start";
+
+            // Safely assign text content rather than rendering raw un-sanitized HTML to avoid XSS issues
+            const safeText = m.text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
             return `
                 <div class="flex ${alignClass}">
                     <div class="max-w-[75%] p-3 rounded-2xl text-xs font-semibold leading-relaxed ${bubbleClass}">
-                        ${m.text}
+                        ${safeText}
                     </div>
                 </div>
             `;
@@ -1146,13 +1160,13 @@ class SwipeternApp {
         const badge = document.getElementById("compliance-readiness-badge");
         if (comp.readiness === "ready") {
             badge.innerText = "Ready / Compliant";
-            badge.className = "px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700";
+            badge.className = "px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
         } else if (comp.readiness === "in_progress") {
             badge.innerText = "In Progress";
-            badge.className = "px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-700";
+            badge.className = "px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20";
         } else {
             badge.innerText = "Not Ready";
-            badge.className = "px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-700";
+            badge.className = "px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-800 text-slate-400 border border-slate-700";
         }
 
         // Calculate progress percentage dynamically for display
@@ -1197,8 +1211,8 @@ class SwipeternApp {
         const container = document.getElementById("posted-jobs-list");
         if (jobs.length === 0) {
             container.innerHTML = `
-                <div class="col-span-full text-center py-12 text-slate-400 text-sm">
-                    <i class="fa-solid fa-briefcase text-4xl mb-2 text-indigo-200"></i>
+                <div class="col-span-full text-center py-12 text-slate-500 text-sm">
+                    <i class="fa-solid fa-briefcase text-4xl mb-2 text-indigo-500/25" aria-hidden="true"></i>
                     <p>No job postings yet. Post your first opportunity!</p>
                 </div>
             `;
@@ -1206,12 +1220,12 @@ class SwipeternApp {
         }
 
         container.innerHTML = jobs.map(j => `
-            <div class="bg-slate-50 border border-slate-100 p-5 rounded-2xl shadow-xs">
-                <span class="bg-indigo-50 text-indigo-600 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Active Listing</span>
-                <h4 class="font-extrabold text-slate-800 text-base mt-2">${j.title}</h4>
-                <p class="text-xs text-slate-500 mt-2 line-clamp-3 leading-relaxed">${j.description}</p>
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-xs text-left">
+                <span class="bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Active Listing</span>
+                <h4 class="font-extrabold text-slate-200 text-base mt-2">${j.title}</h4>
+                <p class="text-xs text-slate-400 mt-2 line-clamp-3 leading-relaxed">${j.description}</p>
                 <div class="flex flex-wrap gap-1 mt-4">
-                    ${j.skills_required.split(',').map(s => s.trim()).filter(Boolean).map(s => `<span class="bg-slate-200 text-slate-600 text-[9px] px-1.5 py-0.5 rounded-md font-bold">${s}</span>`).join('')}
+                    ${j.skills_required.split(',').map(s => s.trim()).filter(Boolean).map(s => `<span class="bg-slate-950 border border-slate-850 text-slate-400 text-[9px] px-1.5 py-0.5 rounded-md font-bold">${s}</span>`).join('')}
                 </div>
             </div>
         `).join('');
@@ -1282,7 +1296,7 @@ class SwipeternApp {
         if (reports.length === 0) {
             tableBody.innerHTML = `
                 <tr>
-                    <td colspan="6" class="text-center py-10 text-slate-400">No safety reports recorded. Good work!</td>
+                    <td colspan="6" class="text-center py-10 text-slate-500">No safety reports recorded. Good work!</td>
                 </tr>
             `;
             return;
@@ -1290,10 +1304,10 @@ class SwipeternApp {
 
         tableBody.innerHTML = reports.map(r => {
             let statusBadge = "";
-            if (r.status === "pending") statusBadge = `<span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full text-[10px] font-bold">Pending</span>`;
-            else if (r.status === "ignored") statusBadge = `<span class="bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full text-[10px] font-bold">Ignored</span>`;
-            else if (r.status === "warned") statusBadge = `<span class="bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full text-[10px] font-bold">Warned</span>`;
-            else statusBadge = `<span class="bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full text-[10px] font-bold">Suspended</span>`;
+            if (r.status === "pending") statusBadge = `<span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-full text-[10px] font-bold">Pending</span>`;
+            else if (r.status === "ignored") statusBadge = `<span class="bg-slate-800 text-slate-400 border border-slate-700 px-2 py-0.5 rounded-full text-[10px] font-bold">Ignored</span>`;
+            else if (r.status === "warned") statusBadge = `<span class="bg-orange-500/10 text-orange-400 border border-orange-500/20 px-2 py-0.5 rounded-full text-[10px] font-bold">Warned</span>`;
+            else statusBadge = `<span class="bg-rose-500/10 text-rose-450 border border-rose-500/20 px-2 py-0.5 rounded-full text-[10px] font-bold">Suspended</span>`;
 
             const isPending = r.status === "pending";
 
@@ -1301,15 +1315,15 @@ class SwipeternApp {
                 <tr>
                     <td class="px-4 py-3 font-semibold text-slate-500">#${r.id}</td>
                     <td class="px-4 py-3">User #${r.reporter_id}</td>
-                    <td class="px-4 py-3 font-bold text-slate-700">User #${r.reported_user_id}</td>
-                    <td class="px-4 py-3 max-w-xs truncate font-medium text-slate-600" title="${r.reason}">${r.reason}</td>
+                    <td class="px-4 py-3 font-bold text-slate-300">User #${r.reported_user_id}</td>
+                    <td class="px-4 py-3 max-w-xs truncate font-medium text-slate-400" title="${r.reason}">${r.reason}</td>
                     <td class="px-4 py-3">${statusBadge}</td>
                     <td class="px-4 py-3 text-right space-x-1.5">
                         ${isPending ? `
-                            <button onclick="app.executeAdminAction(${r.id}, 'ignore')" class="text-[10px] bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold px-2 py-1 rounded">Ignore</button>
-                            <button onclick="app.executeAdminAction(${r.id}, 'warn')" class="text-[10px] bg-orange-50 hover:bg-orange-100 text-orange-600 font-bold px-2 py-1 rounded">Warn</button>
-                            <button onclick="app.executeAdminAction(${r.id}, 'suspend')" class="text-[10px] bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold px-2 py-1 rounded">Suspend</button>
-                        ` : `<span class="text-[10px] font-semibold text-slate-300">Reviewed</span>`}
+                            <button onclick="app.executeAdminAction(${r.id}, 'ignore')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-bold px-2.5 py-1.5 rounded focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 32px;">Ignore</button>
+                            <button onclick="app.executeAdminAction(${r.id}, 'warn')" class="text-[10px] bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/20 text-orange-400 font-bold px-2.5 py-1.5 rounded focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 32px;">Warn</button>
+                            <button onclick="app.executeAdminAction(${r.id}, 'suspend')" class="text-[10px] bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-450 font-bold px-2.5 py-1.5 rounded focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 32px;">Suspend</button>
+                        ` : `<span class="text-[10px] font-semibold text-slate-500">Reviewed</span>`}
                     </td>
                 </tr>
             `;
@@ -1380,7 +1394,7 @@ class SwipeternApp {
         const cacLabels = ['Student Acquisition', 'Startup Recruiter', 'Enterprise Partner'].map(splitLabel);
         const tamLabels = ['Total Addressable Market', 'Serviceable Addressable Market', 'Serviceable Obtainable Market'].map(splitLabel);
 
-        // Render CAC Chart
+        // Render CAC Chart with clean High-Contrast styling
         const ctxCac = document.getElementById('cacChart').getContext('2d');
         if (window.myCacChart) window.myCacChart.destroy();
         window.myCacChart = new Chart(ctxCac, {
@@ -1391,13 +1405,13 @@ class SwipeternApp {
                     {
                         label: 'CAC ($)',
                         data: [15, 120, 500],
-                        backgroundColor: '#f43f5e',
+                        backgroundColor: '#d946ef', // Neon fuchsia
                         borderRadius: 6
                     },
                     {
                         label: 'LTV ($)',
                         data: [180, 1600, 8000],
-                        backgroundColor: '#10b981',
+                        backgroundColor: '#10b981', // Neon emerald
                         borderRadius: 6
                     }
                 ]
@@ -1406,7 +1420,7 @@ class SwipeternApp {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { labels: { color: '#64748b', font: { weight: 'bold', size: 10 } } },
+                    legend: { labels: { color: '#94a3b8', font: { weight: 'bold', size: 10 } } },
                     tooltip: {
                         callbacks: {
                             title: function(context) {
@@ -1417,13 +1431,13 @@ class SwipeternApp {
                     }
                 },
                 scales: {
-                    x: { ticks: { color: '#64748b', font: { weight: 'bold', size: 9 } } },
-                    y: { ticks: { color: '#64748b', font: { weight: 'bold', size: 9 } } }
+                    x: { ticks: { color: '#64748b', font: { weight: 'bold', size: 9 } }, grid: { color: '#1e293b' } },
+                    y: { ticks: { color: '#64748b', font: { weight: 'bold', size: 9 } }, grid: { color: '#1e293b' } }
                 }
             }
         });
 
-        // Render TAM/SAM/SOM Chart
+        // Render TAM/SAM/SOM Chart with clean High-Contrast styling
         const ctxTam = document.getElementById('tamChart').getContext('2d');
         if (window.myTamChart) window.myTamChart.destroy();
         window.myTamChart = new Chart(ctxTam, {
@@ -1433,7 +1447,7 @@ class SwipeternApp {
                 datasets: [{
                     data: [43, 12, 0.35],
                     backgroundColor: ['#6366f1', '#14b8a6', '#f59e0b'],
-                    borderColor: '#ffffff',
+                    borderColor: '#0f172a',
                     borderWidth: 2
                 }]
             },
@@ -1441,7 +1455,7 @@ class SwipeternApp {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { labels: { color: '#64748b', font: { weight: 'bold', size: 10 } } },
+                    legend: { labels: { color: '#94a3b8', font: { weight: 'bold', size: 10 } } },
                     tooltip: {
                         callbacks: {
                             title: function(context) {
@@ -1464,11 +1478,11 @@ class SwipeternApp {
         logContainer.innerHTML = data.recent_events.map(ev => {
             const dateStr = new Date(ev.created_at).toLocaleTimeString();
             return `
-                <div class="flex space-x-2 py-0.5 border-b border-slate-800 last:border-0 hover:bg-slate-850">
+                <div class="flex space-x-2 py-1 border-b border-slate-800 last:border-0 hover:bg-slate-900/50">
                     <span class="text-indigo-400 font-bold shrink-0">[${dateStr}]</span>
-                    <span class="text-emerald-400 font-bold shrink-0">${ev.event_name.toUpperCase()}</span>
-                    <span class="text-slate-400 shrink-0">User #${ev.user_id || 'SYS'}</span>
-                    <span class="text-slate-300 truncate font-semibold" title='${ev.payload}'>${ev.payload}</span>
+                    <span class="text-fuchsia-400 font-bold shrink-0">${ev.event_name.toUpperCase()}</span>
+                    <span class="text-slate-500 shrink-0">User #${ev.user_id || 'SYS'}</span>
+                    <span class="text-slate-350 truncate font-semibold" title='${ev.payload}'>${ev.payload}</span>
                 </div>
             `;
         }).join('');
