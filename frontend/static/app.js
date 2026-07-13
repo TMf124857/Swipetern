@@ -17,6 +17,105 @@ class SwipeternApp {
         this.complianceInterval = null;
 
         this.authTab = "login"; // login or register
+
+        // --- Sandbox State Properties ---
+        this.sandboxMode = "student"; // 'student' or 'employer'
+        this.sandStudentIndex = 0;
+        this.sandRoleIndex = 0;
+
+        this.sandStudents = [
+            {
+                id: "STU-101",
+                name: "Emma Janssen",
+                education: "Ghent University • Belgium",
+                skills: "React, TypeScript, Tailwind CSS, REST APIs",
+                bio: "Next.js frontend engineer looking to build high-performance mobile billing systems in Kampala, Uganda.",
+                vibe: "💡 High Energy, tech-community organizer, coffee lover.",
+                avatar: "🎓"
+            },
+            {
+                id: "STU-102",
+                name: "Lucas de Jong",
+                education: "TU Delft • Netherlands",
+                skills: "Python, SQL, Data Modeling, NumPy",
+                bio: "Predictive data analyst wanting to optimize regional cooperative yields using satellite telemetry.",
+                vibe: "🌿 Highly focused, field trip enthusiast, quiet execution.",
+                avatar: "🎓"
+            },
+            {
+                id: "STU-103",
+                name: "Marie Dubois",
+                education: "Université de Paris • France",
+                skills: "Clinical Medicine, Global Health, Triaging",
+                bio: "Public health major aiming to assist automated triage scheduling pipelines in regional clinic clusters.",
+                vibe: "❤️ Highly empathetic, triage pro, community focused.",
+                avatar: "🎓"
+            }
+        ];
+
+        this.sandRoles = [
+            {
+                id: "OP-201",
+                company_name: "Phynx Tech Solutions",
+                industry: "Kampala • ICT / Fintech",
+                skills_required: "React, Mobile Money API, TailwindCSS",
+                description: "Help construct our lightning-fast mobile money gateway interfaces for small businesses.",
+                employer_bio: "⚡ High growth, agile developer sprints, zero bureaucracy.",
+                avatar: "🏢"
+            },
+            {
+                id: "OP-202",
+                company_name: "Enum Agribusiness",
+                industry: "Kigali • Agritech",
+                skills_required: "Python, Pandas, SQL Yield Models",
+                description: "Coordinate with regional maize networks to analyze crop telemetry data logs.",
+                employer_bio: "🌱 Direct field integration, sustainable agricultural impact.",
+                avatar: "🏢"
+            },
+            {
+                id: "OP-203",
+                company_name: "Kampala Community Clinic",
+                industry: "Kampala • Healthcare",
+                skills_required: "Data logs, clinical assistant foundation",
+                description: "Support active triage protocols and optimize record verification databases.",
+                employer_bio: "🩺 Mission first, extremely deep patient relationships.",
+                avatar: "🏢"
+            }
+        ];
+
+        this.sandSwipes = {
+            likesFromStudents: {
+                "STU-101": ["OP-201", "OP-202"],
+                "STU-102": ["OP-202"],
+                "STU-103": ["OP-203"]
+            },
+            likesFromEmployers: {
+                "OP-201": ["STU-101"], // Triggers instant match
+                "OP-202": ["STU-102"],
+                "OP-203": ["STU-103"]
+            }
+        };
+
+        this.sandMatches = [
+            {
+                id: "MCH-4819",
+                student_id: "STU-103",
+                student_name: "Marie Dubois",
+                opportunity_id: "OP-203",
+                employer_name: "Kampala Community Clinic",
+                opportunity_title: "Medical Care Assistant",
+                timestamp: "Just Now"
+            }
+        ];
+
+        this.sandChats = {
+            "MCH-4819": [
+                { sender: "system", text: "🎉 Double Opt-In Match! Instant chat channel initialized.", time: "Just Now" },
+                { sender: "employer", text: "Welcome to our match channel, Marie! We would love to set up an introductory chat.", time: "Just Now" }
+            ]
+        };
+
+        this.activeSandMatchId = "MCH-4819";
     }
 
     // Initialize the Application on page load
@@ -25,7 +124,7 @@ class SwipeternApp {
         if (this.token) {
             await this.fetchMe();
         } else {
-            this.showScreen("welcome");
+            this.showScreen("landing");
         }
     }
 
@@ -119,10 +218,18 @@ class SwipeternApp {
         document.getElementById("screen-welcome").classList.add("hidden");
         document.getElementById("screen-onboarding").classList.add("hidden");
         document.getElementById("screen-workspace").classList.add("hidden");
-        document.getElementById("nav-authed").classList.add("hidden");
+        document.getElementById("screen-landing").classList.add("hidden");
 
-        if (screenName === "welcome") {
+        document.getElementById("nav-authed").classList.add("hidden");
+        document.getElementById("nav-guest").classList.add("hidden");
+
+        if (screenName === "landing") {
+            document.getElementById("screen-landing").classList.remove("hidden");
+            document.getElementById("nav-guest").classList.remove("hidden");
+            this.initSandbox();
+        } else if (screenName === "welcome") {
             document.getElementById("screen-welcome").classList.remove("hidden");
+            document.getElementById("nav-guest").classList.remove("hidden");
         } else if (screenName === "onboarding") {
             document.getElementById("screen-onboarding").classList.remove("hidden");
             document.getElementById("nav-authed").classList.remove("hidden");
@@ -135,22 +242,31 @@ class SwipeternApp {
         }
     }
 
+    // Auth Dialog modal triggers
+    showAuthModal() {
+        document.getElementById("modal-auth").classList.remove("hidden");
+    }
+
+    hideAuthModal() {
+        document.getElementById("modal-auth").classList.add("hidden");
+    }
+
     // Toggle Welcome / Register tabs
     setAuthTab(tab) {
         this.authTab = tab;
-        const loginTab = document.getElementById("tab-btn-login");
-        const regTab = document.getElementById("tab-btn-register");
-        const loginForm = document.getElementById("form-login");
-        const regForm = document.getElementById("form-register");
+        const loginTab = document.getElementById("modal-btn-login");
+        const regTab = document.getElementById("modal-btn-register");
+        const loginForm = document.getElementById("modal-form-login");
+        const regForm = document.getElementById("modal-form-register");
 
         if (tab === "login") {
-            loginTab.className = "flex-1 py-2 text-sm font-bold rounded-lg bg-white text-indigo-600 shadow-xs transition duration-200";
-            regTab.className = "flex-1 py-2 text-sm font-bold rounded-lg text-slate-600 hover:text-slate-900 transition duration-200";
+            loginTab.className = "flex-1 py-1.5 text-xs font-bold rounded-lg bg-white text-indigo-600 shadow-sm transition";
+            regTab.className = "flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-500 transition";
             loginForm.classList.remove("hidden");
             regForm.classList.add("hidden");
         } else {
-            regTab.className = "flex-1 py-2 text-sm font-bold rounded-lg bg-white text-indigo-600 shadow-xs transition duration-200";
-            loginTab.className = "flex-1 py-2 text-sm font-bold rounded-lg text-slate-600 hover:text-slate-900 transition duration-200";
+            regTab.className = "flex-1 py-1.5 text-xs font-bold rounded-lg bg-white text-indigo-600 shadow-sm transition";
+            loginTab.className = "flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-500 transition";
             regForm.classList.remove("hidden");
             loginForm.classList.add("hidden");
         }
@@ -161,19 +277,19 @@ class SwipeternApp {
         const studLabel = document.getElementById("role-label-student");
         const empLabel = document.getElementById("role-label-employer");
         if (role === "student") {
-            studLabel.className = "border-2 border-indigo-500 bg-indigo-50/50 p-3 rounded-xl flex items-center justify-center space-x-2 cursor-pointer";
-            empLabel.className = "border-2 border-slate-200 p-3 rounded-xl flex items-center justify-center space-x-2 cursor-pointer";
+            studLabel.className = "border-2 border-indigo-500 bg-indigo-50/50 p-2.5 rounded-xl flex items-center justify-center space-x-1.5 cursor-pointer text-[10px] font-black uppercase tracking-wider";
+            empLabel.className = "border border-slate-200 p-2.5 rounded-xl flex items-center justify-center space-x-1.5 cursor-pointer text-[10px] font-black uppercase tracking-wider";
         } else {
-            empLabel.className = "border-2 border-indigo-500 bg-indigo-50/50 p-3 rounded-xl flex items-center justify-center space-x-2 cursor-pointer";
-            studLabel.className = "border-2 border-slate-200 p-3 rounded-xl flex items-center justify-center space-x-2 cursor-pointer";
+            empLabel.className = "border-2 border-indigo-500 bg-indigo-50/50 p-2.5 rounded-xl flex items-center justify-center space-x-1.5 cursor-pointer text-[10px] font-black uppercase tracking-wider";
+            studLabel.className = "border border-slate-200 p-2.5 rounded-xl flex items-center justify-center space-x-1.5 cursor-pointer text-[10px] font-black uppercase tracking-wider";
         }
     }
 
     // Auth actions
     async handleRegister(e) {
         e.preventDefault();
-        const email = document.getElementById("reg-email").value;
-        const password = document.getElementById("reg-password").value;
+        const email = document.querySelector('#modal-form-register input[type="email"]').value;
+        const password = document.querySelector('#modal-form-register input[type="password"]').value;
         const role = document.querySelector('input[name="reg-role"]:checked').value;
 
         try {
@@ -188,8 +304,8 @@ class SwipeternApp {
 
     async handleLogin(e) {
         e.preventDefault();
-        const email = document.getElementById("login-email").value;
-        const password = document.getElementById("login-password").value;
+        const email = document.querySelector('#modal-form-login input[type="email"]').value;
+        const password = document.querySelector('#modal-form-login input[type="password"]').value;
         await this.executeLogin(email, password);
     }
 
@@ -208,6 +324,7 @@ class SwipeternApp {
             localStorage.setItem("user", JSON.stringify(this.user));
             localStorage.setItem("profile", JSON.stringify(this.profile));
 
+            this.hideAuthModal();
             this.showToast("Logged in successfully!");
 
             if (!this.user.is_onboarded) {
@@ -237,8 +354,7 @@ class SwipeternApp {
         localStorage.removeItem("profile");
 
         this.stopPolling();
-        this.setAuthTab("login");
-        this.showScreen("welcome");
+        this.showScreen("landing");
     }
 
     // Fetch user self details
@@ -262,16 +378,71 @@ class SwipeternApp {
 
     // Profile Onboarding Form Config
     setupOnboardingFields() {
-        const studentFields = document.getElementById("fields-student");
-        const employerFields = document.getElementById("fields-employer");
+        // Build onboarding workspace dynamically
+        const container = document.getElementById("screen-onboarding");
 
-        if (this.user.role === "student") {
-            studentFields.classList.remove("hidden");
-            employerFields.classList.add("hidden");
-        } else {
-            studentFields.classList.add("hidden");
-            employerFields.classList.remove("hidden");
-        }
+        const studentFields = `
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Education / Institution</label>
+                <input type="text" id="prof-education" placeholder="e.g. Stanford University, BS Comp Sci" class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-medium">
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Your Skills (Comma separated)</label>
+                <input type="text" id="prof-skills" placeholder="e.g. Python, React, Figma" class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-medium">
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Target Job Titles (Comma separated)</label>
+                <input type="text" id="prof-job-titles" placeholder="e.g. Software Engineer, Designer" class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-medium">
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Visa / Work Permit Status</label>
+                <select id="prof-visa-status" class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-bold bg-white">
+                    <option value="not_required">Citizen / PR (No sponsorship needed)</option>
+                    <option value="pending">F-1 Visa / Needs Sponsorship</option>
+                    <option value="approved">Already Approved Work Visa</option>
+                </select>
+            </div>
+        `;
+
+        const employerFields = `
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Company Name</label>
+                <input type="text" id="prof-company" placeholder="e.g. Stripe, Inc." class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-medium">
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Industry Sector</label>
+                <input type="text" id="prof-industry" placeholder="e.g. Fintech, Web3, SpaceTech" class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-medium">
+            </div>
+        `;
+
+        container.innerHTML = `
+            <div class="bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100">
+                <div class="mb-6">
+                    <span class="text-xs font-extrabold tracking-widest text-indigo-600 uppercase">Onboarding</span>
+                    <h2 class="text-3xl font-black text-slate-900 mt-1">Design Your Vibe Card</h2>
+                    <p class="text-slate-500 text-sm mt-1.5">Stand out with skills, target roles, and work status.</p>
+                </div>
+
+                <form onsubmit="app.saveProfile(event)" class="space-y-5">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Display Name</label>
+                        <input type="text" id="prof-name" required placeholder="Jane Doe" class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-medium">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Pitch (Bio)</label>
+                        <textarea id="prof-bio" rows="3" placeholder="A brief hook about you or your company vision..." class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-medium"></textarea>
+                    </div>
+
+                    <div class="space-y-4">
+                        ${this.user.role === "student" ? studentFields : employerFields}
+                    </div>
+
+                    <button type="submit" class="w-full bg-slate-900 hover:bg-indigo-600 text-white font-bold py-3.5 rounded-2xl shadow-lg transition duration-200 uppercase tracking-wider text-xs">
+                        Enter Platform
+                    </button>
+                </form>
+            </div>
+        `;
 
         // Fill fields with any existing values
         if (this.profile) {
@@ -333,13 +504,13 @@ class SwipeternApp {
             userEmail.innerText = this.user.email;
             if (this.user.role === "student") {
                 roleIcon.innerHTML = `<i class="fa-solid fa-graduation-cap text-yellow-300"></i>`;
-                userBadge.className = "bg-gradient-to-r from-blue-600 to-indigo-600 border border-blue-400 px-3 py-1 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1";
+                userBadge.className = "bg-gradient-to-r from-blue-600 to-indigo-600 border border-blue-400 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1";
             } else if (this.user.role === "employer") {
                 roleIcon.innerHTML = `<i class="fa-solid fa-building text-amber-300"></i>`;
-                userBadge.className = "bg-gradient-to-r from-amber-600 to-orange-600 border border-amber-400 px-3 py-1 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1";
+                userBadge.className = "bg-gradient-to-r from-amber-600 to-orange-600 border border-amber-400 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1";
             } else {
                 roleIcon.innerHTML = `<i class="fa-solid fa-user-shield text-rose-300"></i>`;
-                userBadge.className = "bg-gradient-to-r from-rose-600 to-red-600 border border-rose-400 px-3 py-1 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1";
+                userBadge.className = "bg-gradient-to-r from-rose-600 to-red-600 border border-rose-400 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1";
             }
         }
     }
@@ -410,6 +581,276 @@ class SwipeternApp {
             this.fetchAnalytics();
         } else if (tabName === "admin") {
             this.fetchAdminReports();
+        }
+    }
+
+    // --- INTERACTIVE SANDBOX SIMULATOR (GUESTS CAN PLAY FIRST) ---
+    initSandbox() {
+        this.renderSandboxCard();
+        this.renderSandboxMatches();
+        this.renderSandboxChat();
+    }
+
+    setSandboxMode(mode) {
+        this.sandboxMode = mode;
+        const btnStud = document.getElementById('btn-sand-student');
+        const btnRecr = document.getElementById('btn-sand-employer');
+        const identityLabel = document.getElementById('landing-identity');
+
+        if (mode === 'student') {
+            btnStud.className = "px-3.5 py-1.5 text-[10px] font-black rounded-lg bg-white text-indigo-600 shadow-sm transition-all uppercase tracking-wider";
+            btnRecr.className = "px-3.5 py-1.5 text-[10px] font-black rounded-lg text-slate-500 hover:text-slate-800 transition-all uppercase tracking-wider";
+            identityLabel.innerText = "Candidate View";
+        } else {
+            btnStud.className = "px-3.5 py-1.5 text-[10px] font-black rounded-lg text-slate-500 hover:text-slate-800 transition-all uppercase tracking-wider";
+            btnRecr.className = "px-3.5 py-1.5 text-[10px] font-black rounded-lg bg-white text-indigo-600 shadow-sm transition-all uppercase tracking-wider";
+            identityLabel.innerText = "Employer View";
+        }
+        this.renderSandboxCard();
+    }
+
+    renderSandboxCard() {
+        const viewport = document.getElementById('sandbox-deck-container');
+
+        if (this.sandboxMode === 'student') {
+            if (this.sandRoleIndex >= this.sandRoles.length) {
+                viewport.innerHTML = `
+                    <div class="text-center py-6">
+                        <span class="text-3xl">🎉</span>
+                        <h4 class="text-slate-800 font-extrabold text-sm mt-2">End of Roles Stack</h4>
+                        <p class="text-xs text-slate-500 max-w-xs mx-auto mt-1 px-4">Toggle over to "Employer View" to review incoming students!</p>
+                        <button onclick="app.resetSandboxFeeds()" class="mt-4 bg-slate-900 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-indigo-600 transition">Reset Swipe Cards</button>
+                    </div>
+                `;
+                return;
+            }
+            const role = this.sandRoles[this.sandRoleIndex];
+            viewport.innerHTML = `
+                <div class="space-y-4 animate-scale-in w-full text-left">
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-xl shadow-xs">${role.avatar}</div>
+                            <div>
+                                <h4 class="text-slate-900 font-extrabold text-sm">${role.company_name}</h4>
+                                <p class="text-[11px] text-slate-400 font-bold">${role.industry}</p>
+                            </div>
+                        </div>
+                        <span class="text-[9px] bg-emerald-50 text-emerald-600 border border-emerald-100 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">15 ECTS</span>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Vibe Check:</div>
+                        <p class="text-xs italic text-indigo-600 font-bold">${role.employer_bio}</p>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Requirements:</div>
+                        <p class="text-xs text-slate-600 leading-relaxed font-semibold line-clamp-2">${role.description}</p>
+                    </div>
+                    <div class="flex flex-wrap gap-1 pt-1">
+                        ${role.skills_required.split(', ').map(tag => `<span class="text-[9px] bg-slate-100 px-2 py-0.5 rounded text-slate-500 font-bold">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+        } else {
+            if (this.sandStudentIndex >= this.sandStudents.length) {
+                viewport.innerHTML = `
+                    <div class="text-center py-6">
+                        <span class="text-3xl">🤝</span>
+                        <h4 class="text-slate-800 font-extrabold text-sm mt-2">End of Candidate Stack</h4>
+                        <p class="text-xs text-slate-500 max-w-xs mx-auto mt-1 px-4">Toggle back to "Student" to see opportunity cards!</p>
+                        <button onclick="app.resetSandboxFeeds()" class="mt-4 bg-slate-900 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-indigo-600 transition">Reset Swipe Cards</button>
+                    </div>
+                `;
+                return;
+            }
+            const student = this.sandStudents[this.sandStudentIndex];
+            viewport.innerHTML = `
+                <div class="space-y-4 animate-scale-in w-full text-left">
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-xl shadow-xs">${student.avatar}</div>
+                            <div>
+                                <h4 class="text-slate-900 font-extrabold text-sm">${student.name}</h4>
+                                <p class="text-[11px] text-slate-400 font-bold">${student.education}</p>
+                            </div>
+                        </div>
+                        <span class="text-[9px] bg-rose-50 text-rose-600 border border-rose-100 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">Vetted student</span>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Vibe Check:</div>
+                        <p class="text-xs italic text-indigo-600 font-bold">${student.vibe}</p>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Pitch:</div>
+                        <p class="text-xs text-slate-600 leading-relaxed font-semibold line-clamp-2">${student.bio}</p>
+                    </div>
+                    <div class="flex flex-wrap gap-1 pt-1">
+                        ${student.skills.split(', ').map(tag => `<span class="text-[9px] bg-slate-100 px-2 py-0.5 rounded text-slate-500 font-bold">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+        }
+    }
+
+    resetSandboxFeeds() {
+        this.sandStudentIndex = 0;
+        this.sandRoleIndex = 0;
+        this.renderSandboxCard();
+    }
+
+    swipeSandbox(direction) {
+        if (this.sandboxMode === 'student') {
+            if (this.sandRoleIndex >= this.sandRoles.length) return;
+            const role = this.sandRoles[this.sandRoleIndex];
+
+            if (direction === 'like') {
+                if (!this.sandSwipes.likesFromStudents["STU-101"].includes(role.id)) {
+                    this.sandSwipes.likesFromStudents["STU-101"].push(role.id);
+                }
+                if (this.sandSwipes.likesFromEmployers[role.id] && this.sandSwipes.likesFromEmployers[role.id].includes("STU-101")) {
+                    this.triggerSandboxMatch("STU-101", "Emma Janssen", role.id, role.company_name, "Frontend Intern");
+                }
+            }
+            this.sandRoleIndex++;
+        } else {
+            if (this.sandStudentIndex >= this.sandStudents.length) return;
+            const student = this.sandStudents[this.sandStudentIndex];
+
+            if (direction === 'like') {
+                if (!this.sandSwipes.likesFromEmployers["OP-201"].includes(student.id)) {
+                    this.sandSwipes.likesFromEmployers["OP-201"].push(student.id);
+                }
+                if (this.sandSwipes.likesFromStudents[student.id] && this.sandSwipes.likesFromStudents[student.id].includes("OP-201")) {
+                    this.triggerSandboxMatch(student.id, student.name, "OP-201", "Phynx Tech Solutions", "Frontend Developer Intern");
+                }
+            }
+            this.sandStudentIndex++;
+        }
+        this.renderSandboxCard();
+    }
+
+    triggerSandboxMatch(studentId, studentName, roleId, companyName, roleName) {
+        const matchId = "MCH-" + Math.floor(1000 + Math.random() * 9000);
+        const newMatch = {
+            id: matchId,
+            student_id: studentId,
+            student_name: studentName,
+            opportunity_id: roleId,
+            employer_name: companyName,
+            opportunity_title: roleName,
+            timestamp: "Just Now"
+        };
+
+        this.sandMatches.unshift(newMatch);
+        this.sandChats[matchId] = [
+            { sender: "system", text: "🎉 Double Opt-In Match! Instant chat channel initialized.", time: "Just Now" },
+            { sender: "employer", text: `Welcome to the connection channel, ${studentName}! Ready to complete travel compliance?`, time: "Just Now" }
+        ];
+
+        this.activeSandMatchId = matchId;
+
+        // Show celebrate success
+        document.getElementById("match-student-name").innerText = studentName;
+        document.getElementById("match-employer-name").innerText = companyName;
+        document.getElementById("match-opp-title").innerText = roleName;
+        document.getElementById("modal-match-success").classList.remove("hidden");
+
+        this.renderSandboxMatches();
+        this.renderSandboxChat();
+    }
+
+    renderSandboxMatches() {
+        const container = document.getElementById('sandbox-matches-list');
+        const badge = document.getElementById('sandbox-match-badge');
+        badge.innerText = this.sandMatches.length;
+
+        container.innerHTML = this.sandMatches.map(match => `
+            <div onclick="app.selectSandboxMatch('${match.id}')" class="p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${this.activeSandMatchId === match.id ? 'bg-indigo-50 border-indigo-150 text-indigo-950 font-bold' : 'bg-slate-50 border-slate-100 hover:border-slate-200'}">
+                <div>
+                    <div class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        ${match.student_name}
+                    </div>
+                    <div class="text-[10px] text-slate-400 mt-0.5">${match.employer_name} • ${match.opportunity_title}</div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    selectSandboxMatch(matchId) {
+        this.activeSandMatchId = matchId;
+        this.renderSandboxMatches();
+        this.renderSandboxChat();
+    }
+
+    renderSandboxChat() {
+        const chatBox = document.getElementById('sandbox-chat-messages');
+        const partnerTitle = document.getElementById('sandbox-chat-title');
+
+        if (!this.activeSandMatchId || !this.sandChats[this.activeSandMatchId]) {
+            chatBox.innerHTML = `<div class="text-center text-slate-400 italic py-6">Select a connection above to chat.</div>`;
+            return;
+        }
+
+        const activeMatch = this.sandMatches.find(m => m.id === this.activeSandMatchId);
+        partnerTitle.innerText = `Chat with ${activeMatch.student_name}`;
+
+        const log = this.sandChats[this.activeSandMatchId];
+        chatBox.innerHTML = log.map(msg => {
+            if (msg.sender === 'system') {
+                return `<div class="p-2 bg-indigo-50/50 text-indigo-500 text-[10px] text-center rounded-xl font-bold uppercase tracking-wider">${msg.text}</div>`;
+            }
+            const isStudent = msg.sender === 'student';
+            const align = isStudent ? 'justify-end' : 'justify-start';
+            const color = isStudent ? 'bg-indigo-600 text-white rounded-br-none' : 'bg-slate-200 text-slate-800 rounded-bl-none';
+
+            return `
+                <div class="flex ${align}">
+                    <div class="p-2.5 rounded-2xl max-w-[85%] leading-relaxed ${color}">
+                        ${msg.text}
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    sendSandboxTemplate(type) {
+        if (!this.activeSandMatchId || !this.sandChats[this.activeSandMatchId]) return;
+
+        let messageText = "";
+        if (type === 'request_interview') {
+            messageText = `🗓️ Swipetern Scheduler: Google Meet invite request dispatched. Let's arrange a 15-minute call.`;
+        } else if (type === 'ects_check') {
+            messageText = `🎓 Academic Compliance: Dynamic 15 ECTS logging parameters initiated. Please review the curriculum parameters.`;
+        }
+
+        this.sandChats[this.activeSandMatchId].push({
+            sender: "employer",
+            text: messageText,
+            time: "Just Now"
+        });
+
+        this.renderSandboxChat();
+
+        setTimeout(() => {
+            let response = "";
+            if (type === 'request_interview') response = "Slot accepted! Let's arrange it.";
+            else if (type === 'ects_check') response = "Done. Academic co-op signature has been logged.";
+
+            this.sandChats[this.activeSandMatchId].push({
+                sender: "student",
+                text: response,
+                time: "Just Now"
+            });
+            this.renderSandboxChat();
+        }, 1500);
+    }
+
+    toggleSandboxCheck(step) {
+        const check = document.getElementById(`sand-check-${step}`);
+        if (check.checked) {
+            this.showToast(`Checkpoint ${step} verified!`);
         }
     }
 
@@ -1035,11 +1476,6 @@ class SwipeternApp {
 
     // Convenience utility to switch roles / elevate to admin for ease of testing
     async elevateToAdmin() {
-        if (!this.user) {
-            this.showError("Please register or log in first.");
-            return;
-        }
-
         try {
             // We register/promote this email to admin manually in DB or register a new one
             const adminEmail = "admin_mock_" + Math.floor(Math.random() * 1000) + "@swipetern.com";
