@@ -97,7 +97,7 @@
     <!-- Header / Navbar with Gen Z styling -->
     <header class="bg-slate-900/80 backdrop-blur-md sticky top-0 z-40 border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-2.5 cursor-pointer" onclick="app.showTab('discovery')" aria-label="Swipetern Homepage">
+            <div class="flex items-center space-x-2.5 cursor-pointer" onclick="app.showExplainerPage()" aria-label="Swipetern Homepage">
                 <div class="bg-gradient-to-tr from-fuchsia-500 via-pink-500 to-indigo-500 p-2.5 rounded-2xl text-white shadow-md shadow-fuchsia-500/20 transform hover:scale-105 transition duration-200">
                     <i class="fa-solid fa-earth-africa text-xl"></i>
                 </div>
@@ -122,7 +122,7 @@
                 </div>
 
                 <!-- Guest Claim Option -->
-                <div id="nav-guest">
+                <div id="nav-guest" class="flex items-center space-x-2">
                     <button onclick="app.showAuthModal()" class="bg-gradient-to-r from-fuchsia-500 to-indigo-600 hover:from-fuchsia-600 hover:to-indigo-700 text-white px-5 py-3 rounded-2xl text-xs font-black shadow-lg shadow-fuchsia-500/10 hover:shadow-indigo-500/20 transition transform hover:scale-105 duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;" aria-label="Log In or Create an Account">
                         <i class="fa-solid fa-user-lock mr-1.5 text-sm"></i> Claim My Account / Log In
                     </button>
@@ -164,22 +164,96 @@
         </div>
 
 
+        <!-- ================= EXPLAINER SCREEN (DEFAULT UN-AUTH VIEW) ================= -->
+        <section id="screen-explainer" class="flex-grow flex flex-col space-y-16 py-6 animate-scale-in">
+            <!-- Hero Section -->
+            <div class="text-center max-w-4xl mx-auto space-y-6">
+                <span class="inline-block bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20 font-extrabold tracking-widest px-4 py-2 rounded-full uppercase text-[10px] animate-pulse">
+                    ✨ Swipetern Platform Explainer Guide
+                </span>
+                <h1 class="text-4xl md:text-6xl font-black text-slate-100 leading-tight tracking-tight">
+                    Pure Alignment. <br/>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 via-purple-400 to-indigo-400">
+                        Mutual Consent Recruiting for East Africa.
+                    </span>
+                </h1>
+                <p class="text-base text-slate-400 leading-relaxed max-w-2xl mx-auto font-semibold">
+                    Welcome to Swipetern, the standalone mobile-first matchmaking corridor linking international interns from Europe & North America with innovative startups and clinics in Uganda, Kenya, and Rwanda.
+                </p>
+
+                <!-- Core CTAs -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                    <button onclick="app.showScreen('landing')" class="w-full sm:w-auto bg-gradient-to-r from-fuchsia-500 to-indigo-600 hover:from-fuchsia-600 hover:to-indigo-750 text-white font-black px-8 py-4 rounded-2xl text-xs uppercase tracking-wider shadow-lg shadow-fuchsia-500/20 transform hover:scale-105 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
+                        🚀 Enter Interactive Sandbox (No Sign Up)
+                    </button>
+                    <button onclick="app.showAuthModal()" class="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-200 font-black px-8 py-4 rounded-2xl text-xs uppercase tracking-wider transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
+                        🔑 Claim My Account / Log In
+                    </button>
+                </div>
+            </div>
+
+            <!-- Conceptual "Why Swipetern" Infographic -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
+                <!-- Vibe 1 -->
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-[2rem] space-y-3">
+                    <div class="h-10 w-10 bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20 rounded-xl flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
+                    <h3 class="font-extrabold text-slate-100 text-base">Double Opt-In Resonance</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed font-medium">
+                        Students and employers must both swipe "Like" on each other to connect. No resume spam, no unsolicited calls, only meaningful human alignment.
+                    </p>
+                </div>
+
+                <!-- Vibe 2 -->
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-[2rem] space-y-3">
+                    <div class="h-10 w-10 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-xl flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-comments"></i>
+                    </div>
+                    <h3 class="font-extrabold text-slate-100 text-base">Direct Messaging Hub</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed font-medium">
+                        Successful matching instantly unlocks a private, isolated chat room. Discuss milestones, curriculum signoffs, and interview schedules instantly.
+                    </p>
+                </div>
+
+                <!-- Vibe 3 -->
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-[2rem] space-y-3">
+                    <div class="h-10 w-10 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-passport"></i>
+                    </div>
+                    <h3 class="font-extrabold text-slate-100 text-base">Pre-Hire Departure Tracker</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed font-medium">
+                        Ensure legal and physical security with localized checkpoints tracking ECTS co-op credentials, East African work permits, and Yellow Fever health certificates.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Deep Energetic Connection section -->
+            <div class="bg-gradient-to-br from-slate-900 to-indigo-950/40 border border-slate-800 rounded-[2.5rem] p-8 shadow-xl space-y-6">
+                <div class="max-w-2xl">
+                    <span class="text-xs font-extrabold tracking-widest text-fuchsia-500 uppercase">Our Core Ideology</span>
+                    <h2 class="text-2xl font-black text-slate-100 mt-1 leading-snug">The Sacred Bond of Seeker & Guide</h2>
+                    <p class="text-sm text-slate-400 mt-2 font-medium leading-relaxed">
+                        Swipetern treats early-career placements as a collaborative quest. By aligning **Europe and North America's** interns with leading agribusinesses, fintech startups, and healthcare clinics across **Uganda, Rwanda, and Kenya**, we turn internships into shared journeys of high-impact local deployment.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+
         <!-- ================= SANDBOX / LANDING SCREEN (TRY FIRST) ================= -->
-        <section id="screen-landing" class="flex-grow flex flex-col space-y-12 py-6">
+        <section id="screen-landing" class="hidden flex-grow flex flex-col space-y-12 py-6">
 
             <!-- Hero Header Pitch -->
             <div class="text-center max-w-4xl mx-auto space-y-4">
                 <span class="inline-block bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20 font-extrabold tracking-widest px-4 py-2 rounded-full uppercase text-[10px] animate-pulse shadow-xs">
-                    <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Karibu! Connecting East Africa & Global Interns
+                    <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Interactive Sandbox Sandbox
                 </span>
-                <h1 class="text-4xl md:text-6xl font-black text-slate-100 leading-tight tracking-tight">
-                    Deploy East Africa. <br/>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 via-purple-400 to-indigo-400">
-                        Mutual Consent, Safe Relocation.
-                    </span>
+                <h1 class="text-4xl md:text-5xl font-black text-slate-100 leading-tight tracking-tight">
+                    Live Matchmaking Deck
                 </h1>
                 <p class="text-base text-slate-400 leading-relaxed max-w-xl mx-auto font-medium">
-                    Are you an employer in Uganda, Kenya, or Rwanda, or an eager student from Europe or North America? Try our live simulation sandbox below to match, chat, and clear East African departure compliance checklists instantly.
+                    Swipe real candidates, trigger instant mutual matches, and send administrative fast replies. Play in the sandbox to experience Swipetern!
                 </p>
             </div>
 
@@ -215,7 +289,7 @@
                         <button onclick="app.swipeSandbox('pass')" class="h-12 w-12 bg-slate-950 hover:bg-rose-955 text-rose-500 rounded-full border border-slate-800 flex items-center justify-center shadow-lg hover:border-rose-900/40 transition transform hover:scale-105 active:scale-95 duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px; min-width: 44px;" aria-label="Swipe Pass">
                             <i class="fa-solid fa-xmark text-lg"></i>
                         </button>
-                        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Swipe Left to Skip • Right to Like</span>
+                        <span class="text-[10px] text-slate-555 font-bold uppercase tracking-widest">Swipe Left to Skip • Right to Like</span>
                         <button onclick="app.swipeSandbox('like')" class="h-12 w-12 bg-slate-950 hover:bg-emerald-955 text-emerald-500 rounded-full border border-slate-800 flex items-center justify-center shadow-lg hover:border-emerald-900/40 transition transform hover:scale-105 active:scale-95 duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px; min-width: 44px;" aria-label="Swipe Like">
                             <i class="fa-solid fa-heart text-lg animate-pulse"></i>
                         </button>
@@ -274,7 +348,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <!-- Academic -->
-                    <div class="bg-slate-950 border border-slate-800 p-5 rounded-2xl space-y-3">
+                    <div class="bg-slate-955 border border-slate-800 p-5 rounded-2xl space-y-3">
                         <div class="flex items-center justify-between">
                             <div class="h-8 w-8 rounded-lg bg-teal-500/10 text-teal-600 font-black text-sm flex items-center justify-center border border-teal-500/20">
                                 1
@@ -290,7 +364,7 @@
                     </div>
 
                     <!-- Visa Status -->
-                    <div class="bg-slate-950 border border-slate-800 p-5 rounded-2xl space-y-3">
+                    <div class="bg-slate-955 border border-slate-800 p-5 rounded-2xl space-y-3">
                         <div class="flex items-center justify-between">
                             <div class="h-8 w-8 rounded-lg bg-indigo-500/10 text-indigo-400 font-black text-sm flex items-center justify-center border border-indigo-500/20">
                                 2
@@ -300,13 +374,13 @@
                         <h4 class="font-extrabold text-slate-100 text-sm">Uganda Work Permit / Special Entry Visa</h4>
                         <p class="text-xs text-slate-400 leading-relaxed font-medium">Verify valid passport data logs and East African immigration entry approvals.</p>
                         <div class="flex items-center space-x-2 pt-2">
-                            <input type="checkbox" id="sand-check-2" onchange="app.toggleSandboxCheck(2)" class="h-4 w-4 text-indigo-500 rounded bg-slate-950 border-slate-800 focus:ring-indigo-500">
+                            <input type="checkbox" id="sand-check-2" onchange="app.toggleSandboxCheck(2)" class="h-4 w-4 text-indigo-500 rounded bg-slate-955 border-slate-800 focus:ring-indigo-500">
                             <span class="text-xs font-bold text-slate-300">Mark verified</span>
                         </div>
                     </div>
 
                     <!-- Travel docs -->
-                    <div class="bg-slate-950 border border-slate-800 p-5 rounded-2xl space-y-3">
+                    <div class="bg-slate-955 border border-slate-800 p-5 rounded-2xl space-y-3">
                         <div class="flex items-center justify-between">
                             <div class="h-8 w-8 rounded-lg bg-fuchsia-500/10 text-fuchsia-400 font-black text-sm flex items-center justify-center border border-fuchsia-500/20">
                                 3
@@ -316,7 +390,7 @@
                         <h4 class="font-extrabold text-slate-100 text-sm">Yellow Fever & Travel Logistics</h4>
                         <p class="text-xs text-slate-400 leading-relaxed font-medium">Verify immunization logs, flight itinerary, and local medical cover certificates.</p>
                         <div class="flex items-center space-x-2 pt-2">
-                            <input type="checkbox" id="sand-check-3" onchange="app.toggleSandboxCheck(3)" class="h-4 w-4 text-fuchsia-500 rounded bg-slate-950 border-slate-800 focus:ring-fuchsia-500">
+                            <input type="checkbox" id="sand-check-3" onchange="app.toggleSandboxCheck(3)" class="h-4 w-4 text-fuchsia-500 rounded bg-slate-955 border-slate-800 focus:ring-fuchsia-500">
                             <span class="text-xs font-bold text-slate-300">Mark verified</span>
                         </div>
                     </div>
@@ -399,10 +473,10 @@
 
                     <!-- Swipe Controls -->
                     <div class="flex justify-center items-center space-x-8 mt-6" id="deck-controls">
-                        <button onclick="app.swipe('pass')" class="h-16 w-16 bg-slate-950 hover:bg-rose-955 text-rose-500 rounded-full border border-slate-800 flex items-center justify-center shadow-lg hover:border-rose-900/40 transition transform hover:scale-105 active:scale-95 duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px; min-width: 44px;" aria-label="Swipe Pass">
+                        <button onclick="app.swipe('pass')" class="h-16 w-16 bg-slate-955 hover:bg-rose-955 text-rose-500 rounded-full border border-slate-800 flex items-center justify-center shadow-lg hover:border-rose-900/40 transition transform hover:scale-105 active:scale-95 duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px; min-width: 44px;" aria-label="Swipe Pass">
                             <i class="fa-solid fa-xmark text-2xl"></i>
                         </button>
-                        <button onclick="app.swipe('like')" class="h-16 w-16 bg-slate-950 hover:bg-emerald-955 text-emerald-500 rounded-full border border-slate-800 flex items-center justify-center shadow-lg hover:border-emerald-900/40 transition transform hover:scale-105 active:scale-95 duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px; min-width: 44px;" aria-label="Swipe Like">
+                        <button onclick="app.swipe('like')" class="h-16 w-16 bg-slate-955 hover:bg-emerald-955 text-emerald-500 rounded-full border border-slate-800 flex items-center justify-center shadow-lg hover:border-emerald-900/40 transition transform hover:scale-105 active:scale-95 duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px; min-width: 44px;" aria-label="Swipe Like">
                             <i class="fa-solid fa-heart text-2xl"></i>
                         </button>
                     </div>
@@ -493,7 +567,7 @@
                                         </div>
 
                                         <!-- Step 2: Visa Status -->
-                                        <div class="bg-slate-950 border border-slate-800 p-3.5 rounded-xl flex items-start justify-between">
+                                        <div class="bg-slate-955 border border-slate-800 p-3.5 rounded-xl flex items-start justify-between">
                                             <div>
                                                 <h5 class="font-bold text-slate-200">2. EA Permit / Entry Visa</h5>
                                                 <p class="text-[10px] text-slate-500 mt-0.5">Immigration entry status.</p>
@@ -507,7 +581,7 @@
                                         </div>
 
                                         <!-- Step 3: Travel Docs -->
-                                        <div class="bg-slate-950 border border-slate-800 p-3.5 rounded-xl flex items-start justify-between">
+                                        <div class="bg-slate-955 border border-slate-800 p-3.5 rounded-xl flex items-start justify-between">
                                             <div>
                                                 <h5 class="font-bold text-slate-200">3. Health / Yellow Fever</h5>
                                                 <p class="text-[10px] text-slate-500 mt-0.5">Yellow Fever & medical logs.</p>
@@ -538,7 +612,7 @@
 
                     <!-- Chat room inactive placeholder -->
                     <div id="chat-empty" class="flex-grow flex flex-col items-center justify-center p-8 text-center text-slate-500">
-                        <div class="h-20 w-20 rounded-full bg-slate-950 flex items-center justify-center mb-4 border border-slate-800">
+                        <div class="h-20 w-20 rounded-full bg-slate-955 flex items-center justify-center mb-4 border border-slate-800">
                             <i class="fa-solid fa-comments text-3xl text-fuchsia-500 animate-pulse"></i>
                         </div>
                         <h4 class="font-bold text-slate-300">Select a Chat</h4>
@@ -577,15 +651,15 @@
                             <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Members</span>
                             <span class="text-2xl font-black text-slate-100 mt-1 block" id="metric-users">0</span>
                         </div>
-                        <div class="bg-slate-950 border border-slate-800 p-4 rounded-2xl">
+                        <div class="bg-slate-955 border border-slate-800 p-4 rounded-2xl">
                             <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Opportunities</span>
                             <span class="text-2xl font-black text-slate-100 mt-1 block" id="metric-jobs">0</span>
                         </div>
-                        <div class="bg-slate-950 border border-slate-800 p-4 rounded-2xl">
+                        <div class="bg-slate-955 border border-slate-800 p-4 rounded-2xl">
                             <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Total Matches</span>
                             <span class="text-2xl font-black text-slate-100 mt-1 block" id="metric-matches">0</span>
                         </div>
-                        <div class="bg-slate-950 border border-slate-800 p-4 rounded-2xl">
+                        <div class="bg-slate-955 border border-slate-800 p-4 rounded-2xl">
                             <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Total Swipes</span>
                             <span class="text-2xl font-black text-fuchsia-400 mt-1 block" id="metric-swipes">0</span>
                         </div>
@@ -603,10 +677,10 @@
                             </div>
                         </div>
 
-                        <div class="bg-slate-950 border border-slate-800 p-6 rounded-2xl flex flex-col justify-between">
+                        <div class="bg-slate-955 border border-slate-800 p-6 rounded-2xl flex flex-col justify-between">
                             <div>
                                 <h4 class="font-bold text-slate-200 text-sm mb-1">Target Market Segmentation (TAM/SAM/SOM)</h4>
-                                <p class="text-[10px] text-slate-450 mb-3">Capturing the massive early-career and international deployment sector.</p>
+                                <p class="text-[10px] text-slate-455 mb-3">Capturing the massive early-career and international deployment sector.</p>
                             </div>
                             <div class="chart-container">
                                 <canvas id="tamChart"></canvas>
@@ -641,7 +715,7 @@
                         </div>
 
                         <!-- Compliance Readiness Breakdown -->
-                        <div class="bg-slate-955 border border-slate-800 p-5 rounded-2xl">
+                        <div class="bg-slate-950 border border-slate-800 p-5 rounded-2xl">
                             <h4 class="font-bold text-sm text-slate-300 mb-4">Compliance Progress</h4>
                             <div class="space-y-3">
                                 <div>
@@ -758,7 +832,7 @@
 
             <form id="modal-form-register" onsubmit="app.handleRegister(event)" class="space-y-3 hidden">
                 <input type="email" id="reg-email" required placeholder="you@domain.com" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 text-xs font-bold focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
-                <input type="password" id="reg-password" required placeholder="Min 4 characters" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 text-xs font-bold focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
+                <input type="password" id="reg-password" required placeholder="Min 4 characters" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 text-xs font-bold focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
 
                 <div class="grid grid-cols-2 gap-2 pt-1">
                     <label class="border-2 border-fuchsia-500 bg-fuchsia-500/10 p-2.5 rounded-xl flex items-center justify-center space-x-1.5 cursor-pointer text-[10px] font-black uppercase tracking-wider" id="role-label-student">
@@ -771,7 +845,7 @@
                     </label>
                 </div>
 
-                <button type="submit" class="w-full bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-black py-3 rounded-2xl text-xs uppercase tracking-wider transition duration-155 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
+                <button type="submit" class="w-full bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-black py-3 rounded-2xl text-xs uppercase tracking-wider transition duration-155 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-955 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
                     Create Account
                 </button>
             </form>
@@ -807,22 +881,22 @@
             <form onsubmit="app.handleAddJob(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Job Title</label>
-                    <input type="text" id="add-job-title" required placeholder="e.g. Frontend Engineering Intern" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 text-sm focus:outline-hidden focus:ring-2 focus:ring-fuchsia-500 font-medium" style="min-height: 44px;">
+                    <input type="text" id="add-job-title" required placeholder="e.g. Frontend Engineering Intern" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 text-sm focus:outline-hidden focus:ring-2 focus:ring-fuchsia-500 font-medium" style="min-height: 44px;">
                 </div>
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Description</label>
-                    <textarea id="add-job-desc" rows="4" required placeholder="Describe core tasks, mission, and benefits..." class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 text-sm focus:outline-hidden focus:ring-2 focus:ring-fuchsia-500 font-medium"></textarea>
+                    <textarea id="add-job-desc" rows="4" required placeholder="Describe core tasks, mission, and benefits..." class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 text-sm focus:outline-hidden focus:ring-2 focus:ring-fuchsia-500 font-medium"></textarea>
                 </div>
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Skills Required (Comma separated)</label>
-                    <input type="text" id="add-job-skills" placeholder="e.g. React, Tailwind CSS" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 text-sm focus:outline-hidden focus:ring-2 focus:ring-fuchsia-500 font-medium" style="min-height: 44px;">
+                    <input type="text" id="add-job-skills" placeholder="e.g. React, Tailwind CSS" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 text-sm focus:outline-hidden focus:ring-2 focus:ring-fuchsia-500 font-medium" style="min-height: 44px;">
                 </div>
 
                 <div class="flex space-x-3 pt-2">
                     <button type="button" onclick="document.getElementById('modal-add-job').classList.add('hidden')" class="flex-1 border border-slate-700 hover:bg-slate-800 text-slate-300 font-bold py-2 rounded-xl text-sm transition focus-visible:ring-2 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
                         Cancel
                     </button>
-                    <button type="submit" class="flex-1 bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold py-2 rounded-xl text-sm transition shadow-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
+                    <button type="submit" class="flex-1 bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold py-2 rounded-xl text-sm transition shadow-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-955 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
                         Publish listing
                     </button>
                 </div>
@@ -839,14 +913,14 @@
             <form onsubmit="app.handleReportSubmit(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Details / Reason</label>
-                    <textarea id="report-reason" rows="4" required placeholder="Provide context regarding abusive behavior, spam, or scams..." class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 text-sm focus:outline-hidden focus:ring-2 focus:ring-fuchsia-500 font-medium"></textarea>
+                    <textarea id="report-reason" rows="4" required placeholder="Provide context regarding abusive behavior, spam, or scams..." class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 text-sm focus:outline-hidden focus:ring-2 focus:ring-fuchsia-500 font-medium"></textarea>
                 </div>
 
                 <div class="flex space-x-3">
                     <button type="button" onclick="document.getElementById('modal-report').classList.add('hidden')" class="flex-1 border border-slate-700 hover:bg-slate-800 text-slate-300 font-bold py-2 rounded-xl text-sm transition focus-visible:ring-2 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
                         Cancel
                     </button>
-                    <button type="submit" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 rounded-xl text-sm transition shadow-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
+                    <button type="submit" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 rounded-xl text-sm transition shadow-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-955 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
                         Submit
                     </button>
                 </div>

@@ -210,7 +210,7 @@ class SwipeternApp {
         if (this.token) {
             await this.fetchMe();
         } else {
-            this.showScreen("landing");
+            this.showScreen("explainer");
         }
     }
 
@@ -306,18 +306,23 @@ class SwipeternApp {
         const onboarding = document.getElementById("screen-onboarding");
         const workspace = document.getElementById("screen-workspace");
         const landing = document.getElementById("screen-landing");
+        const explainer = document.getElementById("screen-explainer");
 
         if (welcome) welcome.classList.add("hidden");
         if (onboarding) onboarding.classList.add("hidden");
         if (workspace) workspace.classList.add("hidden");
         if (landing) landing.classList.add("hidden");
+        if (explainer) explainer.classList.add("hidden");
 
         const navAuthed = document.getElementById("nav-authed");
         const navGuest = document.getElementById("nav-guest");
         if (navAuthed) navAuthed.classList.add("hidden");
         if (navGuest) navGuest.classList.add("hidden");
 
-        if (screenName === "landing") {
+        if (screenName === "explainer") {
+            if (explainer) explainer.classList.remove("hidden");
+            if (navGuest) navGuest.classList.remove("hidden");
+        } else if (screenName === "landing") {
             if (landing) landing.classList.remove("hidden");
             if (navGuest) navGuest.classList.remove("hidden");
             this.initSandbox();
@@ -333,6 +338,14 @@ class SwipeternApp {
             if (navAuthed) navAuthed.classList.remove("hidden");
             this.updateNavbarBadges();
             this.setupWorkspace();
+        }
+    }
+
+    showExplainerPage() {
+        if (this.token) {
+            this.showTab('discovery');
+        } else {
+            this.showScreen('explainer');
         }
     }
 
@@ -448,7 +461,7 @@ class SwipeternApp {
         localStorage.removeItem("profile");
 
         this.stopPolling();
-        this.showScreen("landing");
+        this.showScreen("explainer");
     }
 
     // Fetch user self details
@@ -478,19 +491,19 @@ class SwipeternApp {
         const studentFields = `
             <div>
                 <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Education / Institution</label>
-                <input type="text" id="prof-education" placeholder="e.g. Stanford University, BS Comp Sci" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
+                <input type="text" id="prof-education" placeholder="e.g. Stanford University, BS Comp Sci" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-955 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
             </div>
             <div>
                 <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Your Skills (Comma separated)</label>
-                <input type="text" id="prof-skills" placeholder="e.g. Python, React, Figma" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
+                <input type="text" id="prof-skills" placeholder="e.g. Python, React, Figma" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-955 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
             </div>
             <div>
                 <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Target Job Titles (Comma separated)</label>
-                <input type="text" id="prof-job-titles" placeholder="e.g. Software Engineer, Designer" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
+                <input type="text" id="prof-job-titles" placeholder="e.g. Software Engineer, Designer" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-955 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
             </div>
             <div>
                 <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Visa / Work Permit Status</label>
-                <select id="prof-visa-status" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-bold" style="min-height: 44px;">
+                <select id="prof-visa-status" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-955 focus:ring-fuchsia-500 text-sm font-bold" style="min-height: 44px;">
                     <option value="not_required">Citizen / PR (No sponsorship needed)</option>
                     <option value="pending">F-1 Visa / Needs Sponsorship</option>
                     <option value="approved">Already Approved Work Visa</option>
@@ -501,11 +514,11 @@ class SwipeternApp {
         const employerFields = `
             <div>
                 <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Company Name</label>
-                <input type="text" id="prof-company" placeholder="e.g. Stripe, Inc." class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
+                <input type="text" id="prof-company" placeholder="e.g. Stripe, Inc." class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-955 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
             </div>
             <div>
                 <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Industry Sector</label>
-                <input type="text" id="prof-industry" placeholder="e.g. Fintech, Web3, SpaceTech" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
+                <input type="text" id="prof-industry" placeholder="e.g. Fintech, Web3, SpaceTech" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-955 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
             </div>
         `;
 
@@ -520,18 +533,18 @@ class SwipeternApp {
                 <form onsubmit="app.saveProfile(event)" class="space-y-5">
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Display Name</label>
-                        <input type="text" id="prof-name" required placeholder="Jane Doe" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
+                        <input type="text" id="prof-name" required placeholder="Jane Doe" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-955 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
                     </div>
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Pitch (Bio)</label>
-                        <textarea id="prof-bio" rows="3" placeholder="A brief hook about you or your company vision..." class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium"></textarea>
+                        <textarea id="prof-bio" rows="3" placeholder="A brief hook about you or your company vision..." class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-955 focus:ring-fuchsia-500 text-sm font-medium"></textarea>
                     </div>
 
                     <div class="space-y-4">
                         ${this.user.role === "student" ? studentFields : employerFields}
                     </div>
 
-                    <button type="submit" class="w-full bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold py-3.5 rounded-2xl shadow-lg transition duration-200 uppercase tracking-wider text-xs focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
+                    <button type="submit" class="w-full bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold py-3.5 rounded-2xl shadow-lg transition duration-200 uppercase tracking-wider text-xs focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-955 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
                         Enter Platform
                     </button>
                 </form>
@@ -598,13 +611,13 @@ class SwipeternApp {
             userEmail.innerText = this.user.email;
             if (this.user.role === "student") {
                 roleIcon.innerHTML = `<i class="fa-solid fa-graduation-cap text-fuchsia-400"></i>`;
-                userBadge.className = "bg-slate-950 border border-slate-800 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1.5 text-fuchsia-400";
+                userBadge.className = "bg-slate-955 border border-slate-800 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1.5 text-fuchsia-400";
             } else if (this.user.role === "employer") {
                 roleIcon.innerHTML = `<i class="fa-solid fa-building text-indigo-400"></i>`;
-                userBadge.className = "bg-slate-950 border border-slate-800 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1.5 text-indigo-400";
+                userBadge.className = "bg-slate-955 border border-slate-800 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1.5 text-indigo-400";
             } else {
                 roleIcon.innerHTML = `<i class="fa-solid fa-user-shield text-rose-400"></i>`;
-                userBadge.className = "bg-slate-950 border border-slate-800 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1.5 text-rose-400";
+                userBadge.className = "bg-slate-955 border border-slate-800 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1.5 text-rose-400";
             }
         }
     }
@@ -713,7 +726,7 @@ class SwipeternApp {
                         <i class="fa-solid fa-trophy text-4xl text-fuchsia-500 mb-3 animate-bounce" aria-hidden="true"></i>
                         <h4 class="text-slate-200 font-extrabold text-sm mt-2">End of Roles Stack</h4>
                         <p class="text-xs text-slate-400 max-w-xs mx-auto mt-1 px-4">Toggle over to "Employer View" to review incoming students!</p>
-                        <button onclick="app.resetSandboxFeeds()" class="mt-4 bg-slate-950 hover:bg-slate-800 border border-slate-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">Reset Swipe Cards</button>
+                        <button onclick="app.resetSandboxFeeds()" class="mt-4 bg-slate-955 hover:bg-slate-800 border border-slate-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">Reset Swipe Cards</button>
                     </div>
                 `;
                 return;
@@ -723,7 +736,7 @@ class SwipeternApp {
                 <div class="space-y-4 animate-scale-in w-full text-left">
                     <div class="flex justify-between items-start">
                         <div class="flex items-center space-x-3">
-                            <div class="w-11 h-11 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-center text-xl shadow-xs">
+                            <div class="w-11 h-11 rounded-2xl bg-slate-955 border border-slate-800 flex items-center justify-center text-xl shadow-xs">
                                 <i class="${role.avatar}"></i>
                             </div>
                             <div>
@@ -742,7 +755,7 @@ class SwipeternApp {
                         <p class="text-xs text-slate-300 leading-relaxed font-semibold line-clamp-2">${role.description}</p>
                     </div>
                     <div class="flex flex-wrap gap-1 pt-1">
-                        ${role.skills_required.split(', ').map(tag => `<span class="text-[9px] bg-slate-950 border border-slate-800 px-2 py-0.5 rounded text-slate-400 font-bold">${tag}</span>`).join('')}
+                        ${role.skills_required.split(', ').map(tag => `<span class="text-[9px] bg-slate-955 border border-slate-800 px-2 py-0.5 rounded text-slate-400 font-bold">${tag}</span>`).join('')}
                     </div>
                 </div>
             `;
@@ -753,7 +766,7 @@ class SwipeternApp {
                         <i class="fa-solid fa-users text-4xl text-fuchsia-500 mb-3 animate-bounce" aria-hidden="true"></i>
                         <h4 class="text-slate-200 font-extrabold text-sm mt-2">End of Candidate Stack</h4>
                         <p class="text-xs text-slate-400 max-w-xs mx-auto mt-1 px-4">Toggle back to "Student" to see opportunity cards!</p>
-                        <button onclick="app.resetSandboxFeeds()" class="mt-4 bg-slate-950 hover:bg-slate-800 border border-slate-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">Reset Swipe Cards</button>
+                        <button onclick="app.resetSandboxFeeds()" class="mt-4 bg-slate-955 hover:bg-slate-800 border border-slate-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">Reset Swipe Cards</button>
                     </div>
                 `;
                 return;
@@ -763,7 +776,7 @@ class SwipeternApp {
                 <div class="space-y-4 animate-scale-in w-full text-left">
                     <div class="flex justify-between items-start">
                         <div class="flex items-center space-x-3">
-                            <div class="w-11 h-11 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-center text-xl shadow-xs">
+                            <div class="w-11 h-11 rounded-2xl bg-slate-955 border border-slate-800 flex items-center justify-center text-xl shadow-xs">
                                 <i class="${student.avatar}"></i>
                             </div>
                             <div>
@@ -782,7 +795,7 @@ class SwipeternApp {
                         <p class="text-xs text-slate-300 leading-relaxed font-semibold">${student.vibe}</p>
                     </div>
                     <div class="flex flex-wrap gap-1 pt-1">
-                        ${student.skills.split(', ').map(tag => `<span class="text-[9px] bg-slate-950 border border-slate-800 px-2 py-0.5 rounded text-slate-400 font-bold">${tag}</span>`).join('')}
+                        ${student.skills.split(', ').map(tag => `<span class="text-[9px] bg-slate-955 border border-slate-800 px-2 py-0.5 rounded text-slate-400 font-bold">${tag}</span>`).join('')}
                     </div>
                 </div>
             `;
@@ -862,7 +875,7 @@ class SwipeternApp {
         badge.innerText = this.sandMatches.length;
 
         container.innerHTML = this.sandMatches.map(match => `
-            <div onclick="app.selectSandboxMatch('${match.id}')" class="p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${this.activeSandMatchId === match.id ? 'bg-fuchsia-500/10 border-fuchsia-500/40 text-fuchsia-400 font-bold' : 'bg-slate-950 border-slate-800 hover:border-slate-700'}" style="min-height: 44px;">
+            <div onclick="app.selectSandboxMatch('${match.id}')" class="p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${this.activeSandMatchId === match.id ? 'bg-fuchsia-500/10 border-fuchsia-500/40 text-fuchsia-400 font-bold' : 'bg-slate-955 border-slate-800 hover:border-slate-700'}" style="min-height: 44px;">
                 <div>
                     <div class="text-xs font-bold flex items-center gap-1.5">
                         <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -1312,7 +1325,7 @@ class SwipeternApp {
                 <h4 class="font-extrabold text-slate-200 text-base mt-2">${j.title}</h4>
                 <p class="text-xs text-slate-400 mt-2 line-clamp-3 leading-relaxed">${j.description}</p>
                 <div class="flex flex-wrap gap-1 mt-4">
-                    ${j.skills_required.split(',').map(s => s.trim()).filter(Boolean).map(s => `<span class="bg-slate-950 border border-slate-850 text-slate-400 text-[9px] px-1.5 py-0.5 rounded-md font-bold">${s}</span>`).join('')}
+                    ${j.skills_required.split(',').map(s => s.trim()).filter(Boolean).map(s => `<span class="bg-slate-955 border border-slate-850 text-slate-400 text-[9px] px-1.5 py-0.5 rounded-md font-bold">${s}</span>`).join('')}
                 </div>
             </div>
         `).join('');
@@ -1394,7 +1407,7 @@ class SwipeternApp {
             if (r.status === "pending") statusBadge = `<span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-full text-[10px] font-bold">Pending</span>`;
             else if (r.status === "ignored") statusBadge = `<span class="bg-slate-800 text-slate-400 border border-slate-700 px-2 py-0.5 rounded-full text-[10px] font-bold">Ignored</span>`;
             else if (r.status === "warned") statusBadge = `<span class="bg-orange-500/10 text-orange-400 border border-orange-500/20 px-2 py-0.5 rounded-full text-[10px] font-bold">Warned</span>`;
-            else statusBadge = `<span class="bg-rose-500/10 text-rose-450 border border-rose-500/20 px-2 py-0.5 rounded-full text-[10px] font-bold">Suspended</span>`;
+            else statusBadge = `<span class="bg-rose-500/10 text-rose-455 border border-rose-500/20 px-2 py-0.5 rounded-full text-[10px] font-bold">Suspended</span>`;
 
             const isPending = r.status === "pending";
 
@@ -1569,7 +1582,7 @@ class SwipeternApp {
                     <span class="text-indigo-400 font-bold shrink-0">[${dateStr}]</span>
                     <span class="text-fuchsia-400 font-bold shrink-0">${ev.event_name.toUpperCase()}</span>
                     <span class="text-slate-500 shrink-0">User #${ev.user_id || 'SYS'}</span>
-                    <span class="text-slate-350 truncate font-semibold" title='${ev.payload}'>${ev.payload}</span>
+                    <span class="text-slate-355 truncate font-semibold" title='${ev.payload}'>${ev.payload}</span>
                 </div>
             `;
         }).join('');
