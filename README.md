@@ -29,7 +29,7 @@ Swipetern is specifically optimized to power the **Global-to-East Africa interns
 
 This unique corridor requires robust operational and legal guardrails to navigate international relocations safely:
 1. **Academic ECTS Integration:** Facilitates automated signoffs between international universities and East African organizations, ensuring that assignments satisfy required **European Credit Transfer System (ECTS)** guidelines (e.g. standard co-op coursework equivalents).
-2. **East African Immigration & Work Permits:** Tracks pre-hire regulatory tasks, including passport data logs, Special Entry Visas, and local country work authorizations (such as **Uganda Class G Work Permits**).
+2. **East African Immigration & Work Permits (Powered by Admas Afrolink):** Swipetern is proud to partner with **Admas Afrolink**—the official logistics, visa, and immigration clearance agency. Through this partnership, we track pre-hire regulatory tasks directly, including passport data logs, East African Special Entry Visas, and local country work authorizations (such as **Uganda Class G Work Permits**).
 3. **Health Security & Travel Logistics:** Verifies dynamic safety requirements, such as **Yellow Fever immunizations**, flight itineraries, and valid local medical cover certificates.
 
 ---

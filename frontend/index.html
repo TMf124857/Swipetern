@@ -92,7 +92,7 @@
         }
     </style>
 </head>
-<body class="text-slate-350 min-h-screen flex flex-col antialiased leading-relaxed">
+<body class="text-slate-355 min-h-screen flex flex-col antialiased leading-relaxed">
 
     <!-- Header / Navbar with Gen Z styling -->
     <header class="bg-slate-900/80 backdrop-blur-md sticky top-0 z-40 border-b border-slate-800">
@@ -228,14 +228,24 @@
                 </div>
             </div>
 
-            <!-- Deep Energetic Connection section -->
-            <div class="bg-gradient-to-br from-slate-900 to-indigo-950/40 border border-slate-800 rounded-[2.5rem] p-8 shadow-xl space-y-6">
-                <div class="max-w-2xl">
-                    <span class="text-xs font-extrabold tracking-widest text-fuchsia-500 uppercase">Our Core Ideology</span>
-                    <h2 class="text-2xl font-black text-slate-100 mt-1 leading-snug">The Sacred Bond of Seeker & Guide</h2>
-                    <p class="text-sm text-slate-400 mt-2 font-medium leading-relaxed">
-                        Swipetern treats early-career placements as a collaborative quest. By aligning **Europe and North America's** interns with leading agribusinesses, fintech startups, and healthcare clinics across **Uganda, Rwanda, and Kenya**, we turn internships into shared journeys of high-impact local deployment.
-                    </p>
+            <!-- Deep Energetic Connection and Admas Afrolink Partner section -->
+            <div class="bg-gradient-to-br from-slate-900 to-indigo-950/40 border border-slate-800 rounded-[2.5rem] p-8 shadow-xl space-y-6 text-left">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                    <div class="md:col-span-8 space-y-4">
+                        <span class="text-xs font-extrabold tracking-widest text-fuchsia-500 uppercase">Ecosystem Logistics & Relocations Partner</span>
+                        <h2 class="text-2xl font-black text-slate-100 leading-snug">Powered Globally by Admas Afrolink</h2>
+                        <p class="text-sm text-slate-400 font-medium leading-relaxed">
+                            Relocating across continents requires highly professional, trusted expertise. We are incredibly proud to partner officially with **Admas Afrolink**—the premier international agency managing student visa processing, East African special immigration entry permits, travel health logs, and flight logistics for the Swipetern network.
+                        </p>
+                    </div>
+                    <div class="md:col-span-4 bg-slate-950/80 border border-slate-850 p-6 rounded-2xl text-center space-y-2">
+                        <div class="inline-block bg-fuchsia-500/10 border border-fuchsia-500/20 text-fuchsia-400 h-12 w-12 rounded-full flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-handshake"></i>
+                        </div>
+                        <h4 class="font-extrabold text-sm text-slate-200">Admas Afrolink</h4>
+                        <span class="text-[9px] uppercase tracking-widest text-fuchsia-400 font-black block">Official Logistics Partner</span>
+                        <p class="text-[11px] text-slate-500">Processing East African visas & travel certifications with 100% compliance.</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -247,7 +257,7 @@
             <!-- Hero Header Pitch -->
             <div class="text-center max-w-4xl mx-auto space-y-4">
                 <span class="inline-block bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20 font-extrabold tracking-widest px-4 py-2 rounded-full uppercase text-[10px] animate-pulse shadow-xs">
-                    <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Interactive Sandbox Sandbox
+                    <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Interactive Sandbox
                 </span>
                 <h1 class="text-4xl md:text-5xl font-black text-slate-100 leading-tight tracking-tight">
                     Live Matchmaking Deck
@@ -317,7 +327,7 @@
                         </div>
 
                         <!-- Chat Messages Sandbox -->
-                        <div id="sandbox-chat-messages" class="flex-grow overflow-y-auto space-y-2 bg-slate-950 border border-slate-800 p-3 rounded-2xl max-h-36 text-xs mb-3 font-semibold text-slate-300">
+                        <div id="sandbox-chat-messages" class="flex-grow overflow-y-auto space-y-2 bg-slate-955 border border-slate-800 p-3 rounded-2xl max-h-36 text-xs mb-3 font-semibold text-slate-300">
                             <!-- Sandbox messages log -->
                         </div>
 
@@ -325,10 +335,10 @@
                         <div class="space-y-2">
                             <span class="text-[9px] font-black uppercase text-slate-400 tracking-wider">Quick East African Actions:</span>
                             <div class="flex flex-wrap gap-2">
-                                <button onclick="app.sendSandboxTemplate('request_interview')" class="text-[10px] bg-slate-950 hover:bg-indigo-600 border border-slate-800 hover:border-indigo-500 text-white font-bold px-3 py-1.5 rounded-xl transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px; min-width: 44px;">
+                                <button onclick="app.sendSandboxTemplate('request_interview')" class="text-[10px] bg-slate-955 hover:bg-indigo-650 border border-slate-800 hover:border-indigo-500 text-white font-bold px-3 py-1.5 rounded-xl transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px; min-width: 44px;">
                                     <i class="fa-solid fa-calendar-days mr-1"></i> Propose Google Meet Call
                                 </button>
-                                <button onclick="app.sendSandboxTemplate('ects_check')" class="text-[10px] bg-slate-950 hover:bg-indigo-600 border border-slate-800 hover:border-indigo-500 text-white font-bold px-3 py-1.5 rounded-xl transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px; min-width: 44px;">
+                                <button onclick="app.sendSandboxTemplate('ects_check')" class="text-[10px] bg-slate-955 hover:bg-indigo-655 border border-slate-800 hover:border-indigo-500 text-white font-bold px-3 py-1.5 rounded-xl transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px; min-width: 44px;">
                                     <i class="fa-solid fa-graduation-cap mr-1"></i> Send Co-op/ECTS Signoff
                                 </button>
                             </div>
@@ -369,10 +379,10 @@
                             <div class="h-8 w-8 rounded-lg bg-indigo-500/10 text-indigo-400 font-black text-sm flex items-center justify-center border border-indigo-500/20">
                                 2
                             </div>
-                            <span class="text-[10px] font-black text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded-full uppercase tracking-wider">Regulatory</span>
+                            <span class="text-[10px] font-black text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded-full uppercase tracking-wider">Admas Afrolink</span>
                         </div>
-                        <h4 class="font-extrabold text-slate-100 text-sm">Uganda Work Permit / Special Entry Visa</h4>
-                        <p class="text-xs text-slate-400 leading-relaxed font-medium">Verify valid passport data logs and East African immigration entry approvals.</p>
+                        <h4 class="font-extrabold text-slate-100 text-sm">EA Permit / Entry Visa</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed font-medium">Passport verification and Special Entry permit processing by **Admas Afrolink**.</p>
                         <div class="flex items-center space-x-2 pt-2">
                             <input type="checkbox" id="sand-check-2" onchange="app.toggleSandboxCheck(2)" class="h-4 w-4 text-indigo-500 rounded bg-slate-955 border-slate-800 focus:ring-indigo-500">
                             <span class="text-xs font-bold text-slate-300">Mark verified</span>
@@ -401,7 +411,7 @@
             <div class="bg-gradient-to-r from-fuchsia-500 via-purple-600 to-indigo-600 rounded-[2.5rem] p-8 text-white text-center shadow-xl space-y-4">
                 <h3 class="text-2xl md:text-3xl font-black tracking-tight leading-snug">Love the Swipetern Corridor?</h3>
                 <p class="text-xs md:text-sm text-indigo-50 font-bold max-w-lg mx-auto leading-relaxed">Claim your student or employer profile right now! Connect with elite tech agribusiness and health organizations across Uganda and East Africa.</p>
-                <button onclick="app.showAuthModal()" class="bg-slate-950 hover:bg-slate-900 border border-slate-800 text-white font-black px-6 py-3.5 rounded-2xl text-xs uppercase tracking-wider shadow-md transform hover:scale-105 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
+                <button onclick="app.showAuthModal()" class="bg-slate-955 hover:bg-slate-900 border border-slate-800 text-white font-black px-6 py-3.5 rounded-2xl text-xs uppercase tracking-wider shadow-md transform hover:scale-105 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
                     🚀 Create My Free Account Now
                 </button>
             </div>
@@ -525,7 +535,7 @@
                                     <!-- Messages injected -->
                                 </div>
                                 <form onsubmit="app.sendMessage(event)" class="flex space-x-2">
-                                    <input type="text" id="chat-message-input" placeholder="Drop a message..." required class="flex-grow px-4 py-3 text-sm rounded-xl border border-slate-700 bg-slate-950 text-slate-200 focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden font-medium">
+                                    <input type="text" id="chat-message-input" placeholder="Drop a message..." required class="flex-grow px-4 py-3 text-sm rounded-xl border border-slate-700 bg-slate-955 text-slate-200 focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden font-medium">
                                     <button type="submit" class="bg-fuchsia-600 hover:bg-fuchsia-700 text-white px-5 rounded-xl font-bold text-sm transition duration-150 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px; min-width: 44px;" aria-label="Send Message">
                                         <i class="fa-solid fa-paper-plane"></i>
                                     </button>
@@ -541,7 +551,7 @@
 
                                 <div class="space-y-4 text-xs">
                                     <!-- Progress/Readiness Meter -->
-                                    <div class="bg-slate-950 border border-slate-800 p-4 rounded-2xl">
+                                    <div class="bg-slate-955 border border-slate-800 p-4 rounded-2xl">
                                         <div class="flex justify-between items-center mb-1.5">
                                             <span class="font-bold text-slate-400">Verification</span>
                                             <span class="font-black text-fuchsia-400" id="compliance-percent">0%</span>
@@ -554,7 +564,7 @@
                                     <!-- Verification Steps Checkboxes -->
                                     <div class="space-y-2">
                                         <!-- Step 1: School Approval -->
-                                        <div class="bg-slate-950 border border-slate-800 p-3.5 rounded-xl flex items-start justify-between">
+                                        <div class="bg-slate-955 border border-slate-800 p-3.5 rounded-xl flex items-start justify-between">
                                             <div>
                                                 <h5 class="font-bold text-slate-200">1. University Approval</h5>
                                                 <p class="text-[10px] text-slate-500 mt-0.5">Approved via portal.</p>
@@ -594,7 +604,7 @@
                                         </div>
 
                                         <!-- Step 4: Interview Scheduled -->
-                                        <div class="bg-slate-950 border border-slate-800 p-3.5 rounded-xl flex items-start justify-between">
+                                        <div class="bg-slate-955 border border-slate-800 p-3.5 rounded-xl flex items-start justify-between">
                                             <div>
                                                 <h5 class="font-bold text-slate-200">4. Interview Progress</h5>
                                                 <p class="text-[10px] text-slate-500 mt-0.5">Initial meet scheduled.</p>
@@ -670,7 +680,7 @@
                         <div class="bg-slate-950 border border-slate-800 p-6 rounded-2xl flex flex-col justify-between">
                             <div>
                                 <h4 class="font-bold text-slate-200 text-sm mb-1">Customer Acquisition Cost vs. Lifetime Value</h4>
-                                <p class="text-[10px] text-slate-450 mb-3">Demonstrating massive margins driven by campus partner loops.</p>
+                                <p class="text-[10px] text-slate-455 mb-3">Demonstrating massive margins driven by campus partner loops.</p>
                             </div>
                             <div class="chart-container">
                                 <canvas id="cacChart"></canvas>
@@ -690,7 +700,7 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Swipe like/pass breakdown -->
-                        <div class="bg-slate-950 border border-slate-800 p-5 rounded-2xl">
+                        <div class="bg-slate-955 border border-slate-800 p-5 rounded-2xl">
                             <h4 class="font-bold text-sm text-slate-300 mb-4">Swipe Action Ratio</h4>
                             <div class="space-y-3">
                                 <div>
@@ -823,15 +833,15 @@
 
             <!-- Forms -->
             <form id="modal-form-login" onsubmit="app.handleLogin(event)" class="space-y-3">
-                <input type="email" id="login-email" required placeholder="you@domain.com" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 text-xs font-bold focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
-                <input type="password" id="login-password" required placeholder="Password" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 text-xs font-bold focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
-                <button type="submit" class="w-full bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-black py-3 rounded-2xl text-xs uppercase tracking-wider transition duration-155 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden animate-scale-in" style="min-height: 44px;">
+                <input type="email" id="login-email" required placeholder="you@domain.com" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 text-xs font-bold focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
+                <input type="password" id="login-password" required placeholder="Password" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 text-xs font-bold focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
+                <button type="submit" class="w-full bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-black py-3 rounded-2xl text-xs uppercase tracking-wider transition duration-155 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-955 focus-visible:ring-fuchsia-500 focus:outline-hidden animate-scale-in" style="min-height: 44px;">
                     Sign In
                 </button>
             </form>
 
             <form id="modal-form-register" onsubmit="app.handleRegister(event)" class="space-y-3 hidden">
-                <input type="email" id="reg-email" required placeholder="you@domain.com" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 text-xs font-bold focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
+                <input type="email" id="reg-email" required placeholder="you@domain.com" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 text-xs font-bold focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
                 <input type="password" id="reg-password" required placeholder="Min 4 characters" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 text-xs font-bold focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
 
                 <div class="grid grid-cols-2 gap-2 pt-1">
@@ -913,7 +923,7 @@
             <form onsubmit="app.handleReportSubmit(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Details / Reason</label>
-                    <textarea id="report-reason" rows="4" required placeholder="Provide context regarding abusive behavior, spam, or scams..." class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 text-sm focus:outline-hidden focus:ring-2 focus:ring-fuchsia-500 font-medium"></textarea>
+                    <textarea id="report-reason" rows="4" required placeholder="Provide context regarding abusive behavior, spam, or scams..." class="w-full px-4 py-3 rounded-2xl border border-slate-755 bg-slate-955 text-slate-200 text-sm focus:outline-hidden focus:ring-2 focus:ring-fuchsia-500 font-medium"></textarea>
                 </div>
 
                 <div class="flex space-x-3">
