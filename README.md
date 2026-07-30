@@ -15,6 +15,7 @@ Swipetern is a high-performance, full-stack platform designed to connect **stude
 7. [Role Privileges](#-role-privileges)
 8. [Running & Testing Locally](#-running--testing-locally)
 9. [Deployment Guide](#-deployment-guide)
+11. [🗺️ MVP Blueprint & Generative AI Prompts](#-mvp-blueprint--generative-ai-prompts)
 
 ---
 
@@ -355,3 +356,15 @@ Alternatively, connect your repository to Vercel via the Vercel Dashboard:
 - [ ] **Production DB:** Switch from local SQLite file (`swipetern.db`) to a managed database like AWS RDS PostgreSQL.
 - [ ] **Secure Cookies:** In production, set the session cookie to `Secure=True` and `SameSite=Strict`.
 - [ ] **Disable Admin Backdoor:** Ensure the quick mock admin buttons are omitted or gated behind admin security credentials.
+
+---
+
+## 🗺️ MVP Blueprint & Generative AI Prompts
+
+For teams looking to reconstruct, customize, or fully expand Swipetern into a high-scale production web application, we have provided an incredibly comprehensive development blueprint:
+
+👉 See **[MVP_PLAN.md](./MVP_PLAN.md)**
+
+This blueprint maps:
+- **System-by-System Developer Tasks:** Divided cleanly across Front-ground (UI/UX, Gestures, Charts, celebration animations), Middle-ground (fast, stateless HMAC sessions, PBKDF2 cryptography, FastAPI routing), and Back-ground layers (SQLAlchemy schema, SQLite native cascade triggers).
+- **Copy-Pasteable Generative AI Prompts:** Rigorously designed and context-aware prompts ready to use on ChatGPT, Claude, Gemini, or v0 to produce clean, high-performance modular chunks of code matching Swipetern's Master Design System rules.
