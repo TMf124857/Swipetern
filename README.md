@@ -15,6 +15,7 @@ Swipetern is a high-performance, full-stack platform designed to connect **stude
 7. [Role Privileges](#-role-privileges)
 8. [Running & Testing Locally](#-running--testing-locally)
 9. [Deployment Guide](#-deployment-guide)
+11. [🗺️ MVP Blueprint & Generative AI Prompts](#-mvp-blueprint--generative-ai-prompts)
 
 ---
 
@@ -22,6 +23,15 @@ Swipetern is a high-performance, full-stack platform designed to connect **stude
 **Swipetern** is a modern, responsive web application implementing a "swipe-to-match" paradigm for the internship and co-op recruiting market.
 Instead of sending countless resume applications into a black hole, students discover internship positions, and employers discover student candidates, by scrolling through curated cards.
 When both parties swipe "LIKE" on each other, a **Mutual Match** is instantly created. This unlocks an integrated **Live Chat room** and an interactive **Compliance Tracker checklist** to transition candidates from "match" to "ready to onboard."
+
+### 🌍 The Global - East Africa Corridor
+
+Swipetern is specifically optimized to power the **Global-to-East Africa internship corridor**. It connects innovative employers and grassroots non-profits in East African hubs (such as **Kampala, Uganda**, **Nairobi, Kenya**, and **Kigali, Rwanda**) with talented student interns seeking real-world, high-impact deployments from **Europe and North America**.
+
+This unique corridor requires robust operational and legal guardrails to navigate international relocations safely:
+1. **Academic ECTS Integration:** Facilitates automated signoffs between international universities and East African organizations, ensuring that assignments satisfy required **European Credit Transfer System (ECTS)** guidelines (e.g. standard co-op coursework equivalents).
+2. **East African Immigration & Work Permits (Powered by Admas Afrolink):** Swipetern is proud to partner with **Admas Afrolink**—the official logistics, visa, and immigration clearance agency. Through this partnership, we track pre-hire regulatory tasks directly, including passport data logs, East African Special Entry Visas, and local country work authorizations (such as **Uganda Class G Work Permits**).
+3. **Health Security & Travel Logistics:** Verifies dynamic safety requirements, such as **Yellow Fever immunizations**, flight itineraries, and valid local medical cover certificates.
 
 ---
 
@@ -346,3 +356,15 @@ Alternatively, connect your repository to Vercel via the Vercel Dashboard:
 - [ ] **Production DB:** Switch from local SQLite file (`swipetern.db`) to a managed database like AWS RDS PostgreSQL.
 - [ ] **Secure Cookies:** In production, set the session cookie to `Secure=True` and `SameSite=Strict`.
 - [ ] **Disable Admin Backdoor:** Ensure the quick mock admin buttons are omitted or gated behind admin security credentials.
+
+---
+
+## 🗺️ MVP Blueprint & Generative AI Prompts
+
+For teams looking to reconstruct, customize, or fully expand Swipetern into a high-scale production web application, we have provided an incredibly comprehensive development blueprint:
+
+👉 See **[MVP_PLAN.md](./MVP_PLAN.md)**
+
+This blueprint maps:
+- **System-by-System Developer Tasks:** Divided cleanly across Front-ground (UI/UX, Gestures, Charts, celebration animations), Middle-ground (fast, stateless HMAC sessions, PBKDF2 cryptography, FastAPI routing), and Back-ground layers (SQLAlchemy schema, SQLite native cascade triggers).
+- **Copy-Pasteable Generative AI Prompts:** Rigorously designed and context-aware prompts ready to use on ChatGPT, Claude, Gemini, or v0 to produce clean, high-performance modular chunks of code matching Swipetern's Master Design System rules.
