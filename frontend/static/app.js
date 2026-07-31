@@ -9,6 +9,7 @@ class SwipeternApp {
         this.currentTab = "discovery";
         this.discoveryCards = [];
         this.currentCardIndex = 0;
+        this.discoveryViewMode = "swipe"; // "swipe" or "ats"
 
         this.matches = [];
         this.activeMatchId = null;
@@ -306,18 +307,23 @@ class SwipeternApp {
         const onboarding = document.getElementById("screen-onboarding");
         const workspace = document.getElementById("screen-workspace");
         const landing = document.getElementById("screen-landing");
+        const explainer = document.getElementById("screen-explainer");
 
         if (welcome) welcome.classList.add("hidden");
         if (onboarding) onboarding.classList.add("hidden");
         if (workspace) workspace.classList.add("hidden");
         if (landing) landing.classList.add("hidden");
+        if (explainer) explainer.classList.add("hidden");
 
         const navAuthed = document.getElementById("nav-authed");
         const navGuest = document.getElementById("nav-guest");
         if (navAuthed) navAuthed.classList.add("hidden");
         if (navGuest) navGuest.classList.add("hidden");
 
-        if (screenName === "landing") {
+        if (screenName === "explainer") {
+            if (explainer) explainer.classList.remove("hidden");
+            if (navGuest) navGuest.classList.remove("hidden");
+        } else if (screenName === "landing") {
             if (landing) landing.classList.remove("hidden");
             if (navGuest) navGuest.classList.remove("hidden");
             this.initSandbox();
@@ -334,6 +340,10 @@ class SwipeternApp {
             this.updateNavbarBadges();
             this.setupWorkspace();
         }
+    }
+
+    showExplainerPage() {
+        this.showScreen("explainer");
     }
 
     // Auth Dialog modal triggers
@@ -478,7 +488,7 @@ class SwipeternApp {
         const studentFields = `
             <div>
                 <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Education / Institution</label>
-                <input type="text" id="prof-education" placeholder="e.g. Stanford University, BS Comp Sci" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
+                <input type="text" id="prof-education" placeholder="e.g. Stanford University, BS Comp Sci" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
             </div>
             <div>
                 <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Your Skills (Comma separated)</label>
@@ -501,7 +511,7 @@ class SwipeternApp {
         const employerFields = `
             <div>
                 <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Company Name</label>
-                <input type="text" id="prof-company" placeholder="e.g. Stripe, Inc." class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
+                <input type="text" id="prof-company" placeholder="e.g. Stripe, Inc." class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
             </div>
             <div>
                 <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Industry Sector</label>
@@ -598,13 +608,13 @@ class SwipeternApp {
             userEmail.innerText = this.user.email;
             if (this.user.role === "student") {
                 roleIcon.innerHTML = `<i class="fa-solid fa-graduation-cap text-fuchsia-400"></i>`;
-                userBadge.className = "bg-slate-950 border border-slate-800 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1.5 text-fuchsia-400";
+                userBadge.className = "bg-slate-955 border border-slate-800 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1.5 text-fuchsia-400";
             } else if (this.user.role === "employer") {
                 roleIcon.innerHTML = `<i class="fa-solid fa-building text-indigo-400"></i>`;
-                userBadge.className = "bg-slate-950 border border-slate-800 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1.5 text-indigo-400";
+                userBadge.className = "bg-slate-955 border border-slate-800 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1.5 text-indigo-400";
             } else {
                 roleIcon.innerHTML = `<i class="fa-solid fa-user-shield text-rose-400"></i>`;
-                userBadge.className = "bg-slate-950 border border-slate-800 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1.5 text-rose-400";
+                userBadge.className = "bg-slate-955 border border-slate-800 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1.5 text-rose-400";
             }
         }
     }
@@ -958,8 +968,121 @@ class SwipeternApp {
             const data = await this.request("/api/discovery");
             this.discoveryCards = data;
             this.currentCardIndex = 0;
-            this.renderDeck();
+
+            // Show/hide view toggle for employer
+            const toggleEl = document.getElementById("recruiter-view-toggle");
+            if (toggleEl) {
+                if (this.user && this.user.role === "employer") {
+                    toggleEl.classList.remove("hidden");
+                } else {
+                    toggleEl.classList.add("hidden");
+                }
+            }
+
+            // Enforce default view on load
+            this.setDiscoveryViewMode(this.discoveryViewMode || "swipe");
         } catch (err) {}
+    }
+
+    setDiscoveryViewMode(mode) {
+        this.discoveryViewMode = mode;
+        const btnSwipe = document.getElementById("btn-view-swipe");
+        const btnAts = document.getElementById("btn-view-ats");
+        const deckContainer = document.getElementById("deck-container");
+        const deckControls = document.getElementById("deck-controls");
+        const atsView = document.getElementById("employer-ats-view");
+
+        if (mode === "swipe") {
+            if (btnSwipe) btnSwipe.className = "px-3.5 py-1.5 text-[10px] font-black rounded-lg bg-slate-900 text-fuchsia-400 shadow-sm transition-all uppercase tracking-wider";
+            if (btnAts) btnAts.className = "px-3.5 py-1.5 text-[10px] font-black rounded-lg text-slate-400 hover:text-slate-200 transition-all uppercase tracking-wider";
+            if (deckContainer) deckContainer.classList.remove("hidden");
+            if (deckControls) deckControls.style.display = "flex";
+            if (atsView) atsView.classList.add("hidden");
+            this.renderDeck();
+        } else {
+            if (btnAts) btnAts.className = "px-3.5 py-1.5 text-[10px] font-black rounded-lg bg-slate-900 text-fuchsia-400 shadow-sm transition-all uppercase tracking-wider";
+            if (btnSwipe) btnSwipe.className = "px-3.5 py-1.5 text-[10px] font-black rounded-lg text-slate-400 hover:text-slate-200 transition-all uppercase tracking-wider";
+            if (deckContainer) deckContainer.classList.add("hidden");
+            if (deckControls) deckControls.style.display = "none";
+            if (atsView) atsView.classList.remove("hidden");
+            this.renderAtsBoard();
+        }
+    }
+
+    renderAtsBoard() {
+        const listContainer = document.getElementById("ats-available-list");
+        const countLabel = document.getElementById("ats-avail-count");
+        if (!listContainer) return;
+
+        const available = this.discoveryCards.slice(this.currentCardIndex);
+        if (countLabel) countLabel.innerText = available.length;
+
+        if (available.length === 0) {
+            listContainer.innerHTML = `
+                <div class="text-center py-6 text-slate-500 text-xs">
+                    <p class="font-bold">No more candidates available.</p>
+                </div>
+            `;
+            return;
+        }
+
+        listContainer.innerHTML = available.map((candidate, idx) => {
+            const originalIndex = this.currentCardIndex + idx;
+            return `
+                <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl space-y-2 text-left relative group">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h5 class="text-xs font-extrabold text-slate-200">${candidate.name}</h5>
+                            <p class="text-[10px] text-slate-400 font-bold">${candidate.education || 'Student'}</p>
+                        </div>
+                        <div class="flex space-x-1">
+                            <button onclick="app.swipeAts(${originalIndex}, 'pass')" class="p-1 text-rose-500 hover:bg-rose-955 rounded transition" title="Pass" style="min-height: 28px; min-width: 28px;">
+                                <i class="fa-solid fa-xmark text-xs"></i>
+                            </button>
+                            <button onclick="app.swipeAts(${originalIndex}, 'like')" class="p-1 text-emerald-500 hover:bg-emerald-955 rounded transition" title="Like" style="min-height: 28px; min-width: 28px;">
+                                <i class="fa-solid fa-heart text-xs animate-pulse"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-[11px] text-slate-400 line-clamp-2 italic">"${candidate.bio || 'Ready to deploy!'}"</p>
+                    <div class="flex flex-wrap gap-1">
+                        ${candidate.skills.split(',').slice(0,3).map(s => `<span class="bg-slate-950 px-1.5 py-0.5 rounded text-[8px] text-slate-400 font-bold">${s.trim()}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    async swipeAts(cardIndex, direction) {
+        if (cardIndex < 0 || cardIndex >= this.discoveryCards.length) return;
+        const card = this.discoveryCards[cardIndex];
+        const payload = { direction };
+
+        if (this.user.role === "student") {
+            payload.target_opportunity_id = card.id;
+        } else {
+            payload.target_user_id = card.id;
+        }
+
+        // Remove the candidate from available cards array
+        this.discoveryCards.splice(cardIndex, 1);
+
+        try {
+            const res = await fetch("/api/swipe", {
+                method: "POST",
+                headers: this.getHeaders(),
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+
+            if (data.matched) {
+                this.showMatchModal(data.match);
+            }
+            this.showToast(`Swiped ${direction === 'like' ? 'Like' : 'Pass'} on ${card.name}!`);
+            this.renderAtsBoard();
+        } catch (err) {
+            console.error("ATS swipe failed:", err);
+        }
     }
 
     renderDeck() {
@@ -1284,6 +1407,25 @@ class SwipeternApp {
         } catch (e) {
             console.error(e);
         }
+    }
+
+    async dispatchEctsMagicLink() {
+        const emailInput = document.getElementById("magic-advisor-email");
+        if (!emailInput) return;
+        const email = emailInput.value.trim();
+        if (!email) {
+            this.showError("Please provide a valid university advisor email.");
+            return;
+        }
+
+        this.showToast(`Magic link sent to ${email}! Simulating instant advisor sign-off...`);
+        emailInput.value = "";
+
+        // Wait 1.5 seconds, then set the university approval checkbox status to APPROVED!
+        setTimeout(async () => {
+            await this.updateCompliance("schoolApproval", "approved");
+            this.showToast("Success: University advisor clicked magic-link. Co-op approved!");
+        }, 1500);
     }
 
     // --- EMPLOYER JOB POSTING FLOW ---

@@ -296,11 +296,11 @@
                     </div>
 
                     <div class="flex justify-center items-center space-x-6 border-t border-slate-800 pt-4">
-                        <button onclick="app.swipeSandbox('pass')" class="h-12 w-12 bg-slate-950 hover:bg-rose-955 text-rose-500 rounded-full border border-slate-800 flex items-center justify-center shadow-lg hover:border-rose-900/40 transition transform hover:scale-105 active:scale-95 duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px; min-width: 44px;" aria-label="Swipe Pass">
+                        <button onclick="app.swipeSandbox('pass')" class="h-12 w-12 bg-slate-955 hover:bg-rose-955 text-rose-500 rounded-full border border-slate-800 flex items-center justify-center shadow-lg hover:border-rose-900/40 transition transform hover:scale-105 active:scale-95 duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px; min-width: 44px;" aria-label="Swipe Pass">
                             <i class="fa-solid fa-xmark text-lg"></i>
                         </button>
                         <span class="text-[10px] text-slate-555 font-bold uppercase tracking-widest">Swipe Left to Skip • Right to Like</span>
-                        <button onclick="app.swipeSandbox('like')" class="h-12 w-12 bg-slate-950 hover:bg-emerald-955 text-emerald-500 rounded-full border border-slate-800 flex items-center justify-center shadow-lg hover:border-emerald-900/40 transition transform hover:scale-105 active:scale-95 duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px; min-width: 44px;" aria-label="Swipe Like">
+                        <button onclick="app.swipeSandbox('like')" class="h-12 w-12 bg-slate-955 hover:bg-emerald-955 text-emerald-500 rounded-full border border-slate-800 flex items-center justify-center shadow-lg hover:border-emerald-900/40 transition transform hover:scale-105 active:scale-95 duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px; min-width: 44px;" aria-label="Swipe Like">
                             <i class="fa-solid fa-heart text-lg animate-pulse"></i>
                         </button>
                     </div>
@@ -335,7 +335,7 @@
                         <div class="space-y-2">
                             <span class="text-[9px] font-black uppercase text-slate-400 tracking-wider">Quick East African Actions:</span>
                             <div class="flex flex-wrap gap-2">
-                                <button onclick="app.sendSandboxTemplate('request_interview')" class="text-[10px] bg-slate-955 hover:bg-indigo-650 border border-slate-800 hover:border-indigo-500 text-white font-bold px-3 py-1.5 rounded-xl transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px; min-width: 44px;">
+                                <button onclick="app.sendSandboxTemplate('request_interview')" class="text-[10px] bg-slate-955 hover:bg-indigo-655 border border-slate-800 hover:border-indigo-500 text-white font-bold px-3 py-1.5 rounded-xl transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px; min-width: 44px;">
                                     <i class="fa-solid fa-calendar-days mr-1"></i> Propose Google Meet Call
                                 </button>
                                 <button onclick="app.sendSandboxTemplate('ects_check')" class="text-[10px] bg-slate-955 hover:bg-indigo-655 border border-slate-800 hover:border-indigo-500 text-white font-bold px-3 py-1.5 rounded-xl transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px; min-width: 44px;">
@@ -471,9 +471,21 @@
 
                 <!-- Tab 1: Discovery Deck (Swipe Card Interface) -->
                 <div id="tab-discovery" class="tab-content flex-grow flex flex-col items-center justify-center p-6">
-                    <div class="text-center mb-6">
-                        <span class="bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider inline-block">Active Deck</span>
-                        <h3 class="text-2xl font-black text-slate-100 mt-2">Vibe Check</h3>
+                    <div class="w-full flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+                        <div class="text-center sm:text-left">
+                            <span class="bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider inline-block">Active Deck</span>
+                            <h3 class="text-2xl font-black text-slate-100 mt-1">Vibe Check</h3>
+                        </div>
+
+                        <!-- Dual Mode Recruiter ATS Toggle (Hidden for Students) -->
+                        <div id="recruiter-view-toggle" class="hidden flex bg-slate-950 p-1 rounded-xl border border-slate-800">
+                            <button onclick="app.setDiscoveryViewMode('swipe')" id="btn-view-swipe" class="px-3.5 py-1.5 text-[10px] font-black rounded-lg bg-slate-900 text-fuchsia-400 shadow-sm transition-all uppercase tracking-wider focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 36px;">
+                                <i class="fa-solid fa-rectangle-list mr-1"></i> Card Deck
+                            </button>
+                            <button onclick="app.setDiscoveryViewMode('ats')" id="btn-view-ats" class="px-3.5 py-1.5 text-[10px] font-black rounded-lg text-slate-400 hover:text-slate-200 transition-all uppercase tracking-wider focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 36px;">
+                                <i class="fa-solid fa-table-columns mr-1"></i> Recruiter ATS
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Swipe Card Deck container -->
@@ -489,6 +501,48 @@
                         <button onclick="app.swipe('like')" class="h-16 w-16 bg-slate-955 hover:bg-emerald-955 text-emerald-500 rounded-full border border-slate-800 flex items-center justify-center shadow-lg hover:border-emerald-900/40 transition transform hover:scale-105 active:scale-95 duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px; min-width: 44px;" aria-label="Swipe Like">
                             <i class="fa-solid fa-heart text-2xl"></i>
                         </button>
+                    </div>
+
+                    <!-- Recruiter ATS Desktop Kanban Board (Alternative Discovery view) -->
+                    <div id="employer-ats-view" class="hidden w-full flex-grow flex flex-col p-4 animate-scale-in">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start h-full">
+
+                            <!-- Col 1: Available Candidates -->
+                            <div class="bg-slate-950 border border-slate-850 p-4 rounded-2xl flex flex-col h-[400px]">
+                                <h4 class="font-extrabold text-xs text-slate-400 uppercase tracking-wider pb-3 border-b border-slate-850 flex justify-between items-center">
+                                    <span>Available Candidates</span>
+                                    <span class="bg-slate-900 px-2 py-0.5 rounded text-[10px] font-mono text-fuchsia-400" id="ats-avail-count">0</span>
+                                </h4>
+                                <div class="flex-grow overflow-y-auto pt-3 space-y-3" id="ats-available-list">
+                                    <!-- Dynamic elements -->
+                                </div>
+                            </div>
+
+                            <!-- Col 2: Swiped Liked Candidates -->
+                            <div class="bg-slate-955 border border-slate-850 p-4 rounded-2xl flex flex-col h-[400px]">
+                                <h4 class="font-extrabold text-xs text-slate-400 uppercase tracking-wider pb-3 border-b border-slate-850 flex justify-between items-center">
+                                    <span>My Likes (Right)</span>
+                                    <span class="bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded text-[10px] font-mono text-emerald-400">Locked</span>
+                                </h4>
+                                <div class="flex-grow overflow-y-auto pt-3 space-y-3 text-center text-slate-500 text-xs flex flex-col justify-center">
+                                    <i class="fa-solid fa-heart-circle-check text-3xl text-emerald-500/20 mb-2"></i>
+                                    <p class="px-6 font-semibold">Matched users are pushed straight to active Chat DMs</p>
+                                </div>
+                            </div>
+
+                            <!-- Col 3: Swiped Passed Candidates -->
+                            <div class="bg-slate-955 border border-slate-850 p-4 rounded-2xl flex flex-col h-[400px]">
+                                <h4 class="font-extrabold text-xs text-slate-400 uppercase tracking-wider pb-3 border-b border-slate-850 flex justify-between items-center">
+                                    <span>Passed (Left)</span>
+                                    <span class="bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded text-[10px] font-mono text-rose-400">Skipped</span>
+                                </h4>
+                                <div class="flex-grow overflow-y-auto pt-3 space-y-3 text-center text-slate-500 text-xs flex flex-col justify-center">
+                                    <i class="fa-solid fa-eye-slash text-3xl text-rose-500/20 mb-2"></i>
+                                    <p class="px-6 font-semibold">Candidates you passed over in this session</p>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
 
@@ -535,7 +589,7 @@
                                     <!-- Messages injected -->
                                 </div>
                                 <form onsubmit="app.sendMessage(event)" class="flex space-x-2">
-                                    <input type="text" id="chat-message-input" placeholder="Drop a message..." required class="flex-grow px-4 py-3 text-sm rounded-xl border border-slate-700 bg-slate-955 text-slate-200 focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden font-medium">
+                                    <input type="text" id="chat-message-input" placeholder="Drop a message..." required class="flex-grow px-4 py-3 text-sm rounded-xl border border-slate-700 bg-slate-950 text-slate-200 focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden font-medium">
                                     <button type="submit" class="bg-fuchsia-600 hover:bg-fuchsia-700 text-white px-5 rounded-xl font-bold text-sm transition duration-150 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px; min-width: 44px;" aria-label="Send Message">
                                         <i class="fa-solid fa-paper-plane"></i>
                                     </button>
@@ -543,7 +597,7 @@
                             </div>
 
                             <!-- Compliance tracker widget side panel -->
-                            <div class="lg:w-80 border-t lg:border-t-0 lg:border-l border-slate-850 p-5 bg-slate-950/30 flex flex-col shrink-0">
+                            <div class="lg:w-80 border-t lg:border-t-0 lg:border-l border-slate-850 p-5 bg-slate-955/30 flex flex-col shrink-0">
                                 <h4 class="font-extrabold text-xs tracking-widest text-slate-400 uppercase flex items-center justify-between mb-4">
                                     <span>Checklist</span>
                                     <span id="compliance-readiness-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-amber-500/10 text-amber-400 border border-amber-500/20">Pending</span>
@@ -564,16 +618,26 @@
                                     <!-- Verification Steps Checkboxes -->
                                     <div class="space-y-2">
                                         <!-- Step 1: School Approval -->
-                                        <div class="bg-slate-955 border border-slate-800 p-3.5 rounded-xl flex items-start justify-between">
-                                            <div>
-                                                <h5 class="font-bold text-slate-200">1. University Approval</h5>
-                                                <p class="text-[10px] text-slate-500 mt-0.5">Approved via portal.</p>
+                                        <div class="bg-slate-955 border border-slate-800 p-3.5 rounded-xl flex flex-col gap-2">
+                                            <div class="flex items-start justify-between">
+                                                <div>
+                                                    <h5 class="font-bold text-slate-200">1. University Approval</h5>
+                                                    <p class="text-[10px] text-slate-500 mt-0.5">ECTS credit co-op approval.</p>
+                                                </div>
+                                                <select id="comp-school" onchange="app.updateCompliance('schoolApproval', this.value)" class="text-[11px] font-bold border border-slate-700 rounded-lg p-1 bg-slate-900 text-slate-200 focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 32px;">
+                                                    <option value="pending">Pending</option>
+                                                    <option value="approved">Approved</option>
+                                                    <option value="rejected">Rejected</option>
+                                                </select>
                                             </div>
-                                            <select id="comp-school" onchange="app.updateCompliance('schoolApproval', this.value)" class="text-[11px] font-bold border border-slate-700 rounded-lg p-1 bg-slate-900 text-slate-200 focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 32px;">
-                                                <option value="pending">Pending</option>
-                                                <option value="approved">Approved</option>
-                                                <option value="rejected">Rejected</option>
-                                            </select>
+                                            <!-- Simulated University Passwordless Magic-Link Approval Form -->
+                                            <div class="border-t border-slate-800 pt-2 flex flex-col gap-1.5">
+                                                <span class="text-[9px] uppercase font-black text-slate-500">Dispatch ECTS Magic-Link:</span>
+                                                <div class="flex space-x-1.5">
+                                                    <input type="email" id="magic-advisor-email" placeholder="advisor@university.edu" class="flex-grow px-2 py-1 bg-slate-950 border border-slate-800 rounded text-[10px] text-slate-200 focus:ring-1 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 28px;">
+                                                    <button onclick="app.dispatchEctsMagicLink()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-2 py-1 rounded text-[9px] uppercase tracking-wider focus:ring-2 focus:ring-indigo-500 focus:outline-hidden" style="min-height: 28px;">Send</button>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <!-- Step 2: Visa Status -->
@@ -797,7 +861,7 @@
                 <a href="#" class="hover:text-slate-300">Privacy Policy</a>
                 <a href="#" class="hover:text-slate-300">Terms of Service</a>
                 <!-- Super easy convenience button to switch/elevate user role to admin -->
-                <button onclick="app.elevateToAdmin()" class="bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 px-3 py-1.5 rounded-xl text-[10px] transition font-bold border border-amber-500/20 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-amber-500 focus:outline-hidden" style="min-height: 32px;">
+                <button onclick="app.elevateToAdmin()" class="bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 px-3 py-1.5 rounded-xl text-[10px] transition font-bold border border-amber-500/20 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-955 focus-visible:ring-amber-500 focus:outline-hidden" style="min-height: 32px;">
                     <i class="fa-solid fa-shield-halved"></i> Quick Admin Mock
                 </button>
             </div>
@@ -833,16 +897,16 @@
 
             <!-- Forms -->
             <form id="modal-form-login" onsubmit="app.handleLogin(event)" class="space-y-3">
-                <input type="email" id="login-email" required placeholder="you@domain.com" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 text-xs font-bold focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
-                <input type="password" id="login-password" required placeholder="Password" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 text-xs font-bold focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
+                <input type="email" id="login-email" required placeholder="you@domain.com" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 text-xs font-bold focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
+                <input type="password" id="login-password" required placeholder="Password" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 text-xs font-bold focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
                 <button type="submit" class="w-full bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-black py-3 rounded-2xl text-xs uppercase tracking-wider transition duration-155 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-955 focus-visible:ring-fuchsia-500 focus:outline-hidden animate-scale-in" style="min-height: 44px;">
                     Sign In
                 </button>
             </form>
 
             <form id="modal-form-register" onsubmit="app.handleRegister(event)" class="space-y-3 hidden">
-                <input type="email" id="reg-email" required placeholder="you@domain.com" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 text-xs font-bold focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
-                <input type="password" id="reg-password" required placeholder="Min 4 characters" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 text-xs font-bold focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
+                <input type="email" id="reg-email" required placeholder="you@domain.com" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 text-xs font-bold focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
+                <input type="password" id="reg-password" required placeholder="Min 4 characters" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 text-xs font-bold focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
 
                 <div class="grid grid-cols-2 gap-2 pt-1">
                     <label class="border-2 border-fuchsia-500 bg-fuchsia-500/10 p-2.5 rounded-xl flex items-center justify-center space-x-1.5 cursor-pointer text-[10px] font-black uppercase tracking-wider" id="role-label-student">
@@ -877,7 +941,7 @@
                 <div><span class="font-bold text-slate-500">Opportunity:</span> <span id="match-opp-title" class="font-medium text-fuchsia-400"></span></div>
             </div>
 
-            <button onclick="app.closeMatchModal()" class="w-full bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-black py-3.5 rounded-2xl shadow-lg transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
+            <button onclick="app.closeMatchModal()" class="w-full bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-black py-3.5 rounded-2xl shadow-lg transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-955 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 44px;">
                 Start Chatting & Complete Checklist
             </button>
         </div>
@@ -895,7 +959,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Description</label>
-                    <textarea id="add-job-desc" rows="4" required placeholder="Describe core tasks, mission, and benefits..." class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 text-sm focus:outline-hidden focus:ring-2 focus:ring-fuchsia-500 font-medium"></textarea>
+                    <textarea id="add-job-desc" rows="4" required placeholder="Describe core tasks, mission, and benefits..." class="w-full px-4 py-3 rounded-2xl border border-slate-755 bg-slate-955 text-slate-200 text-sm focus:outline-hidden focus:ring-2 focus:ring-fuchsia-500 font-medium"></textarea>
                 </div>
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Skills Required (Comma separated)</label>
