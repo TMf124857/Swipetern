@@ -20,8 +20,7 @@ def verify_password(password: str, hashed: str) -> bool:
             iterations = int(iterations_str)
             new_key = hashlib.pbkdf2_hmac(algo, password.encode("utf-8"), salt.encode("utf-8"), iterations)
             return hmac.compare_digest(new_key.hex(), key_hex)
-        # Safe fallback for old SHA-256 passwords
-        return hmac.compare_digest(hashlib.sha256(password.encode("utf-8")).hexdigest(), hashed)
+        return False
     except Exception:
         return False
 
