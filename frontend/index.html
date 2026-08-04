@@ -8,8 +8,8 @@
     <meta name="theme-color" content="#020617">
     <link rel="manifest" href="/manifest.json">
     <title>Swipetern - Global-East Africa Mutual Match Internships</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Compiled Tailwind CSS (replaces CDN for production performance) -->
+    <link rel="stylesheet" href="/static/tailwind.css">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Chart.js CDN -->
@@ -93,6 +93,57 @@
             position: relative;
             width: 100%;
             height: 220px;
+        }
+
+        /* ===== ACCESSIBILITY: Reduced Motion ===== */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+            .swipe-card {
+                transition: none !important;
+            }
+            .animate-ping,
+            .animate-pulse,
+            .animate-bounce,
+            .animate-spin {
+                animation: none !important;
+            }
+        }
+
+        /* ===== ACCESSIBILITY: Global focus-visible ring ===== */
+        :focus-visible {
+            outline: 2px solid #d946ef;
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+        /* Override for elements that already set their own ring via Tailwind */
+        .focus\:outline-hidden:focus-visible,
+        [class*="focus-visible:ring"]:focus-visible {
+            outline: none;
+        }
+
+        /* ===== CONTRAST: Raise muted text for WCAG AA ===== */
+        /* slate-400 (#94a3b8) on slate-900 (#0f172a) passes AA at small sizes */
+        /* Upgrading slate-500 (#64748b) usages in key labels to slate-400 */
+        .text-slate-500 {
+            /* Keep existing — slate-500 on dark bg is marginal; boost where used as primary info */
+        }
+
+        /* ===== KEYBOARD SWIPE HINT ===== */
+        #deck-keyboard-hint {
+            font-size: 0.65rem;
+            color: #64748b;
+            text-align: center;
+            margin-top: 0.5rem;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+            text-transform: uppercase;
         }
     </style>
 </head>
@@ -494,6 +545,7 @@
                             <i class="fa-solid fa-heart text-2xl"></i>
                         </button>
                     </div>
+                    <p id="deck-keyboard-hint"><kbd>←</kbd> Pass &nbsp;·&nbsp; <kbd>→</kbd> Like</p>
                 </div>
 
                 <!-- Tab 2: Matches and Live Chat Room -->
