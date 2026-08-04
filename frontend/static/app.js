@@ -212,6 +212,23 @@ class SwipeternApp {
         } else {
             this.showScreen("landing");
         }
+
+        // Keyboard swipe controls: ArrowLeft = Pass, ArrowRight = Like
+        document.addEventListener("keydown", (e) => {
+            const discoveryTab = document.getElementById("tab-discovery");
+            if (!discoveryTab || discoveryTab.classList.contains("hidden")) return;
+            // Only fire when no input/textarea/select is focused
+            const tag = document.activeElement && document.activeElement.tagName;
+            if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+
+            if (e.key === "ArrowLeft") {
+                e.preventDefault();
+                this.swipe("pass");
+            } else if (e.key === "ArrowRight") {
+                e.preventDefault();
+                this.swipe("like");
+            }
+        });
     }
 
     // Setup network request headers
