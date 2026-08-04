@@ -1,0 +1,4 @@
+/* Tailwind CSS base directives — compiled to frontend/static/tailwind.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

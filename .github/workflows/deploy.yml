@@ -1,0 +1,53 @@
+name: Swipetern CI/CD → Vercel
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── Checkout ──────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── Python setup & backend tests ──────────────────────────────────────
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run backend tests
+        run: pytest backend/tests/ -v
+        env:
+          DATABASE_URL: "sqlite:///./test.db"
+          SECRET_KEY: "ci-test-secret-key-not-for-production"
+
+      # ── Node setup & Tailwind CSS compilation ─────────────────────────────
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Compile Tailwind CSS
+        run: npm run build:css
+
+      # ── Deploy to Vercel (main branch only) ───────────────────────────────
+      - name: Deploy to Vercel
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: npx vercel --prod --token ${{ secrets.VERCEL_TOKEN }} --yes
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}

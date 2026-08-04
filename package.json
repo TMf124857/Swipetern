@@ -1,0 +1,13 @@
+{
+  "name": "swipetern-frontend",
+  "version": "1.0.0",
+  "description": "Swipetern frontend — Tailwind CSS pre-compilation",
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/input.css -o ./frontend/static/tailwind.css --minify",
+    "watch:css": "tailwindcss -i ./src/input.css -o ./frontend/static/tailwind.css --watch",
+    "build": "npm run build:css"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0"
+  }
+}

@@ -499,7 +499,8 @@ def get_analytics_dashboard_metrics(
 
 # --- SEED ROOT / STATIC SERVING ---
 
-# Serve the static frontend
-# Note: Mount this after all api routes!
-if os.path.exists("frontend"):
+# Serve the static frontend only in local development.
+# On Vercel (serverless), static files are served by the CDN layer — mounting
+# them here would conflict with the serverless function routing.
+if not os.getenv("VERCEL") and os.path.exists("frontend"):
     app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
