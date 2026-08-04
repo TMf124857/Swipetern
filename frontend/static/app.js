@@ -210,7 +210,7 @@ class SwipeternApp {
         if (this.token) {
             await this.fetchMe();
         } else {
-            this.showScreen("landing");
+            this.showScreen("explainer");
         }
     }
 
@@ -302,11 +302,13 @@ class SwipeternApp {
 
     // Render screen based on auth/onboarding status with robust null guards
     showScreen(screenName) {
+        const explainer = document.getElementById("screen-explainer");
         const welcome = document.getElementById("screen-welcome");
         const onboarding = document.getElementById("screen-onboarding");
         const workspace = document.getElementById("screen-workspace");
         const landing = document.getElementById("screen-landing");
 
+        if (explainer) explainer.classList.add("hidden");
         if (welcome) welcome.classList.add("hidden");
         if (onboarding) onboarding.classList.add("hidden");
         if (workspace) workspace.classList.add("hidden");
@@ -317,7 +319,10 @@ class SwipeternApp {
         if (navAuthed) navAuthed.classList.add("hidden");
         if (navGuest) navGuest.classList.add("hidden");
 
-        if (screenName === "landing") {
+        if (screenName === "explainer") {
+            if (explainer) explainer.classList.remove("hidden");
+            if (navGuest) navGuest.classList.remove("hidden");
+        } else if (screenName === "landing") {
             if (landing) landing.classList.remove("hidden");
             if (navGuest) navGuest.classList.remove("hidden");
             this.initSandbox();
@@ -334,6 +339,11 @@ class SwipeternApp {
             this.updateNavbarBadges();
             this.setupWorkspace();
         }
+    }
+
+    // Navigate back to the explainer/marketing landing page
+    showExplainerPage() {
+        this.showScreen("explainer");
     }
 
     // Auth Dialog modal triggers
@@ -482,15 +492,15 @@ class SwipeternApp {
             </div>
             <div>
                 <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Your Skills (Comma separated)</label>
-                <input type="text" id="prof-skills" placeholder="e.g. Python, React, Figma" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
+                <input type="text" id="prof-skills" placeholder="e.g. Python, React, Figma" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
             </div>
             <div>
                 <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Target Job Titles (Comma separated)</label>
-                <input type="text" id="prof-job-titles" placeholder="e.g. Software Engineer, Designer" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
+                <input type="text" id="prof-job-titles" placeholder="e.g. Software Engineer, Designer" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
             </div>
             <div>
                 <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Visa / Work Permit Status</label>
-                <select id="prof-visa-status" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-bold" style="min-height: 44px;">
+                <select id="prof-visa-status" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-bold" style="min-height: 44px;">
                     <option value="not_required">Citizen / PR (No sponsorship needed)</option>
                     <option value="pending">F-1 Visa / Needs Sponsorship</option>
                     <option value="approved">Already Approved Work Visa</option>
@@ -505,7 +515,7 @@ class SwipeternApp {
             </div>
             <div>
                 <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Industry Sector</label>
-                <input type="text" id="prof-industry" placeholder="e.g. Fintech, Web3, SpaceTech" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
+                <input type="text" id="prof-industry" placeholder="e.g. Fintech, Web3, SpaceTech" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
             </div>
         `;
 
@@ -520,11 +530,11 @@ class SwipeternApp {
                 <form onsubmit="app.saveProfile(event)" class="space-y-5">
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Display Name</label>
-                        <input type="text" id="prof-name" required placeholder="Jane Doe" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
+                        <input type="text" id="prof-name" required placeholder="Jane Doe" class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium" style="min-height: 44px;">
                     </div>
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1.5">Pitch (Bio)</label>
-                        <textarea id="prof-bio" rows="3" placeholder="A brief hook about you or your company vision..." class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-955 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium"></textarea>
+                        <textarea id="prof-bio" rows="3" placeholder="A brief hook about you or your company vision..." class="w-full px-4 py-3 rounded-2xl border border-slate-700 bg-slate-950 text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-fuchsia-500 text-sm font-medium"></textarea>
                     </div>
 
                     <div class="space-y-4">
@@ -899,7 +909,7 @@ class SwipeternApp {
             }
             const isStudent = msg.sender === 'student';
             const align = isStudent ? 'justify-end' : 'justify-start';
-            const color = isStudent ? 'bg-indigo-600 text-white rounded-br-none' : 'bg-slate-850 text-slate-200 border border-slate-800 rounded-bl-none';
+            const color = isStudent ? 'bg-indigo-600 text-white rounded-br-none' : 'bg-slate-800 text-slate-200 border border-slate-800 rounded-bl-none';
 
             return `
                 <div class="flex ${align}">
@@ -996,7 +1006,7 @@ class SwipeternApp {
                 <div class="p-6 flex flex-col justify-between flex-grow overflow-y-auto max-h-[160px] bg-slate-900 border-t border-slate-800">
                     <div>
                         <h5 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Company Description</h5>
-                        <p class="text-xs text-slate-355 line-clamp-2 mb-3">${card.employer_bio || 'No description provided.'}</p>
+                        <p class="text-xs text-slate-300 line-clamp-2 mb-3">${card.employer_bio || 'No description provided.'}</p>
 
                         <h5 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Requirements</h5>
                         <p class="text-xs text-slate-200 leading-relaxed font-medium mb-3">${card.description}</p>
@@ -1017,7 +1027,7 @@ class SwipeternApp {
                 <div class="p-6 flex flex-col justify-between flex-grow overflow-y-auto max-h-[160px] bg-slate-900 border-t border-slate-800">
                     <div>
                         <h5 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">About Me</h5>
-                        <p class="text-xs text-slate-355 line-clamp-2 mb-3">${card.bio || 'Hello, looking for awesome internships!'}</p>
+                        <p class="text-xs text-slate-300 line-clamp-2 mb-3">${card.bio || 'Hello, looking for awesome internships!'}</p>
 
                         <h5 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Target Roles</h5>
                         <p class="text-xs text-slate-200 font-bold mb-3">${card.target_job_titles || 'Software Engineer'}</p>
@@ -1034,6 +1044,57 @@ class SwipeternApp {
                 ${detailsHtml}
             </div>
         `;
+
+        // Attach touch & mouse drag gesture to the rendered card
+        this.attachSwipeGesture(document.getElementById("active-swipe-card"));
+    }
+
+    // Attach touch/mouse drag swipe gestures to a discovery card element
+    attachSwipeGesture(cardEl) {
+        if (!cardEl) return;
+
+        let startX = 0;
+        let currentX = 0;
+        let dragging = false;
+        const SWIPE_THRESHOLD = 80; // px needed to trigger a swipe decision
+
+        const onStart = (x) => {
+            startX = x;
+            currentX = x;
+            dragging = true;
+        };
+
+        const onMove = (x) => {
+            if (!dragging) return;
+            currentX = x;
+            const delta = currentX - startX;
+            cardEl.style.transform = `translateX(${delta}px) rotate(${delta * 0.06}deg)`;
+            cardEl.style.transition = "none";
+        };
+
+        const onEnd = () => {
+            if (!dragging) return;
+            dragging = false;
+            const delta = currentX - startX;
+            cardEl.style.transition = "";
+            cardEl.style.transform = "";
+
+            if (delta > SWIPE_THRESHOLD) {
+                this.swipe("like");
+            } else if (delta < -SWIPE_THRESHOLD) {
+                this.swipe("pass");
+            }
+        };
+
+        // Mouse events (desktop preview)
+        cardEl.addEventListener("mousedown", (e) => onStart(e.clientX));
+        window.addEventListener("mousemove", (e) => { if (dragging) onMove(e.clientX); });
+        window.addEventListener("mouseup", () => onEnd());
+
+        // Touch events (mobile)
+        cardEl.addEventListener("touchstart", (e) => onStart(e.touches[0].clientX), { passive: true });
+        cardEl.addEventListener("touchmove", (e) => onMove(e.touches[0].clientX), { passive: true });
+        cardEl.addEventListener("touchend", () => onEnd());
     }
 
     // Trigger swiping action
@@ -1123,7 +1184,7 @@ class SwipeternApp {
             const initial = displayName.charAt(0).toUpperCase();
 
             return `
-                <div onclick="app.selectMatch(${m.id})" class="flex items-center space-x-3 p-3 rounded-2xl cursor-pointer transition ${isActive ? 'bg-fuchsia-500/10 border border-fuchsia-500/20 text-fuchsia-400 font-bold' : 'hover:bg-slate-850 text-slate-300'}" style="min-height: 44px;">
+                <div onclick="app.selectMatch(${m.id})" class="flex items-center space-x-3 p-3 rounded-2xl cursor-pointer transition ${isActive ? 'bg-fuchsia-500/10 border border-fuchsia-500/20 text-fuchsia-400 font-bold' : 'hover:bg-slate-800 text-slate-300'}" style="min-height: 44px;">
                     <div class="h-10 w-10 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-sm shrink-0">
                         ${initial}
                     </div>
@@ -1179,7 +1240,7 @@ class SwipeternApp {
 
         container.innerHTML = this.chatMessages.map(m => {
             const isMe = m.sender_id === this.user.id;
-            const bubbleClass = isMe ? "bg-indigo-600 text-white rounded-br-none" : "bg-slate-850 text-slate-200 border border-slate-800 rounded-bl-none";
+            const bubbleClass = isMe ? "bg-indigo-600 text-white rounded-br-none" : "bg-slate-800 text-slate-200 border border-slate-800 rounded-bl-none";
             const alignClass = isMe ? "justify-end" : "justify-start";
 
             // Safely assign text content rather than rendering raw un-sanitized HTML to avoid XSS issues
@@ -1312,7 +1373,7 @@ class SwipeternApp {
                 <h4 class="font-extrabold text-slate-200 text-base mt-2">${j.title}</h4>
                 <p class="text-xs text-slate-400 mt-2 line-clamp-3 leading-relaxed">${j.description}</p>
                 <div class="flex flex-wrap gap-1 mt-4">
-                    ${j.skills_required.split(',').map(s => s.trim()).filter(Boolean).map(s => `<span class="bg-slate-950 border border-slate-850 text-slate-400 text-[9px] px-1.5 py-0.5 rounded-md font-bold">${s}</span>`).join('')}
+                    ${j.skills_required.split(',').map(s => s.trim()).filter(Boolean).map(s => `<span class="bg-slate-950 border border-slate-800 text-slate-400 text-[9px] px-1.5 py-0.5 rounded-md font-bold">${s}</span>`).join('')}
                 </div>
             </div>
         `).join('');
@@ -1394,7 +1455,7 @@ class SwipeternApp {
             if (r.status === "pending") statusBadge = `<span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-full text-[10px] font-bold">Pending</span>`;
             else if (r.status === "ignored") statusBadge = `<span class="bg-slate-800 text-slate-400 border border-slate-700 px-2 py-0.5 rounded-full text-[10px] font-bold">Ignored</span>`;
             else if (r.status === "warned") statusBadge = `<span class="bg-orange-500/10 text-orange-400 border border-orange-500/20 px-2 py-0.5 rounded-full text-[10px] font-bold">Warned</span>`;
-            else statusBadge = `<span class="bg-rose-500/10 text-rose-450 border border-rose-500/20 px-2 py-0.5 rounded-full text-[10px] font-bold">Suspended</span>`;
+            else statusBadge = `<span class="bg-rose-500/10 text-rose-400 border border-rose-500/20 px-2 py-0.5 rounded-full text-[10px] font-bold">Suspended</span>`;
 
             const isPending = r.status === "pending";
 
@@ -1409,7 +1470,7 @@ class SwipeternApp {
                         ${isPending ? `
                             <button onclick="app.executeAdminAction(${r.id}, 'ignore')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-bold px-2.5 py-1.5 rounded focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 32px;">Ignore</button>
                             <button onclick="app.executeAdminAction(${r.id}, 'warn')" class="text-[10px] bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/20 text-orange-400 font-bold px-2.5 py-1.5 rounded focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 32px;">Warn</button>
-                            <button onclick="app.executeAdminAction(${r.id}, 'suspend')" class="text-[10px] bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-455 font-bold px-2.5 py-1.5 rounded focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 32px;">Suspend</button>
+                            <button onclick="app.executeAdminAction(${r.id}, 'suspend')" class="text-[10px] bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400 font-bold px-2.5 py-1.5 rounded focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 32px;">Suspend</button>
                         ` : `<span class="text-[10px] font-semibold text-slate-300">Reviewed</span>`}
                     </td>
                 </tr>
@@ -1569,7 +1630,7 @@ class SwipeternApp {
                     <span class="text-indigo-400 font-bold shrink-0">[${dateStr}]</span>
                     <span class="text-fuchsia-400 font-bold shrink-0">${ev.event_name.toUpperCase()}</span>
                     <span class="text-slate-500 shrink-0">User #${ev.user_id || 'SYS'}</span>
-                    <span class="text-slate-350 truncate font-semibold" title='${ev.payload}'>${ev.payload}</span>
+                    <span class="text-slate-300 truncate font-semibold" title='${ev.payload}'>${ev.payload}</span>
                 </div>
             `;
         }).join('');
