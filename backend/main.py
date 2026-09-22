@@ -1,6 +1,7 @@
 import os
 import secrets
-from fastapi import FastAPI, Depends, HTTPException, status, Header, Cookie, Response
+import time
+from fastapi import FastAPI, Depends, HTTPException, status, Header, Cookie, Response, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
@@ -36,21 +37,31 @@ app.add_middleware(
 
 SECRET_KEY = os.getenv("SECRET_KEY", "swipetern-super-secret-key-123")
 
-def sign_token(user_id: int) -> str:
-    msg = str(user_id).encode("utf-8")
+def sign_token(user_id: int, expires_in: int = 86400 * 7) -> str:
+    exp = int(time.time()) + expires_in
+    msg = f"{user_id}:{exp}".encode("utf-8")
     sig = hmac.new(SECRET_KEY.encode("utf-8"), msg, hashlib.sha256).hexdigest()
-    return f"{user_id}.{sig}"
+    return f"{user_id}.{exp}.{sig}"
 
 def verify_token(token: str) -> Optional[int]:
     try:
         parts = token.split(".")
-        if len(parts) != 2:
-            return None
-        user_id_str, sig = parts
-        user_id = int(user_id_str)
-        expected_sig = hmac.new(SECRET_KEY.encode("utf-8"), str(user_id).encode("utf-8"), hashlib.sha256).hexdigest()
-        if hmac.compare_digest(sig, expected_sig):
-            return user_id
+        if len(parts) == 3:
+            user_id_str, exp_str, sig = parts
+            user_id, exp = int(user_id_str), int(exp_str)
+            if time.time() > exp:
+                return None  # Token expired
+            expected_msg = f"{user_id}:{exp}".encode("utf-8")
+            expected_sig = hmac.new(SECRET_KEY.encode("utf-8"), expected_msg, hashlib.sha256).hexdigest()
+            if hmac.compare_digest(sig, expected_sig):
+                return user_id
+        elif len(parts) == 2:
+            # Fallback backward compatibility for legacy 2-part tokens
+            user_id_str, sig = parts
+            user_id = int(user_id_str)
+            expected_sig = hmac.new(SECRET_KEY.encode("utf-8"), str(user_id).encode("utf-8"), hashlib.sha256).hexdigest()
+            if hmac.compare_digest(sig, expected_sig):
+                return user_id
     except Exception:
         pass
     return None
@@ -111,7 +122,7 @@ def register(user_in: schemas.UserRegister, response: Response, db: Session = De
     return user
 
 @app.post("/api/auth/login")
-def login(user_in: schemas.UserLogin, response: Response, db: Session = Depends(get_db)):
+def login(user_in: schemas.UserLogin, response: Response, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     user = crud.get_user_by_email(db, user_in.email)
     if not user or not crud.verify_password(user_in.password, user.hashed_password):
         raise HTTPException(status_code=400, detail="Incorrect email or password.")
@@ -124,8 +135,8 @@ def login(user_in: schemas.UserLogin, response: Response, db: Session = Depends(
 
     profile = crud.get_profile_by_user_id(db, user.id)
 
-    # Track login event
-    crud.track_event(db, "login", user_id=user.id, payload={"role": user.role})
+    # Track login event asynchronously
+    background_tasks.add_task(crud.log_event_bg, "login", user_id=user.id, payload={"role": user.role})
 
     return {
         "token": token,
@@ -176,6 +187,7 @@ def update_profile(
 @app.post("/api/profile/opportunity", response_model=schemas.OpportunityResponse)
 def create_job_opportunity(
     opp_in: schemas.OpportunityCreate,
+    background_tasks: BackgroundTasks,
     current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -184,8 +196,8 @@ def create_job_opportunity(
 
     opp = crud.create_opportunity(db, current_user.id, opp_in)
 
-    # Track opportunity creation
-    crud.track_event(db, "opportunity_created", user_id=current_user.id, payload={"opportunity_id": opp.id, "title": opp.title})
+    # Track opportunity creation asynchronously
+    background_tasks.add_task(crud.log_event_bg, "opportunity_created", user_id=current_user.id, payload={"opportunity_id": opp.id, "title": opp.title})
 
     return opp
 
@@ -216,7 +228,7 @@ def get_discovery_cards(
     result = []
     if current_user.role == "student":
         for opp in cards:
-            emp_profile = crud.get_profile_by_user_id(db, opp.employer_id)
+            emp_profile = opp.employer.profile if opp.employer else None
             result.append({
                 "id": opp.id,
                 "title": opp.title,
@@ -246,6 +258,7 @@ def get_discovery_cards(
 @app.post("/api/swipe")
 def swipe(
     swipe_in: schemas.SwipeCreate,
+    background_tasks: BackgroundTasks,
     current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -298,9 +311,9 @@ def get_user_matches(
     matches = crud.get_matches_for_user(db, current_user.id)
     result = []
     for m in matches:
-        stud_prof = crud.get_profile_by_user_id(db, m.student_id)
-        emp_prof = crud.get_profile_by_user_id(db, m.employer_id)
-        opp = crud.get_opportunity_by_id(db, m.opportunity_id)
+        stud_prof = m.student.profile if m.student else None
+        emp_prof = m.employer.profile if m.employer else None
+        opp = m.opportunity
         result.append(schemas.MatchResponse(
             id=m.id,
             student_id=m.student_id,
