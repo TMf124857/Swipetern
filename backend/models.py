@@ -1,5 +1,5 @@
 import datetime
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, Text
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, Text, UniqueConstraint
 from sqlalchemy.orm import relationship
 from backend.database import Base
 
@@ -74,6 +74,9 @@ class Swipe(Base):
 
 class Match(Base):
     __tablename__ = "matches"
+    __table_args__ = (
+        UniqueConstraint("student_id", "employer_id", "opportunity_id", name="uq_student_employer_opp"),
+    )
 
     id = Column(Integer, primary_key=True, index=True)
     student_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)

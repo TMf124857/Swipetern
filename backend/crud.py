@@ -2,8 +2,9 @@ import hmac
 import secrets
 import hashlib
 import json
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from backend import models, schemas
+from backend.database import SessionLocal
 from datetime import datetime
 
 # Password helpers using secure PBKDF2 with dynamic salt and fallback support
@@ -27,6 +28,11 @@ def verify_password(password: str, hashed: str) -> bool:
 # Analytics Helper
 def track_event(db: Session, event_name: str, user_id: int = None, payload: dict = None):
     payload_str = json.dumps(payload) if payload else "{}"
+    if user_id is not None:
+        user_exists = db.query(models.User.id).filter(models.User.id == user_id).first()
+        if not user_exists:
+            user_id = None
+
     event = models.AnalyticsEvent(
         event_name=event_name,
         user_id=user_id,
@@ -36,6 +42,13 @@ def track_event(db: Session, event_name: str, user_id: int = None, payload: dict
     db.commit()
     db.refresh(event)
     return event
+
+def log_event_bg(event_name: str, user_id: int = None, payload: dict = None):
+    db = SessionLocal()
+    try:
+        track_event(db, event_name, user_id=user_id, payload=payload)
+    finally:
+        db.close()
 
 # User/Auth CRUDS
 def get_user_by_email(db: Session, email: str):
@@ -137,29 +150,33 @@ def load_discovery_feed(db: Session, current_user: models.User):
     ]
 
     if current_user.role == "student":
-        # Fetch active opportunities from onboarded and active employers
-        query = db.query(models.Opportunity).join(models.User, models.Opportunity.employer_id == models.User.id)
-        query = query.filter(
-            models.Opportunity.is_active == True,
-            models.User.is_active == True,
-            models.User.is_suspended == False,
-            models.User.is_onboarded == True
-        )
+        # Fetch active opportunities from onboarded and active employers with eager loading
+        query = db.query(models.Opportunity)\
+            .options(joinedload(models.Opportunity.employer).joinedload(models.User.profile))\
+            .join(models.User, models.Opportunity.employer_id == models.User.id)\
+            .filter(
+                models.Opportunity.is_active == True,
+                models.User.is_active == True,
+                models.User.is_suspended == False,
+                models.User.is_onboarded == True
+            )
         if swiped_opportunity_ids:
             query = query.filter(models.Opportunity.id.notin_(swiped_opportunity_ids))
 
         return query.all()
 
     elif current_user.role == "employer":
-        # Fetch onboarded and active student profiles
-        query = db.query(models.Profile).join(models.User, models.Profile.user_id == models.User.id)
-        query = query.filter(
-            models.User.role == "student",
-            models.User.is_active == True,
-            models.User.is_suspended == False,
-            models.User.is_onboarded == True,
-            models.Profile.is_public == True
-        )
+        # Fetch onboarded and active student profiles with eager loading
+        query = db.query(models.Profile)\
+            .options(joinedload(models.Profile.user))\
+            .join(models.User, models.Profile.user_id == models.User.id)\
+            .filter(
+                models.User.role == "student",
+                models.User.is_active == True,
+                models.User.is_suspended == False,
+                models.User.is_onboarded == True,
+                models.Profile.is_public == True
+            )
         if swiped_user_ids:
             query = query.filter(models.Profile.user_id.notin_(swiped_user_ids))
 
@@ -282,12 +299,18 @@ def get_matches_for_user(db: Session, user_id: int):
     if not user:
         return []
 
+    query = db.query(models.Match).options(
+        joinedload(models.Match.student).joinedload(models.User.profile),
+        joinedload(models.Match.employer).joinedload(models.User.profile),
+        joinedload(models.Match.opportunity)
+    )
+
     if user.role == "student":
-        return db.query(models.Match).filter(models.Match.student_id == user_id).order_by(models.Match.created_at.desc()).all()
+        return query.filter(models.Match.student_id == user_id).order_by(models.Match.created_at.desc()).all()
     elif user.role == "employer":
-        return db.query(models.Match).filter(models.Match.employer_id == user_id).order_by(models.Match.created_at.desc()).all()
+        return query.filter(models.Match.employer_id == user_id).order_by(models.Match.created_at.desc()).all()
     else:  # Admin can see all matches
-        return db.query(models.Match).order_by(models.Match.created_at.desc()).all()
+        return query.order_by(models.Match.created_at.desc()).all()
 
 def get_match_by_id(db: Session, match_id: int):
     return db.query(models.Match).filter(models.Match.id == match_id).first()
