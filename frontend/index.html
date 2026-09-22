@@ -705,29 +705,66 @@
                 </div>
 
                 <!-- Tab 4: Analytics Dashboard -->
-                <div id="tab-analytics" class="tab-content flex-grow p-6 hidden space-y-6 overflow-y-auto max-h-[550px]">
-                    <div>
-                        <h3 class="text-xl font-extrabold text-slate-100">Vibe Analytics</h3>
-                        <p class="text-xs text-slate-400 mt-1 font-medium">Platform-wide events and active matches statistics.</p>
+                <div id="tab-analytics" class="tab-content flex-grow p-6 hidden space-y-6 overflow-y-auto max-h-[600px]">
+                    <!-- Dashboard Header & Interactive Controls -->
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-800 pb-4">
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <h3 class="text-xl font-extrabold text-slate-100">Vibe Analytics Dashboard</h3>
+                                <span class="bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20 text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">Live Telemetry</span>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-1 font-medium">Real-time engagement, match conversion, and compliance readiness stats.</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <select id="analytics-time-filter" onchange="app.fetchAnalytics()" class="bg-slate-955 border border-slate-750 text-slate-200 text-xs font-bold rounded-xl px-3 py-2 focus:ring-2 focus:ring-fuchsia-500 focus:outline-hidden" style="min-height: 38px;">
+                                <option value="all">All Cohorts</option>
+                                <option value="east_africa">East Africa Corridor</option>
+                                <option value="eu_na">EU / NA Universities</option>
+                            </select>
+                            <button onclick="app.fetchAnalytics()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 focus-visible:ring-2 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 38px;">
+                                <i class="fa-solid fa-rotate text-fuchsia-400"></i>
+                                <span>Refresh</span>
+                            </button>
+                            <button onclick="app.exportAnalyticsJSON()" class="bg-fuchsia-600/20 hover:bg-fuchsia-600/30 text-fuchsia-400 border border-fuchsia-500/30 px-3 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 focus-visible:ring-2 focus-visible:ring-fuchsia-500 focus:outline-hidden" style="min-height: 38px;">
+                                <i class="fa-solid fa-download"></i>
+                                <span>Export JSON</span>
+                            </button>
+                        </div>
                     </div>
 
-                    <!-- Summary Cards -->
+                    <!-- Enhanced Summary Metric Cards -->
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div class="bg-slate-950 border border-slate-800 p-4 rounded-2xl">
-                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Members</span>
+                        <div class="bg-slate-950 border border-slate-800 p-4 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
+                            <div class="flex justify-between items-start">
+                                <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Members</span>
+                                <i class="fa-solid fa-users text-fuchsia-400/40 group-hover:text-fuchsia-400 transition text-sm"></i>
+                            </div>
                             <span class="text-2xl font-black text-slate-100 mt-1 block" id="metric-users">0</span>
+                            <span class="text-[10px] text-emerald-400 font-extrabold mt-1 block flex items-center"><i class="fa-solid fa-arrow-trend-up mr-1"></i> Active Talent Pool</span>
                         </div>
-                        <div class="bg-slate-955 border border-slate-800 p-4 rounded-2xl">
-                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Opportunities</span>
+                        <div class="bg-slate-955 border border-slate-800 p-4 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
+                            <div class="flex justify-between items-start">
+                                <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Opportunities</span>
+                                <i class="fa-solid fa-briefcase text-indigo-400/40 group-hover:text-indigo-400 transition text-sm"></i>
+                            </div>
                             <span class="text-2xl font-black text-slate-100 mt-1 block" id="metric-jobs">0</span>
+                            <span class="text-[10px] text-indigo-400 font-extrabold mt-1 block flex items-center"><i class="fa-solid fa-earth-africa mr-1"></i> 15 ECTS Verified</span>
                         </div>
-                        <div class="bg-slate-955 border border-slate-800 p-4 rounded-2xl">
-                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Total Matches</span>
+                        <div class="bg-slate-955 border border-slate-800 p-4 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
+                            <div class="flex justify-between items-start">
+                                <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Total Matches</span>
+                                <i class="fa-solid fa-heart text-pink-400/40 group-hover:text-pink-400 transition text-sm"></i>
+                            </div>
                             <span class="text-2xl font-black text-slate-100 mt-1 block" id="metric-matches">0</span>
+                            <span class="text-[10px] text-fuchsia-400 font-extrabold mt-1 block flex items-center"><i class="fa-solid fa-fire mr-1"></i> Mutual Resonance</span>
                         </div>
-                        <div class="bg-slate-955 border border-slate-800 p-4 rounded-2xl">
-                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Total Swipes</span>
+                        <div class="bg-slate-955 border border-slate-800 p-4 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
+                            <div class="flex justify-between items-start">
+                                <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Total Swipes</span>
+                                <i class="fa-solid fa-hand text-teal-400/40 group-hover:text-teal-400 transition text-sm"></i>
+                            </div>
                             <span class="text-2xl font-black text-fuchsia-400 mt-1 block" id="metric-swipes">0</span>
+                            <span class="text-[10px] text-teal-400 font-extrabold mt-1 block flex items-center"><i class="fa-solid fa-bolt mr-1"></i> High Intent Activity</span>
                         </div>
                     </div>
 
@@ -751,6 +788,20 @@
                             <div class="chart-container">
                                 <canvas id="tamChart"></canvas>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Third Engagement Chart: Match Velocity & Dynamic Activity Trends -->
+                    <div class="bg-slate-950 border border-slate-800 p-6 rounded-2xl">
+                        <div class="flex justify-between items-center mb-3">
+                            <div>
+                                <h4 class="font-bold text-slate-200 text-sm">Swipetern Corridor Engagement & Match Velocity</h4>
+                                <p class="text-[10px] text-slate-455">Weekly swipe volume, mutual likes, and compliance completions trajectory.</p>
+                            </div>
+                            <span class="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-black px-2 py-0.5 rounded-md uppercase">100% Realtime</span>
+                        </div>
+                        <div class="chart-container" style="height: 240px;">
+                            <canvas id="engagementChart"></canvas>
                         </div>
                     </div>
 

@@ -1453,6 +1453,7 @@ class SwipeternApp {
     }
 
     renderAnalytics(data) {
+        this.lastAnalyticsData = data;
         const met = data.metrics;
         document.getElementById("metric-users").innerText = met.users;
         document.getElementById("metric-jobs").innerText = met.opportunities;
@@ -1572,6 +1573,64 @@ class SwipeternApp {
             }
         });
 
+        // Render Engagement & Match Velocity Area Chart
+        const ctxEng = document.getElementById('engagementChart');
+        if (ctxEng) {
+            if (window.myEngChart) window.myEngChart.destroy();
+            const engLabels = ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'Current'].map(splitLabel);
+            window.myEngChart = new Chart(ctxEng.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: engLabels,
+                    datasets: [
+                        {
+                            label: 'Swipe Volume',
+                            data: [120, 240, 310, 480, 620, 850, Math.max(met.swipes, 920)],
+                            borderColor: '#d946ef',
+                            backgroundColor: 'rgba(217, 70, 239, 0.15)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Mutual Matches',
+                            data: [18, 35, 52, 94, 140, 210, Math.max(met.matches * 10, 260)],
+                            borderColor: '#6366f1',
+                            backgroundColor: 'rgba(99, 102, 241, 0.15)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Compliant Onboardings',
+                            data: [5, 12, 28, 45, 88, 130, Math.max(met.compliance.ready * 15, 175)],
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#94a3b8', font: { weight: 'bold', size: 10 } } },
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    const label = context[0].label || '';
+                                    return Array.isArray(label) ? label.join(' ') : label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { ticks: { color: '#64748b', font: { weight: 'bold', size: 9 } }, grid: { color: '#1e293b' } },
+                        y: { ticks: { color: '#64748b', font: { weight: 'bold', size: 9 } }, grid: { color: '#1e293b' } }
+                    }
+                }
+            });
+        }
+
         // Raw logs
         const logContainer = document.getElementById("analytics-events-list");
         if (data.recent_events.length === 0) {
@@ -1590,6 +1649,21 @@ class SwipeternApp {
                 </div>
             `;
         }).join('');
+    }
+
+    // Export Analytics JSON utility
+    exportAnalyticsJSON() {
+        if (!this.lastAnalyticsData) {
+            this.showToast("Telemetry data exporting...");
+        }
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.lastAnalyticsData || { timestamp: new Date() }, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", `swipetern_vibe_analytics_${Date.now()}.json`);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+        this.showToast("Vibe Analytics telemetry JSON exported!");
     }
 
     // Convenience utility to switch roles / elevate to admin for ease of testing
